@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\FileController;
+use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\StaterkitController;
-use App\Http\Controllers\LanguageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,15 +16,18 @@ use App\Http\Controllers\LanguageController;
 |
 */
 
-Route::get('/', [StaterkitController::class, 'home'])->name('home');
-Route::get('home', [StaterkitController::class, 'home'])->name('home');
-// Route Components
-Route::get('layouts/collapsed-menu', [StaterkitController::class, 'collapsed_menu'])->name('collapsed-menu');
-Route::get('layouts/full', [StaterkitController::class, 'layout_full'])->name('layout-full');
-Route::get('layouts/without-menu', [StaterkitController::class, 'without_menu'])->name('without-menu');
-Route::get('layouts/empty', [StaterkitController::class, 'layout_empty'])->name('layout-empty');
-Route::get('layouts/blank', [StaterkitController::class, 'layout_blank'])->name('layout-blank');
+require __DIR__.'/auth.php';
+Route::get('/clear-cache',function (){
+    echo $exitCode = Artisan::call('storage:link');
+});
 
+Route::get('/', [HomeController::class, 'home'])->middleware(['auth'])->name('home');
 
-// locale Route
-Route::get('lang/{locale}', [LanguageController::class, 'swap']);
+Route::group([ "prefix" => "file", "middleware" => ["auth"]], function() {
+    Route::get('/', [FileController::class, 'index'])->name('file.index');
+    Route::post('/upload', [FileController::class, 'upload'])->name('file.upload');
+});
+
+Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
+    \UniSharp\LaravelFilemanager\Lfm::routes();
+});
