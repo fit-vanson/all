@@ -68,10 +68,8 @@
             @endif
           </span>
           <span class="user-status">
-             {{ Auth::user()->getRoleNames()[0] }}
-          </span>
+               {{ (count(Auth::user()->getRoleNames())) ? Auth::user()->getRoleNames()[0] : 'guest' }}
         </div>
-
             <?php
                 if (Auth::user()->avatar) {
                    $output = '<img src="images/avatars/' . Auth::user()->avatar . '" alt="Avatar" height="40" width="40">';
