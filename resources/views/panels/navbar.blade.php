@@ -62,7 +62,7 @@
         <div class="user-nav d-sm-flex d-none">
           <span class="user-name fw-bolder">
             @if (Auth::check())
-              {{ Auth::user()->name }}
+              {{ Auth::user()->name}}
             @else
               Guest
             @endif
@@ -71,12 +71,32 @@
              {{ Auth::user()->getRoleNames()[0] }}
           </span>
         </div>
-        <span class="avatar">
-          <img class="round"
-            src="{{ asset('images/portrait/small/avatar-s-11.jpg') }}"
-            alt="avatar" height="40" width="40">
-          <span class="avatar-status-online"></span>
-        </span>
+
+            <?php
+                if (Auth::user()->avatar) {
+                   $output = '<img src="images/avatars/' . Auth::user()->avatar . '" alt="Avatar" height="40" width="40">';
+                } else {
+                  // For Avatar badge
+                  $stateNum = rand(0,6);
+                  $states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
+                  $state = $states[$stateNum];
+                  $name = Auth::user()->name;
+                  $initials = implode('', array_map(function($v) { return $v[0]; },array_filter(array_map('trim',explode(' ', $name)))));
+                  $output = '<span class="avatar-content" style="width: 40px; height: 40px">' . $initials . '</span>';
+              }
+              $colorClass = Auth::user()->avatar === '' ? ' bg-light-' . $state .' ' : '';
+              $row_output =
+                  '<div class="d-flex justify-content-left align-items-center">' .
+                  '<div class="avatar-wrapper">' .
+                  '<div class="avatar ' .
+                  $colorClass .
+                  ' me-1">' .
+                  $output .
+                  '</div>' .
+                  '</div>' .
+                  '</div>';
+              echo  $row_output;
+            ?>
       </a>
       <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-user">
         <h6 class="dropdown-header">Manage Profile</h6>
