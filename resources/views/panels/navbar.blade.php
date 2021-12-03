@@ -64,11 +64,11 @@
             @if (Auth::check())
               {{ Auth::user()->name }}
             @else
-              John Doe
-            @endif
+              Guest
+              @endif
           </span>
           <span class="user-status">
-            Admin
+             {{ Auth::user()->getRoleNames()[0] }}
           </span>
         </div>
         <span class="avatar">

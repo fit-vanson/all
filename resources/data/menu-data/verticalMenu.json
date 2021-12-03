@@ -1,7 +1,7 @@
 {
   "menu": [
     {
-      "url": "home",
+      "url": "/",
       "name": "Home",
       "icon": "home",
       "slug": "home"
