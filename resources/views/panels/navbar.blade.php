@@ -79,7 +79,7 @@
                   $states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
                   $state = $states[$stateNum];
                   $name = Auth::user()->name;
-                  $initials = implode('', array_map(function($v) { return $v[0]; },array_filter(array_map('trim',explode(' ', $name)))));
+                  $initials = strtoupper(implode('', array_map(function($v) { return $v[0]; },array_filter(array_map('trim',explode(' ', $name))))));
                   $output = '<span class="avatar-content" style="width: 40px; height: 40px">' . $initials . '</span>';
               }
               $colorClass = Auth::user()->avatar === '' ? ' bg-light-' . $state .' ' : '';
