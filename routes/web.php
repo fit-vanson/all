@@ -27,7 +27,7 @@ Route::group([ "prefix" => "file", "middleware" => ["auth"]], function() {
     Route::get('/', [FileController::class, 'index'])->name('file.index');
     Route::post('/upload', [FileController::class, 'upload'])->name('file.upload');
 });
-Route::group([ "prefix" => "user", "middleware" => ["auth"]], function() {
+Route::group([ "prefix" => "user", "middleware" => ["auth",'role:Admin']], function() {
     Route::get('/', [UserController::class, 'index'])->name('user.index');
     Route::post('/getIndex', [UserController::class, 'getIndex'])->name('user.getIndex');
     Route::post('/create', [UserController::class, 'create'])->name('user.create');
