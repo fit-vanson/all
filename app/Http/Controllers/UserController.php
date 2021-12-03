@@ -81,7 +81,7 @@ class UserController extends Controller
                 "id" => $record->id,
                 "name" => $record->name,
                 "email" => $record->email,
-                "roles" => (count($record->getRoleNames())> 0) ? $record->getRoleNames()[0] : 'guest' ,
+                "roles" => (count($record->getRoleNames())> 0) ? $record->getRoleNames()[0] : 'Guest' ,
             );
         }
 

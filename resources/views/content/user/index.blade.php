@@ -254,7 +254,7 @@
                               User:
                                   '<span class="badge rounded-pill badge-light-success">User</span>',
                               Guest:
-                                  '<span class="badge rounded-pill badge-light-secondary">User</span>',
+                                  '<span class="badge rounded-pill badge-light-secondary">Guest</span>',
                           };
                           $output = roleBadgeObj[full.roles];
                           return $output
