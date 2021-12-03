@@ -253,6 +253,8 @@
                                   '<span class="badge rounded-pill badge-light-primary">Admin</span>',
                               User:
                                   '<span class="badge rounded-pill badge-light-success">User</span>',
+                              Guest:
+                                  '<span class="badge rounded-pill badge-light-secondary">User</span>',
                           };
                           $output = roleBadgeObj[full.roles];
                           return $output
