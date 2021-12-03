@@ -65,7 +65,7 @@
               {{ Auth::user()->name }}
             @else
               Guest
-              @endif
+            @endif
           </span>
           <span class="user-status">
              {{ Auth::user()->getRoleNames()[0] }}

@@ -19,6 +19,19 @@
           "slug": "file.index"
         }
       ]
-    }
+    },{
+          "name": "User",
+          "icon": "user",
+          "slug": "",
+          "badgeClass": "badge rounded-pill badge-light-danger ms-auto me-1",
+          "submenu": [
+              {
+                  "url": "user",
+                  "name": "Quản lý tài khoản",
+                  "icon": "circle",
+                  "slug": "user.index"
+              }
+          ]
+      }
   ]
 }

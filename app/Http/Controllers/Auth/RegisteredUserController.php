@@ -20,6 +20,7 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
+        dd('Liên hệ quản trị viên');
         return view('auth.register');
     }
 
