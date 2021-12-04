@@ -159,7 +159,7 @@
     <script>
         function timeTop () {
             var time = document.getElementById("select_time").value;
-            $.get('{{route('home.topUpload')}}/?time='+time,function (data) {
+            $.get('{{route('home.topUpload')}}?time='+time,function (data) {
                 var html = '';
                 data.forEach(function(item, index, array) {
                     if(item.diff > 0 ) {
