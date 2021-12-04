@@ -68,7 +68,6 @@ class HomeController extends Controller
                 "avatar" => $row_output,
                 "countUpload" => $this->uploadOfUsers($record->id,$time),
                 "diff" => $this->uploadOfUsers($record->id,$time) - $this->uploadOfUsers($record->id,'lastMonth'),
-                "total" => count($records),
             );
         }
         $columns = array_column($data_arr, 'countUpload');
@@ -104,7 +103,6 @@ class HomeController extends Controller
                 "id" => $record->id,
                 "tags_name" => $record->tags_name,
                 "tags_count" => $countRecord,
-                "total" => count($records),
             );
             Tags::updateOrCreate(
                 [
