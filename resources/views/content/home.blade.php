@@ -179,7 +179,6 @@
                     '<div class="fw-bolder '+diff+' ">'+item.countUpload+'</div>'+
                 '</div>';
                 })
-                console.log(html)
                 $('#topTime').html(html);
             })
         }
