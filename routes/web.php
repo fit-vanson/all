@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/auth.php';
 Route::get('/clear-cache',function (){
-    echo $exitCode = Artisan::call('storage:link');
+    echo $exitCode = Artisan::call('optimize:clear');
 });
 
 Route::get('/', [HomeController::class, 'home'])->middleware(['auth'])->name('home');
