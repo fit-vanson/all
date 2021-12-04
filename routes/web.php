@@ -22,6 +22,7 @@ Route::get('/clear-cache',function (){
 });
 
 Route::get('/', [HomeController::class, 'home'])->middleware(['auth'])->name('home');
+Route::get('/topUpload', [HomeController::class, 'topUpload'])->middleware(['auth'])->name('home.topUpload');
 
 Route::group([ "prefix" => "file", "middleware" => ["auth"]], function() {
     Route::get('/', [FileController::class, 'index'])->name('file.index');

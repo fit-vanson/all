@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FileManage;
+use App\Models\Tags;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,81 +19,107 @@ class HomeController extends Controller
 
     public function home()
     {
+        $data_users = $this->topUpload();
+        $data_tags = $this->tagsCount();
+        $file = FileManage::all();
 
-        $breadcrumbs = [
-            ['link' => "/", 'name' => "Home"], ['name' => "Index"]
-        ];
-        return view('/content/home', ['breadcrumbs' => $breadcrumbs]);
+        return view('content.home', [
+            'data_users' => $data_users,
+            'data_tags'=>$data_tags,
+            'file' =>$file
+        ]);
     }
 
-    public function index()
+    public function topUpload()
     {
-
+        if(request()->time){
+            $time =request()->time;
+        }else{
+            $time = 'inMonth';
+        }
+        $records = User::get();
+        $data_arr = array();
+        foreach ($records as $record){
+            if ($record->avatar) {
+                $output = '<img src="images/avatars/' . $record->avatar . '" alt="Avatar" height="40" width="40">';
+            } else {
+                // For Avatar badge
+                $stateNum = rand(0,6);
+                $states = ['danger', 'secondary', 'warning', 'info', 'dark', 'primary', 'success'];
+                $state = $states[$stateNum];
+                $name = $record->name;
+                $initials = strtoupper(implode('', array_map(function($v) { return $v[0]; },array_filter(array_map('trim',explode(' ', $name))))));
+                $output = '<span class="avatar-content" style="width: 40px; height: 40px">' . $initials . '</span>';
+            }
+            $colorClass = $record->avatar === '' ? ' bg-light-' . $state .' ' : '';
+            $row_output ='<div class="d-flex justify-content-left align-items-center">' .
+                            '<div class="avatar-wrapper">' .
+                            '<div class="avatar ' .
+                            $colorClass .
+                            ' me-1">' .
+                            $output .
+                            '</div>' .
+                            '</div>' .
+                            '</div>';
+            $data_arr[] = array(
+                "id" => $record->id,
+                "name" => $record->name,
+                "email" => $record->email,
+                "avatar" => $row_output,
+                "countUpload" => $this->uploadOfUsers($record->id,$time),
+                "diff" => $this->uploadOfUsers($record->id,$time) - $this->uploadOfUsers($record->id,'lastMonth'),
+                "total" => count($records),
+            );
+        }
+        $columns = array_column($data_arr, 'countUpload');
+        array_multisort($columns, SORT_DESC, $data_arr);
+        return $data_arr;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function uploadOfUsers(int $id, $time)
     {
-        //
+        if($time == 'inMonth'){
+            $start = Carbon::now()->startOfMonth();
+            $end = Carbon::now();
+        }elseif ($time == 'lastMonth'){
+            $start = new Carbon('first day of last month');
+            $end = new Carbon('last day of last month');
+        }
+        $countUploads = FileManage::where('user_id', $id)
+            ->whereBetween('created_at',[$start,$end])
+            ->get()
+            ->count();
+        return $countUploads;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function tagsCount(){
+        $records = Tags::all();
+        $data_arr = array();
+        foreach ($records as $record){
+            $countRecord = FileManage::select('count(*) as allcount')
+                ->where('tags', 'like', '%' . $record->tags_name . '%')
+                ->count();
+
+            $data_arr[] = array(
+                "id" => $record->id,
+                "tags_name" => $record->tags_name,
+                "tags_count" => $countRecord,
+                "total" => count($records),
+            );
+            Tags::updateOrCreate(
+                [
+                    'tags_name'=>$record->tags_name,
+                ],
+                [
+                    'tags_count'=>$countRecord,
+                ]
+            );
+        }
+        $columns = array_column($data_arr, 'tags_count');
+        array_multisort($columns, SORT_DESC, $data_arr);
+        return $data_arr;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }
