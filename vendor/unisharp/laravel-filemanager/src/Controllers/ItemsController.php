@@ -27,7 +27,7 @@ class ItemsController extends LfmController
         $perPage = $this->helper->getPaginationPerPage();
         $items = array_merge($this->lfm->folders(), $this->lfm->files());
         $arr_items = array_map(function ($item) {
-            $file = FileManage::where('name',$item->fill()->attributes['name'])->where('dir',request()->working_dir)->where('url',$item->fill()->attributes['url'])->first();
+            $file = FileManage::where('name',$item->fill()->attributes['name'])->where('dir',request()->working_dir)->first();
             if($file){
                 FileManage::updateOrCreate(
                     [
