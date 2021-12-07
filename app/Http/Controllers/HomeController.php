@@ -7,7 +7,13 @@ use App\Models\Tags;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Session\Store;
 use Illuminate\Support\Facades\Auth;
+use ImageOrientationFix\ImageOrientationFixer;
+use Imagick;
+use Monolog\Logger;
+use PHPExiftool\Reader;
+use PHPExiftool\Driver\Value\ValueInterface;
 
 class HomeController extends Controller
 {
@@ -30,7 +36,7 @@ class HomeController extends Controller
         ]);
     }
 
-    public function topUpload()
+    public function topUpload($limit=3)
     {
         if(request()->time){
             $time =request()->time;
@@ -72,6 +78,7 @@ class HomeController extends Controller
         }
         $columns = array_column($data_arr, 'countUpload');
         array_multisort($columns, SORT_DESC, $data_arr);
+        $data_arr = array_slice($data_arr, 0, $limit);
         return $data_arr;
     }
 
@@ -91,7 +98,7 @@ class HomeController extends Controller
         return $countUploads;
     }
 
-    public function tagsCount(){
+    public function tagsCount($limit=5){
         $records = Tags::all();
         $data_arr = array();
         foreach ($records as $record){
@@ -115,6 +122,7 @@ class HomeController extends Controller
         }
         $columns = array_column($data_arr, 'tags_count');
         array_multisort($columns, SORT_DESC, $data_arr);
+        $data_arr = array_slice($data_arr, 0, $limit);
         return $data_arr;
     }
 

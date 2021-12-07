@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use UniSharp\LaravelFilemanager\Events\ImageIsUploading;
 use UniSharp\LaravelFilemanager\Events\ImageWasUploaded;
 use UniSharp\LaravelFilemanager\Lfm;
+use Imagick;
 
 class UploadController extends LfmController
 {
@@ -30,6 +31,7 @@ class UploadController extends LfmController
      */
     public function upload()
     {
+        ini_set('max_execution_time',500);
         if(request()->tags_name){
             $tags_name = json_decode(request()->tags_name,true);
             foreach ($tags_name as $value){
@@ -52,17 +54,30 @@ class UploadController extends LfmController
 
         foreach (is_array($uploaded_files) ? $uploaded_files : [$uploaded_files] as $file) {
             try {
+                if(getimagesize($file) !== null){
+                    list($width, $height) = getimagesize($file);
+                }else{
+                    list($width, $height) = null;
+                }
+
                 $new_filename = $this->lfm->upload($file);
                 $url = $this->lfm->setName($new_filename)->url();
+                $name_original = $this->helper->translateFromUtf8(
+                    trim($this->helper->utf8Pathinfo($file->getClientOriginalName(), "filename"))
+                );
+                $name_original = preg_replace('/[^A-Za-z0-9\-\']/', '_', $name_original);
                 FileManage::updateOrCreate(
                     [
                         'name'=>$new_filename,
+                        'name_original'=>$name_original.'.'.$file->getClientOriginalExtension(),
                         'ext'=>$file->extension(),
                         'file_size'=>$file->getSize(),
                         'user_id'=>Auth::id(),
                         'url'=>$url,
                         'dir'=>$dir,
                         'tags'=>$tags,
+                        'width'=>$width,
+                        'height'=>$height,
                     ]
                 );
             } catch (\Exception $e) {

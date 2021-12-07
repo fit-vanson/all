@@ -288,6 +288,21 @@ a {
   padding: 5px 0 5px;
 }
 
+/*.list .item_size {*/
+/*    font-size: 1.25rem;*/
+/*    padding: 5px 0 5px;*/
+/*}*/
+
+/*.list .item_width {*/
+/*    font-size: 1.25rem;*/
+/*    padding: 5px 0 5px;*/
+/*}*/
+
+/*.list .item_height {*/
+/*    font-size: 1.25rem;*/
+/*    padding: 5px 0 5px;*/
+/*}*/
+
 time {
   font-size: .9rem;
 }
@@ -300,9 +315,26 @@ time {
     display: none;
 }
 
+.grid .item_owner {
+    display: none;
+}
+
+.grid .item_size {
+    display: none;
+}
+
+.grid .item_height  {
+    display: none;
+}
+
+.grid .item_width {
+    display: none;
+}
+
 .info > * {
   max-width: calc(100vw - 70px - 60px);
 }
+
 
 /* Mime icon generator overwrite */
 

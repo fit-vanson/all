@@ -108,6 +108,14 @@
           <div class="item_dir text-truncate"></div>
           <time class="text-muted font-weight-light text-truncate"></time>
         </div>
+          <div class="info" style=" position: absolute;right: 400px;">
+              <div class="item_size text-truncate right-0"></div>
+              <div class="item_width text-muted"></div>
+              <div class="item_height text-muted"></div>
+          </div>
+          <div class="info" style=" position: absolute;right: 100px;">
+              <div class="item_owner text-truncate right-0"></div>
+          </div>
       </a>
     </div>
 
@@ -298,7 +306,8 @@
       paramName: "upload[]", // The name that will be used to transfer the file
       uploadMultiple: false,
       parallelUploads: 20,
-      // timeout:0,
+        // timeout: 180000,
+      timeout:0,
       clickable: '#upload-button',
       dictDefaultMessage: lang['message-drop'],
 
@@ -315,6 +324,7 @@
         this.on('success', function(file, response) {
           if (response == 'OK') {
             loadFolders();
+            loadItems();
               _this.removeFile(file);
               document.getElementById("tags_name").value = '';
           } else {
@@ -325,7 +335,7 @@
       headers: {
         'Authorization': 'Bearer ' + getUrlParam('token')
       },
-      acceptedFiles: "{{ implode(',', $helper->availableMimeTypes()) }}",
+      acceptedFiles: "{{ implode(',', $helper->availableMimeTypes()) }},.psd",
       maxFilesize: ({{ $helper->maxUploadSize() }} / 1000)
     }
   </script>

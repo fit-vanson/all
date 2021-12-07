@@ -27,14 +27,12 @@ class ItemsController extends LfmController
         $perPage = $this->helper->getPaginationPerPage();
         $items = array_merge($this->lfm->folders(), $this->lfm->files());
         $arr_items = array_map(function ($item) {
-            $file = FileManage::where('name',$item->fill()->attributes['name'])->where('dir',request()->working_dir)->first();
+            $file = FileManage::with('user')->where('name',$item->fill()->attributes['name'])->first();
             if($file){
                 FileManage::updateOrCreate(
                     [
                         'id'=>$file->id,
                         'name'=>$file->name,
-                        'dir'=>$file->dir,
-                        'url'=>$file->url,
                     ],
                     [
                         'icon'=>$item->fill()->attributes['icon'],
@@ -51,7 +49,10 @@ class ItemsController extends LfmController
             return array_merge($item->fill()->attributes,$file);
         }, array_slice($items, ($currentPage - 1) * $perPage, $perPage));
         if($keyword != null) {
-            $arr_items = FileManage::where('name', 'like', '%' . $keyword . '%')->orwhere('tags', 'like', '%' . $keyword . '%')->get()->toArray();
+            $arr_items = FileManage::with('user')->where('name', 'like', '%' . $keyword . '%')
+                ->orwhere('name_original', 'like', '%' . $keyword . '%')
+                ->orwhere('tags', 'like', '%' . $keyword . '%')
+                ->get()->toArray();
             $arr_items = array_slice($arr_items, ($currentPage - 1) * $perPage, $perPage);
         }
 

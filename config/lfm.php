@@ -48,33 +48,32 @@ return [
     'folder_categories'        => [
         'file'  => [
             'folder_name'  => 'files',
-            'startup_view' => 'list',
-            'max_size'     => 5000000, // size in KB
+            'startup_view' => 'grid',
+            'max_size'     => 50000000000, // size in KB
             'valid_mime'   => [
                 'image/jpeg',
                 'image/pjpeg',
                 'image/png',
                 'image/gif',
-                'image/psd',
                 'image/jpg',
                 'image/webp',
-                'application/pdf',
                 'text/plain',
                 'video/mp4',
+                'application/octet-stream'
             ],
         ],
         'image' => [
             'folder_name'  => 'photos',
             'startup_view' => 'grid',
-            'max_size'     => 5000000, // size in KB
+            'max_size'     => 50000000000, // size in KB
             'valid_mime'   => [
                 'image/jpeg',
                 'image/pjpeg',
                 'image/png',
                 'image/gif',
-                'image/psd',
                 'image/jpg',
                 'image/webp',
+                'application/octet-stream'
             ],
         ],
     ],
@@ -97,17 +96,17 @@ return [
 
     'disk'                     => 'public',
 
-    'rename_file'              => false,
+    'rename_file'              => true,
 
     'rename_duplicates'        => true,
 
-    'alphanumeric_filename'    => false,
+    'alphanumeric_filename'    => true,
 
     'alphanumeric_directory'   => false,
 
     'should_validate_size'     => false,
 
-    'should_validate_mime'     => true,
+    'should_validate_mime'     => false,
 
     // behavior on files with identical name
     // setting it to true cause old file replace with new one
@@ -158,6 +157,7 @@ return [
         'png'  => 'PNG Image',
         'ppt'  => 'Microsoft PowerPoint',
         'pptx' => 'Microsoft PowerPoint',
+        'psd' => 'Microsoft PowerPoint',
     ],
 
 
@@ -173,6 +173,6 @@ return [
     | directives are not supported.
      */
     'php_ini_overrides'        => [
-        'memory_limit' => '256M',
+        'memory_limit' => '1024M',
     ],
 ];

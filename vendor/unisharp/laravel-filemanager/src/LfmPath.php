@@ -3,10 +3,12 @@
 namespace UniSharp\LaravelFilemanager;
 
 use Illuminate\Container\Container;
+use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use UniSharp\LaravelFilemanager\Events\ImageIsUploading;
 use UniSharp\LaravelFilemanager\Events\ImageWasUploaded;
+use Imagick;
 
 class LfmPath
 {
@@ -201,7 +203,7 @@ class LfmPath
         }
 
         uasort($arr_items, function ($a, $b) use ($key_to_sort) {
-            return strcasecmp($a->{$key_to_sort}, $b->{$key_to_sort});
+            return strcasecmp($b->{$key_to_sort}, $a->{$key_to_sort});
         });
 
         return $arr_items;
@@ -218,10 +220,21 @@ class LfmPath
         $this->uploadValidator($file);
         $new_file_name = $this->getNewName($file);
         $new_file_path = $this->setName($new_file_name)->path('absolute');
-
         event(new ImageIsUploading($new_file_path));
         try {
             $new_file_name = $this->saveFile($file, $new_file_name);
+            try
+            {
+                $file = new \Imagick($new_file_path);
+                $file->stripImage();
+                $file->writeImage($new_file_path);
+                $file->clear();
+                $file->destroy();
+            } catch(Exception $e) {
+                Log::error($e->getMessage(), [
+                    'Exception caught'=>  $e->getMessage(),
+                ]);
+            }
         } catch (\Exception $e) {
             \Log::info($e);
             return $this->error('invalid');
@@ -283,7 +296,7 @@ class LfmPath
         $extension = $file->getClientOriginalExtension();
 
         if (config('lfm.rename_file') === true) {
-            $new_file_name = uniqid();
+            $new_file_name = uniqid('',true);
         } elseif (config('lfm.alphanumeric_filename') === true) {
             $new_file_name = preg_replace('/[^A-Za-z0-9\-\']/', '_', $new_file_name);
         }
@@ -315,9 +328,14 @@ class LfmPath
 
     private function saveFile($file, $new_file_name)
     {
+//        $original_image = $this->pretty($new_file_name);
+//        $file = Image::make($file);
+//        $this->storage->put($file->stream()->detach(), 'public');
         $this->setName($new_file_name)->storage->save($file);
 
-        $this->makeThumbnail($new_file_name);
+        if($file->getClientOriginalExtension() != "psd"){
+            $this->makeThumbnail($new_file_name);
+        }
 
         return $new_file_name;
     }

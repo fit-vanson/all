@@ -48,10 +48,10 @@ class DeleteController extends LfmController
 //                    continue;
                 }
             } else {
-                FileManage::whereIn('id',$id)->delete();
                 if ($file_to_delete->isImage()) {
                     $this->lfm->setName($name_to_delete)->thumb()->delete();
                 }
+                FileManage::whereIn('id',$id)->delete();
             }
             $this->lfm->setName($name_to_delete)->delete();
 

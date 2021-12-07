@@ -1,6 +1,6 @@
 var lfm_route = location.origin + location.pathname;
 var show_list;
-var sort_type = 'alphabetic';
+var sort_type = 'time';
 var multi_selection_enabled = false;
 var selected = [];
 var items = [];
@@ -424,8 +424,6 @@ function createPagination(paginationSetting) {
 let timeoutID = null;
 function search(str) {
     loadItems();
-    console.log('search: ' + str)
-
 }
 
 $('#keyword').keyup(function(e) {
@@ -478,9 +476,24 @@ function loadItems(page) {
             var icon = $('<div>').addClass('ico');
             var image = $('<div>').addClass('mime-icon ico-' + item.icon).append(icon);
           }
+          if(item.ext == 'psd'){
+              var icon = $('<div>').addClass('ico');
+              var image = $('<div>').addClass('mime-icon ico-psd').append(icon);
+          }
+
 
           template.find('.square').append(image);
-          template.find('.item_name').text(item.name);
+            if (item.is_file) {
+                template.find('.item_name').text(item.name_original);
+                template.find('.item_size').text('Size: '+ parseFloat(item.file_size/1000000).toFixed(2) + ' MB');
+                if(item.width && item.height){
+                    template.find('.item_width').text('Width: '+item.width);
+                    template.find('.item_height').text('Height: '+item.height);
+                }
+                // template.find('.item_owner').text('Owner: '+item.user['name']);
+            } else {
+                template.find('.item_name').text(item.name);
+            }
           template.find('.item_dir').text(item.dir);
           template.find('time').text((new Date(item.time * 1000)).toLocaleString());
 
@@ -503,7 +516,7 @@ function loadItems(page) {
       $('#nav-buttons > ul').removeClass('d-none');
 
       $('#working_dir').val(working_dir);
-      console.log('Current working_dir : ' + working_dir);
+      // console.log('Current working_dir : ' + working_dir);
       var breadcrumbs = [];
       var validSegments = working_dir.split('/').filter(function (e) { return e; });
       validSegments.forEach(function (segment, index) {
@@ -567,7 +580,13 @@ function rename(item) {
         });
     }else {
         $('#tags_input').show();
-        dialog(lang['message-rename'], [item.name], function (new_name) {
+        var tags = $('#rename_tags').tagify();
+
+
+        // $('[name=rename_tags]').tagify();
+        // var tags = tagifyInput.val()
+        // console.log(tags.getTagElmByValue())
+        dialog(lang['message-rename'], [item.name_original], function (new_name) {
             performLfmRequest('rename', {
                 id: item.id,
                 file: item.name,

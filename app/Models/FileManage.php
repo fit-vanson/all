@@ -10,4 +10,9 @@ class FileManage extends Model
     use HasFactory;
     protected $table = 'file_manages';
     protected $guarded = [];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
