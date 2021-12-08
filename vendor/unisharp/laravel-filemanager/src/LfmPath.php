@@ -223,8 +223,7 @@ class LfmPath
         event(new ImageIsUploading($new_file_path));
         try {
             $new_file_name = $this->saveFile($file, $new_file_name);
-            try
-            {
+            try{
                 $file = new \Imagick($new_file_path);
                 $file->stripImage();
                 $file->writeImage($new_file_path);
