@@ -223,17 +223,17 @@ class LfmPath
         event(new ImageIsUploading($new_file_path));
         try {
             $new_file_name = $this->saveFile($file, $new_file_name);
-            try{
-                $file = new \Imagick($new_file_path);
-                $file->stripImage();
-                $file->writeImage($new_file_path);
-                $file->clear();
-                $file->destroy();
-            } catch(Exception $e) {
-                Log::error($e->getMessage(), [
-                    'Exception caught'=>  $e->getMessage(),
-                ]);
-            }
+//            try{
+//                $file = new \Imagick($new_file_path);
+//                $file->stripImage();
+//                $file->writeImage($new_file_path);
+//                $file->clear();
+//                $file->destroy();
+//            } catch(Exception $e) {
+//                Log::error($e->getMessage(), [
+//                    'Exception caught'=>  $e->getMessage(),
+//                ]);
+//            }
         } catch (\Exception $e) {
             \Log::info($e);
             return $this->error('invalid');
