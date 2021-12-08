@@ -3,6 +3,7 @@
 namespace UniSharp\LaravelFilemanager\Controllers;
 
 use App\Models\FileManage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use UniSharp\LaravelFilemanager\Events\ImageIsDeleting;
 use UniSharp\LaravelFilemanager\Events\ImageWasDeleted;
@@ -43,7 +44,13 @@ class DeleteController extends LfmController
 
             if ($this->lfm->setName($name_to_delete)->isDirectory()) {
                 if (! $this->lfm->setName($name_to_delete)->directoryIsEmpty()) {
-                    FileManage::where('dir',request()->working_dir.'/'.$name_to_delete)->delete();
+                    try{
+                        FileManage::where('dir',request()->working_dir.'/'.$name_to_delete)->delete();
+                    } catch(Exception $e) {
+                        Log::error($e->getMessage(), [
+                            'delele dir'=>  $e->getMessage(),
+                        ]);
+                    }
 //                    array_push($errors, parent::error('delete-folder'));
 //                    continue;
                 }
@@ -51,7 +58,14 @@ class DeleteController extends LfmController
                 if ($file_to_delete->isImage()) {
                     $this->lfm->setName($name_to_delete)->thumb()->delete();
                 }
-                FileManage::whereIn('id',$id)->delete();
+                try{
+                    FileManage::whereIn('id',$id)->delete();
+                } catch(Exception $e) {
+                    Log::error($e->getMessage(), [
+                        'delele file'=>  $e->getMessage(),
+                    ]);
+                }
+
             }
             $this->lfm->setName($name_to_delete)->delete();
 
