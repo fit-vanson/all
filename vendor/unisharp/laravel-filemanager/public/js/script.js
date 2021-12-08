@@ -490,7 +490,9 @@ function loadItems(page) {
                     template.find('.item_width').text('Width: '+item.width);
                     template.find('.item_height').text('Height: '+item.height);
                 }
-                // template.find('.item_owner').text('Owner: '+item.user['name']);
+                if(item.user){
+                    template.find('.item_owner').text('Owner: '+item.user['name']);
+                }
             } else {
                 template.find('.item_name').text(item.name);
             }

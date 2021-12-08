@@ -57,9 +57,7 @@ return [
                 'image/gif',
                 'image/jpg',
                 'image/webp',
-                'text/plain',
                 'video/mp4',
-                'application/octet-stream'
             ],
         ],
         'image' => [
@@ -73,7 +71,6 @@ return [
                 'image/gif',
                 'image/jpg',
                 'image/webp',
-                'application/octet-stream'
             ],
         ],
     ],
