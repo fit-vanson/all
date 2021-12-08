@@ -582,21 +582,29 @@ function rename(item) {
         });
     }else {
         $('#tags_input').show();
-        var tags = $('#rename_tags').tagify();
-
-
-        // $('[name=rename_tags]').tagify();
-        // var tags = tagifyInput.val()
-        // console.log(tags.getTagElmByValue())
         dialog(lang['message-rename'], [item.name_original], function (new_name) {
             performLfmRequest('rename', {
                 id: item.id,
                 file: item.name,
                 new_name: new_name,
-                new_tags: $('#rename_tags').val(),
+                new_tags: (function (){
+                    var tags = $('#rename_tags').val();
+                    tags = JSON.parse(tags);
+                    tags = tags.map(item => item.value).join(',')
+                    return tags
+                }),
                 type: item.is_file,
             }).done(refreshFoldersAndItems);
         },[item.tags]);
+
+        // }$('#rename_tags').val()
+        //     tags = tags.map(item => item.value).join(', ')
+        // var inputElm = document.querySelector,
+        //  tagify = new Tagify(inputElm)
+
+        // var tag  = tags.map(function (item){
+        //     console.log(item)
+        // })
     }
 }
 

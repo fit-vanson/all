@@ -65,7 +65,6 @@ class DeleteController extends LfmController
                         'delele file'=>  $e->getMessage(),
                     ]);
                 }
-
             }
             $this->lfm->setName($name_to_delete)->delete();
 

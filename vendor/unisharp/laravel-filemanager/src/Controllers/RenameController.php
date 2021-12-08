@@ -18,16 +18,15 @@ class RenameController extends LfmController
         $old_name = $this->helper->input('file');
         $new_name = $this->helper->input('new_name');
         if(request()->new_tags){
-            $new_tags = json_decode(request()->new_tags,true);
-            foreach ($new_tags as $value){
-                $temp[] = $value['value'];
+            $tags = request()->new_tags;
+            $tags_name = explode(',',$tags);
+             foreach ($tags_name as $value){
                 Tags::updateOrCreate(
                     [
-                        'tags_name'=>$value['value'],
+                        'tags_name'=>$value,
                     ]
                 );
             }
-            $tags = implode(',',$temp);
         }else{
             $tags = '';
         }
