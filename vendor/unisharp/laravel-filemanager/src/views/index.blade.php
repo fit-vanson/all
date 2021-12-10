@@ -132,11 +132,7 @@
         <div class="modal-body">
           <form action="{{ route('unisharp.lfm.upload') }}" role='form' id='uploadForm' name='uploadForm' method='post' enctype='multipart/form-data' class="dropzone">
             <div class="form-group" id="attachment">
-
-
-
               <div class="controls text-center">
-
 
                 <div class="input-group w-100">
                     <label class="form-label" for="last-name-column">Tags:</label>
@@ -182,7 +178,7 @@
         <div class="modal-body">
           <input type="text" class="form-control">
             <div id="tags_input">
-                <label class="form-label" for="last-name-column" style=" margin-top: 20px">Tags:</label>
+                <label class="form-label" for="last-name-column" style=" margin-top: 20px">Tags: </label>
                 <input type="text" class="form-control" id="rename_tags" name="rename_tags">
             </div>
 

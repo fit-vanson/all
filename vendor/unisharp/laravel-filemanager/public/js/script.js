@@ -589,9 +589,11 @@ function rename(item) {
                 new_name: new_name,
                 new_tags: (function (){
                     var tags = $('#rename_tags').val();
-                    tags = JSON.parse(tags);
-                    tags = tags.map(item => item.value).join(',')
-                    return tags
+                    if(tags){
+                        tags = JSON.parse(tags);
+                        tags = tags.map(item => item.value).join(',')
+                        return tags
+                    }
                 }),
                 type: item.is_file,
             }).done(refreshFoldersAndItems);
