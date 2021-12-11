@@ -484,7 +484,11 @@ function loadItems(page) {
 
           template.find('.square').append(image);
             if (item.is_file) {
-                template.find('.item_name').text(item.name_original);
+                if(item.name_original){
+                    template.find('.item_name').text(item.name_original);
+                }else {
+                    template.find('.item_name').text(item.name);
+                }
                 template.find('.item_size').text('Size: '+ parseFloat(item.file_size/1000000).toFixed(2) + ' MB');
                 if(item.width && item.height){
                     template.find('.item_width').text('Width: '+item.width);
