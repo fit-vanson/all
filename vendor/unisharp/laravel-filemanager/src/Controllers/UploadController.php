@@ -54,7 +54,7 @@ class UploadController extends LfmController
 
         foreach (is_array($uploaded_files) ? $uploaded_files : [$uploaded_files] as $file) {
             try {
-                if(getimagesize($file) !== null){
+                if(getimagesize($file)){
                     list($width, $height) = getimagesize($file);
                 }else{
                     list($width, $height) = null;
