@@ -115,35 +115,8 @@
             </div>
             <!--/ User Content -->
         </div>
-        <div id="insertimageModal" class="modal" role="dialog">
-            <div class="modal-dialog modal-dialog-centered modal-edit-user">
-                <div class="modal-content">
-                    <div class="modal-header bg-transparent">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body pb-5 px-sm-5 pt-50">
-                        <div class="text-center mb-2">
-                            <h1 class="mb-1">Crop Image</h1>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-8 text-center">
-                                <div id="image_demo" style="width:350px; margin-top:30px"></div>
-                            </div>
-                            <div class="col-md-4" style="padding-top:30px;">
-                                <br />
-                                <br />
-                                <br/>
 
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success crop_image">Crop</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @include('content.user.modal_insert_avatar')
     </section>
 
 @endsection
@@ -168,7 +141,6 @@
         $(function () {
             'use strict';
             var formChangePassword = $('#formChangePassword');
-
             if (formChangePassword.length) {
                 formChangePassword.validate({
                     rules: {
@@ -228,6 +200,63 @@
                     }
                 });
             }
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $('#avatar').click(function(){
+                $('#insert_image').click();
+            });
+
+            $image_crop = $('#image_demo').croppie({
+                enableExif: true,
+                viewport: {
+                    width:200,
+                    height:200,
+                    type:'square' //circle
+                },
+                boundary:{
+                    width:300,
+                    height:300
+                }
+            });
+
+            $('#insert_image').on('change', function(){
+                var reader = new FileReader();
+                reader.onload = function (event) {
+                    $image_crop.croppie('bind', {
+                        url: event.target.result
+                    }).then(function(){
+                        console.log('complete');
+                    });
+                }
+                reader.readAsDataURL(this.files[0]);
+                $('#insertimageModal').modal('show');
+            });
+
+            $('.crop_image').click(function(event){
+                $image_crop.croppie('result', {
+                    type: 'canvas',
+                    size: 'viewport'
+                }).then(function(response){
+                    $.ajax({
+                        url:'{{route('user.changeInfo')}}',
+                        type:'POST',
+                        data:{"image":response},
+                        success:function(data){
+                            $('#insertimageModal').modal('hide');
+                            $('#avatar').attr('src','data:image/png;base64,'+data['image']);
+                            $('#avatar1').attr('src','data:image/png;base64,'+data['image']);
+                        }
+                    })
+                });
+            });
         });
     </script>
 @endsection

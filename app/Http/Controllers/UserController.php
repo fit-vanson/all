@@ -38,7 +38,6 @@ class UserController extends Controller
             $role = Auth::user()->getRoleNames()[0];
             return view('content.user.info', ['pageConfigs' => $pageConfigs,'user'=>$user,'role'=>$role]);
         }
-
     }
     public function getIndex(Request $request)
     {
@@ -127,6 +126,11 @@ class UserController extends Controller
         }else{
             $data['password'] =  bcrypt(123456789);
         }
+        if($request->image){
+            $image = $request->image;
+            $image1 = base64_encode(file_get_contents($image));
+            $data['avatar'] = $image1;
+        }
         $data->assignRole($request->user_role);
         $data->save();
         return response()->json(['success'=>'Cập nhật thành công']);
@@ -136,7 +140,6 @@ class UserController extends Controller
         $rules = [
             'user_name' =>'unique:users,name,'.$id.',id',
             'user_email' =>'email|unique:users,email,'.$id.',id',
-
         ];
         $message = [
             'user_name.unique'=>'Tên đã tồn tại',
@@ -148,13 +151,16 @@ class UserController extends Controller
         if($error->fails()){
             return response()->json(['errors'=> $error->errors()->all()]);
         }
-
-
         $data = User::find($id);
         $data->name = $request->user_name;
         $data->email = $request->user_email;
         if($request->user_password){
             $data->password =  bcrypt($request->user_password);
+        }
+        if($request->image){
+            $image = $request->image;
+            $image1 = base64_encode(file_get_contents($image));
+            $data->avatar = $image1;
         }
         $data->syncRoles($request->user_role);
         $data->save();

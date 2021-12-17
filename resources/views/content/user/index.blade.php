@@ -87,17 +87,16 @@
       </table>
     </div>
     <!-- Modal to add new user starts-->
-
     <div class="modal modal-slide-in fade" id="modals-slide-in">
       <div class="modal-dialog">
-          <form class="add-new-user modal-content pt-0" id="userForm" novalidate="novalidate">
+          <form class="add-new-user modal-content pt-0" id="userForm" novalidate="novalidate" enctype="multipart/form-data">
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
               <div class="modal-header mb-1">
                   <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
               </div>
               <div class="modal-body flex-grow-1">
                   <input type="hidden" name="id" id="id" value="">
-                  <input type="file" name="insert_image" id="insert_image" hidden accept="image/*" />
+                  <input type="file" name="insert_image" id="insert_image" hidden  accept="image/*" />
                   <img id="avatar" class="img-fluid rounded mt-3 mb-2" width="110px"  height="110" src="/images/avatars/1.png" />
 
                   <div class="mb-1">
@@ -126,8 +125,8 @@
           </form>
       </div>
     </div>
-
     <!-- Modal to add new user Ends-->
+      @include('content.user.modal_insert_avatar')
   </div>
   <!-- list and filter end -->
 </section>
@@ -165,8 +164,6 @@
               }
           });
           ('use strict');
-
-
           // var newUserSidebar = $('.new-user-modal');
           var  UserForm = $('#userForm');
           // Users List datatable
@@ -358,11 +355,14 @@
               UserForm.on('submit', function (e) {
                   var isValid = UserForm.valid();
                   var nameValue = document.getElementById("submitButton").value;
+                  var formData = $('#userForm').serializeArray();
+                  var avatar = $('#avatar').attr('src');
+                  formData.push({name: 'image', value: avatar});
                   e.preventDefault();
                   if (isValid) {
                       if (nameValue == "create") {
                           $.ajax({
-                              data: $('#userForm').serialize(),
+                              data: formData,
                               url: '{{route('user.create')}}',
                               type: "POST",
                               dataType: 'json',
@@ -391,7 +391,7 @@
                       }
                       if (nameValue == "update") {
                           $.ajax({
-                              data: $('#userForm').serialize(),
+                              data: formData,
                               url: '{{route('user.update')}}',
                               type: "POST",
                               dataType: 'json',
@@ -493,10 +493,49 @@
               $('#submitButton').prop('class','btn btn-primary');
               $('#submitButton').text('Create');
               $('#submitButton').val('create');
+              $('#avatar').attr('src','/images/avatars/1.png');
           });
+      });
 
+      $('#avatar').click(function(){
+          $('#insert_image').click();
+      });
 
+      $image_crop = $('#image_demo').croppie({
+          enableExif: true,
+          viewport: {
+              width:200,
+              height:200,
+              type:'square' //circle
+          },
+          boundary:{
+              width:300,
+              height:300
+          }
+      });
 
+      $('#insert_image').on('change', function(){
+          var reader = new FileReader();
+          reader.onload = function (event) {
+              $image_crop.croppie('bind', {
+                  url: event.target.result
+              }).then(function(){
+                  console.log('complete');
+              });
+          }
+          reader.readAsDataURL(this.files[0]);
+          $('#insertimageModal').modal('show');
+      });
+
+      $('.crop_image').click(function(event){
+          $image_crop.croppie('result', {
+              type: 'canvas',
+              size: 'viewport'
+          }).then(function(response){
+              console.log(response)
+              $('#avatar').attr('src',response);
+              $('#insertimageModal').modal('hide');
+          });
       });
   </script>
 @endsection
