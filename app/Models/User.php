@@ -49,4 +49,5 @@ class User extends Authenticatable
     public function getUploadsCount(){
         return $this->uploads()->count();
     }
+
 }

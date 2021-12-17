@@ -7,9 +7,11 @@ namespace App\Http\Controllers;
 //use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 
@@ -25,15 +27,19 @@ class UserController extends Controller
     }
     public function index(Request $request)
     {
+        $user = Auth::user();
         $pageConfigs = ['pageHeader' => false];
-        $users = $this->user->all();
-        $roles = $this->role->all();
-        return view('content.user.index', ['pageConfigs' => $pageConfigs,'users'=>$users,'roles'=>$roles]);
+        if($user->hasRole('Admin')){
+            $users = $this->user->all();
+            $roles = $this->role->all();
+            return view('content.user.index', ['pageConfigs' => $pageConfigs,'users'=>$users,'roles'=>$roles]);
+        }else{
+            $user = Auth::user();
+            $role = Auth::user()->getRoleNames()[0];
+            return view('content.user.info', ['pageConfigs' => $pageConfigs,'user'=>$user,'role'=>$role]);
+        }
+
     }
-//    public function callAction($method, $parameters)
-//    {
-//        return parent::callAction($method, array_values($parameters));
-//    }
     public function getIndex(Request $request)
     {
         $draw = $request->get('draw');
@@ -81,6 +87,7 @@ class UserController extends Controller
                 "id" => $record->id,
                 "name" => $record->name,
                 "email" => $record->email,
+                "avatar" => $record->avatar,
                 "roles" => (count($record->getRoleNames())> 0) ? $record->getRoleNames()[0] : 'Guest' ,
             );
         }
@@ -97,8 +104,6 @@ class UserController extends Controller
     }
     public function create(Request $request)
     {
-
-
         $rules = [
             'user_name' => 'required|unique:users,name',
             'user_email' => 'required|unique:users,email',
@@ -166,4 +171,29 @@ class UserController extends Controller
         User::where('id',$id)->delete();
         return response()->json(['success'=>'Xóa người dùng.']);
     }
+    public function changeInfo(Request $request){
+        if($request->image){
+            $data = $request->image;
+            $image = base64_encode(file_get_contents($data));
+            $user = User::find(Auth::id());
+            $user->avatar = $image;
+            if ($user->save()) {
+                $res = [
+                    'success' => 'Successfully updated',
+                    'image' => $image,
+                ];
+            }
+            return response()->json($res);
+        }
+        if($request->newPassword){
+            $data = $request->newPassword;
+            $user = User::find(Auth::id());
+            $user->password =  bcrypt($request->newPassword);
+            $user->save();
+            return response()->json(['success' => 'Successfully updated']);
+        }
+        dd($request->all());
+
+    }
+
 }

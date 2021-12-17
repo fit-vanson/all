@@ -17,7 +17,7 @@
   {{-- Page Css files --}}
   <link rel="stylesheet" href="{{ asset(('css/base/plugins/forms/form-validation.css')) }}">
   <link rel="stylesheet" href="{{ asset(('css/base/plugins/extensions/ext-component-toastr.css')) }}">
-  <link rel="stylesheet" href="{{asset(('css/base/plugins/extensions/ext-component-sweet-alerts.css'))}}">
+
 @endsection
 
 
@@ -97,6 +97,9 @@
               </div>
               <div class="modal-body flex-grow-1">
                   <input type="hidden" name="id" id="id" value="">
+                  <input type="file" name="insert_image" id="insert_image" hidden accept="image/*" />
+                  <img id="avatar" class="img-fluid rounded mt-3 mb-2" width="110px"  height="110" src="/images/avatars/1.png" />
+
                   <div class="mb-1">
                       <label class="form-label" for="basic-icon-default-uname">Username</label>
                       <input type="text" id="user_name" class="form-control dt-uname" placeholder="User1" name="user_name">
@@ -149,7 +152,6 @@
   <script src="{{ asset(('vendors/js/forms/cleave/cleave.min.js')) }}"></script>
   <script src="{{ asset(('vendors/js/forms/cleave/addons/cleave-phone.us.js')) }}"></script>
   <script src="{{ asset(('vendors/js/extensions/toastr.min.js')) }}"></script>
-  <script src="{{ asset(('vendors/js/extensions/sweetalert2.all.min.js')) }}"></script>
 @endsection
 
 @section('page-script')
@@ -206,7 +208,7 @@
                           if ($image) {
                               // For Avatar image
                               var $output =
-                                  '<img src="' + assetPath + 'images/avatars/' + $image + '" alt="Avatar" height="32" width="32">';
+                                  '<img src="data:image/png;base64,'+ $image + '" alt="Avatar" height="32" width="32">';
                           } else {
                               // For Avatar badge
                               var stateNum = Math.floor(Math.random() * 6) + 1;
@@ -461,6 +463,7 @@
                   type: "get",
                   url: "user/edit/" + id,
                   success: function (data) {
+                      console.log(data)
                       $('.modal-slide-in').modal('show');
                       $('#exampleModalLabel').html("Edit User");
                       $('#submitButton').prop('class','btn btn-success');
@@ -471,6 +474,12 @@
                       $('#user_name').val(data[0].name);
                       $('#user_email').val(data[0].email);
                       $('#user_role').val(data[1]);
+                      if(data[0].avatar){
+                          $('#avatar').attr('src','data:image/png;base64,'+data[0].avatar);
+                      }else {
+                          $('#avatar').attr('src','/images/avatars/1.png');
+                      }
+
                   },
                   error: function (data) {
                   }

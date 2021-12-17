@@ -14,6 +14,8 @@
 <link rel="stylesheet" href="{{ asset(('css/base/themes/bordered-layout.css')) }}" />
 <link rel="stylesheet" href="{{ asset(('css/base/themes/semi-dark-layout.css')) }}" />
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
+
 @php $configData = Helper::applClasses(); @endphp
 
 <!-- BEGIN: Page CSS-->

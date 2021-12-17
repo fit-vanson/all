@@ -72,7 +72,7 @@
         </div>
             <?php
                 if (Auth::user()->avatar) {
-                   $output = '<img src="images/avatars/' . Auth::user()->avatar . '" alt="Avatar" height="40" width="40">';
+                   $output = '<img id="avatar1" src="data:image/png;base64,'. Auth::user()->avatar.'" alt="Avatar" height="40" width="40">';
                 } else {
                   // For Avatar badge
                   $stateNum = rand(0,6);
@@ -86,7 +86,7 @@
               $row_output =
                   '<div class="d-flex justify-content-left align-items-center">' .
                   '<div class="avatar-wrapper">' .
-                  '<div class="avatar ' .
+                  '<div class="avatar'  .
                   $colorClass .
                   ' me-1">' .
                   $output .
@@ -100,12 +100,8 @@
         <h6 class="dropdown-header">Manage Profile</h6>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item"
-          href="{{ Route::has('profile.show') ? route('profile.show') : 'javascript:void(0)' }}">
+          href="{{route('user.index')}}">
           <i class="me-50" data-feather="user"></i> Profile
-        </a>
-
-        <a class="dropdown-item" href="#">
-          <i class="me-50" data-feather="settings"></i> Settings
         </a>
         @if (Auth::check())
           <a class="dropdown-item" href="{{ route('logout') }}"

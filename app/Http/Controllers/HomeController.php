@@ -47,7 +47,7 @@ class HomeController extends Controller
         $data_arr = array();
         foreach ($records as $record){
             if ($record->avatar) {
-                $output = '<img src="images/avatars/' . $record->avatar . '" alt="Avatar" height="40" width="40">';
+                $output = '<img src="data:image/png;base64,' . $record->avatar . '" alt="Avatar" height="40" width="40">';
             } else {
                 // For Avatar badge
                 $stateNum = rand(0,6);
