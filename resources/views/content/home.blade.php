@@ -64,7 +64,7 @@
                                         </div>
                                     </div>
                                     <div class="my-auto">
-                                        <h4 class="fw-bolder mb-0">{{count($data_users)}}</h4>
+                                        <h4 class="fw-bolder mb-0">{{$users}}</h4>
                                         <p class="card-text font-small-3 mb-0">User</p>
                                     </div>
                                 </div>
@@ -77,7 +77,7 @@
                                         </div>
                                     </div>
                                     <div class="my-auto">
-                                        <h4 class="fw-bolder mb-0">{{count($data_tags)}}</h4>
+                                        <h4 class="fw-bolder mb-0">{{$tags}}</h4>
                                         <p class="card-text font-small-3 mb-0">Tags</p>
                                     </div>
                                 </div>

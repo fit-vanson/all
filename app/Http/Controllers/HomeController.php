@@ -28,11 +28,14 @@ class HomeController extends Controller
         $data_users = $this->topUpload();
         $data_tags = $this->tagsCount();
         $file = FileManage::all();
-
+        $users = User::count();
+        $tags = Tags::count();
         return view('content.home', [
             'data_users' => $data_users,
-            'data_tags'=>$data_tags,
-            'file' =>$file
+            'data_tags'=> $data_tags,
+            'file' => $file,
+            'users' => $users,
+            'tags' => $tags,
         ]);
     }
 
@@ -125,7 +128,4 @@ class HomeController extends Controller
         $data_arr = array_slice($data_arr, 0, $limit);
         return $data_arr;
     }
-
-
-
 }
