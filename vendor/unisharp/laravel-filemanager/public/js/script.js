@@ -480,6 +480,10 @@ function loadItems(page) {
               var icon = $('<div>').addClass('ico');
               var image = $('<div>').addClass('mime-icon ico-psd').append(icon);
           }
+            if(item.ext == 'eps'){
+                var icon = $('<div>').addClass('ico');
+                var image = $('<div>').addClass('mime-icon ico-eps').append(icon);
+            }
 
 
           template.find('.square').append(image);

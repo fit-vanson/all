@@ -332,7 +332,7 @@ class LfmPath
 //        $this->storage->put($file->stream()->detach(), 'public');
         $this->setName($new_file_name)->storage->save($file);
 
-        if($file->getClientOriginalExtension() != "psd"){
+        if($file->getClientOriginalExtension() != "eps" && $file->getClientOriginalExtension() != "psd"){
             $this->makeThumbnail($new_file_name);
         }
 
