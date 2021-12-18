@@ -307,7 +307,7 @@
       clickable: '#upload-button',
       dictDefaultMessage: lang['message-drop'],
 
-        autoProcessQueue: false,
+        autoProcessQueue: true,
         addRemoveLinks: true,
         dictRemoveFile: 'Xoá',
       init: function() {
@@ -322,7 +322,7 @@
             loadFolders();
             loadItems();
               _this.removeFile(file);
-              document.getElementById("tags_name").value = '';
+              // document.getElementById("tags_name").value = '';
           } else {
             this.defaultOptions.error(file, response.join('\n'));
           }
