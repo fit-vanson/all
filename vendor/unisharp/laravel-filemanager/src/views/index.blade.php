@@ -331,7 +331,7 @@
       headers: {
         'Authorization': 'Bearer ' + getUrlParam('token')
       },
-      acceptedFiles: "{{ implode(',', $helper->availableMimeTypes()) }},.psd",
+      acceptedFiles: "{{ implode(',', $helper->availableMimeTypes()) }},.psd,.ai, .eps",
       maxFilesize: ({{ $helper->maxUploadSize() }} / 1000)
     }
   </script>
