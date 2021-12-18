@@ -437,6 +437,7 @@ function loadItems(page) {
         $('#pagination').addClass('preserve_actions_space');
 
         items.forEach(function (item, index) {
+            console.log(item)
           var template = $('#item-template').clone()
             .removeAttr('id class')
             .attr('data-id', index)
@@ -457,7 +458,7 @@ function loadItems(page) {
           }
 
           template.find('.square').append(image);
-          template.find('.item_name').text(item.name);
+          template.find('.item_name').text(item.name_original);
           template.find('time').text((new Date(item.time * 1000)).toLocaleString());
 
           $('#content').append(template);

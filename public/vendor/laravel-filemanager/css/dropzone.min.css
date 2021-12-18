@@ -488,12 +488,14 @@
 }
 
 .dropzone .dz-preview.dz-error .dz-error-message {
-    display: block
+    display: block;
+    top: 150px!important;
 }
 
 .dropzone .dz-preview.dz-error:hover .dz-error-message {
-    transform: scale(1.5);
-    pointer-events: auto
+    /*transform: scale(5.5);*/
+    pointer-events: auto;
+    top: 150px!important;
 }
 
 .dropzone .dz-preview .dz-error-message {
