@@ -49,11 +49,21 @@ class ItemsController extends LfmController
             return array_merge($item->fill()->attributes,$file);
         }, array_slice($items, ($currentPage - 1) * $perPage, $perPage));
         if($keyword != null) {
-            $arr_items = FileManage::with('user')->where('name', 'like', '%' . $keyword . '%')
+            $arr_items1 = FileManage::with('user')->where('name', 'like', '%' . $keyword . '%')
                 ->orwhere('name_original', 'like', '%' . $keyword . '%')
                 ->orwhere('tags', 'like', '%' . $keyword . '%')
                 ->get()->toArray();
-            $arr_items = array_slice($arr_items, ($currentPage - 1) * $perPage, $perPage);
+            $arr_items = array_slice($arr_items1, ($currentPage - 1) * $perPage, $perPage);
+            return [
+                'items' => $arr_items,
+                'paginator' => [
+                    'current_page' => $currentPage,
+                    'total' => count($arr_items1),
+                    'per_page' => $perPage,
+                ],
+                'display' => $this->helper->getDisplayMode(),
+                'working_dir' => $this->lfm->path('working_dir'),
+            ];
         }
 
         return [
