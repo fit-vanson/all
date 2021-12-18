@@ -49,8 +49,8 @@ class ItemsController extends LfmController
             return array_merge($item->fill()->attributes,$file);
         }, array_slice($items, ($currentPage - 1) * $perPage, $perPage));
         if($keyword != null) {
-            $arr_items1 = FileManage::with('user')->where('name', 'like', '%' . $keyword . '%')
-                ->orwhere('name_original', 'like', '%' . $keyword . '%')
+            $arr_items1 = FileManage::with('user')->where('name_original', 'like', '%' . $keyword . '%')
+//                ->orwhere('name_original', 'like', '%' . $keyword . '%')
                 ->orwhere('tags', 'like', '%' . $keyword . '%')
                 ->get()->toArray();
             $arr_items = array_slice($arr_items1, ($currentPage - 1) * $perPage, $perPage);
