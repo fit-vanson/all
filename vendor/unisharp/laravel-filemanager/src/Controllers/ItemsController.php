@@ -50,8 +50,7 @@ class ItemsController extends LfmController
         }, array_slice($items, ($currentPage - 1) * $perPage, $perPage));
         if($keyword != null) {
             $arr_items1 = FileManage::with('user')
-                ->where('name_original', 'like', '%' . $keyword . '%')
-                ->orwhere('tags', 'like', '%' . $keyword . '%')
+                ->whereLike(['name_original', 'tags'], $keyword)
                 ->get()
                 ->toArray();
             $arr_items = array_slice($arr_items1, ($currentPage - 1) * $perPage, $perPage);
