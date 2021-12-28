@@ -427,7 +427,6 @@
                           });
                       }
                       if(data.success) {
-                          console.log(data)
                           $('#CategoryModal').modal('show');
                           $('.categoryModalLabel').html("Edit Category");
                           $('#submitButton').prop('class','btn btn-success');
