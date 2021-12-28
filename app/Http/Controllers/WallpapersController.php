@@ -28,7 +28,7 @@ class WallpapersController extends Controller
         $pageConfigs = ['pageHeader' => false];
         $users = $this->user->all();
         $roles = $this->role->all();
-        $categories = CategoryManage::all();
+        $categories = CategoryManage::where('id', '<>', 1)->get();
         return view('content.wallpaper.index', [
             'pageConfigs' => $pageConfigs,
             'users'=>$users,

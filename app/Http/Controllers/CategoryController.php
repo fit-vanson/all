@@ -64,6 +64,7 @@ class CategoryController extends Controller
         // Get records, also we have included search filter as well
         $records = CategoryManage::with('wallpaper','site')->orderBy($columnName, $columnSortOrder)
             ->where('category_name', 'like', '%' . $searchValue . '%')
+            ->where('id', '<>', 1)
             ->select('*')
             ->skip($start)
             ->take($rowperpage)

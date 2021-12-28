@@ -29,7 +29,7 @@ class SiteController extends Controller
         $pageConfigs = ['pageHeader' => false];
         $users = $this->user->all();
         $roles = $this->role->all();
-        $categories = CategoryManage::all();
+        $categories = CategoryManage::where('id', '<>', 1)->get();;
         $apiKeys = ApiKeys::where('active',1)->get();
         return view('content.site.index', [
             'pageConfigs' => $pageConfigs,
