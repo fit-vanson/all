@@ -20,7 +20,7 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
-        dd('Liên hệ quản trị viên');
+//        dd('Liên hệ quản trị viên');
         return view('auth.register');
     }
 
@@ -45,6 +45,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        $user->syncRoles($request->user_role);
 
         event(new Registered($user));
 

@@ -6,20 +6,54 @@
       "icon": "home",
       "slug": "home"
     },
-    {
-      "name": "File",
-      "icon": "file",
-      "slug": "",
-      "badgeClass": "badge rounded-pill badge-light-danger ms-auto me-1",
-      "submenu": [
-        {
-          "url": "file",
-          "name": "File Manage",
-          "icon": "circle",
-          "slug": "file.index"
-        }
-      ]
-    },{
+      {
+          "navheader": "Quản lý site",
+          "slug": ""
+      },
+
+      {
+          "name": "Quản lý site",
+          "icon": "globe",
+          "slug": "",
+          "submenu": [
+              {
+                  "url": "category",
+                  "name": "Category",
+                  "icon": "circle",
+                  "slug": "category.index"
+              },
+              {
+                  "url": "wallpaper",
+                  "name": "Wallpaper",
+                  "icon": "circle",
+                  "slug": "wallpaper.index"
+              },
+              {
+                  "url": "api-keys",
+                  "name": "Api Keys",
+                  "icon": "circle",
+                  "slug": "api_keys.index"
+              },
+              {
+                  "url": "block-ips",
+                  "name": "Block IPs",
+                  "icon": "circle",
+                  "slug": "block_ips.index"
+              },
+              {
+                  "url": "site",
+                  "name": "Site",
+                  "icon": "circle",
+                  "slug": "site.index"
+              }
+          ]
+      },
+      {
+          "navheader": "Quản trị",
+          "slug": ""
+      },
+
+      {
           "name": "User",
           "icon": "user",
           "slug": "",

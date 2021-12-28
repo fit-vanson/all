@@ -12,6 +12,8 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
     use HasRoles;
+    protected $connection = 'mysql';
+
 
     /**
      * The attributes that are mass assignable.
@@ -43,11 +45,5 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function uploads() {
-        return $this->hasMany(FileManage::class);
-    }
-    public function getUploadsCount(){
-        return $this->uploads()->count();
-    }
 
 }

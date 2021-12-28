@@ -34,7 +34,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/mime" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/http-kernel" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/http-foundation" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/http-client-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpunit/php-timer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpunit/php-text-template" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpunit/php-invoker" />
@@ -126,6 +125,11 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/laravel/breeze" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/intervention/image" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/unisharp/laravel-filemanager" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/PHPExiftool/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/PHPExiftool/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/PHPExiftool/tests" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/jellybellydev/image-orientation-fix" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/miljar/php-exif" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

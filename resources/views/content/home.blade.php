@@ -23,10 +23,10 @@
             <div class="col-xl-4 col-md-6 col-12">
                 <div class="card card-congratulation-medal">
                     <div class="card-body">
-                        <h5>Xin chúc mừng 🎉 {{$data_users[0]['name']}}</h5>
+{{--                        <h5>Xin chúc mừng 🎉 {{$data_users[0]['name']}}</h5>--}}
                         <p class="card-text font-small-3">Upload nhiều trong tháng</p>
                         <h3 class="mb-75 mt-2 pt-50">
-                            <span  style="color: #7367f0">{{$data_users[0]['countUpload']}} </span><span class="card-text font-small-3">Files Upload</span>
+{{--                            <span  style="color: #7367f0">{{$data_users[0]['countUpload']}} </span><span class="card-text font-small-3">Files Upload</span>--}}
 
                         </h3>
                         <img src="{{asset('images/illustration/badge.svg')}}" class="congratulation-medal" alt="Medal Pic" />
@@ -51,7 +51,7 @@
                                         </div>
                                     </div>
                                     <div class="my-auto">
-                                        <h4 class="fw-bolder mb-0">{{$files}}</h4>
+{{--                                        <h4 class="fw-bolder mb-0">{{$files}}</h4>--}}
                                         <p class="card-text font-small-3 mb-0">File</p>
                                     </div>
                                 </div>
@@ -64,7 +64,7 @@
                                         </div>
                                     </div>
                                     <div class="my-auto">
-                                        <h4 class="fw-bolder mb-0">{{$users}}</h4>
+{{--                                        <h4 class="fw-bolder mb-0">{{$users}}</h4>--}}
                                         <p class="card-text font-small-3 mb-0">User</p>
                                     </div>
                                 </div>
@@ -77,7 +77,7 @@
                                         </div>
                                     </div>
                                     <div class="my-auto">
-                                        <h4 class="fw-bolder mb-0">{{$tags}}</h4>
+{{--                                        <h4 class="fw-bolder mb-0">{{$tags}}</h4>--}}
                                         <p class="card-text font-small-3 mb-0">Tags</p>
                                     </div>
                                 </div>
@@ -103,18 +103,18 @@
                         </div>
                     </div>
                     <div class="card-body" id="topTime">
-                        @foreach($data_users as $data)
-                            <div class="transaction-item">
-                                <div class="d-flex">
-                                    {!! $data['avatar'] !!}
-                                    <div class="transaction-percentage">
-                                        <h6 class="transaction-title">{{$data['name']}}</h6>
-                                        <small>{{$data['email']}}</small>
-                                    </div>
-                                </div>
-                                <div class="fw-bolder  @if($data['diff'] > 0 ) text-success @elseif($data['diff'] < 0 ) text-danger @endif ">{{$data['countUpload']}}</div>
-                            </div>
-                        @endforeach
+{{--                        @foreach($data_users as $data)--}}
+{{--                            <div class="transaction-item">--}}
+{{--                                <div class="d-flex">--}}
+{{--                                    {!! $data['avatar'] !!}--}}
+{{--                                    <div class="transaction-percentage">--}}
+{{--                                        <h6 class="transaction-title">{{$data['name']}}</h6>--}}
+{{--                                        <small>{{$data['email']}}</small>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="fw-bolder  @if($data['diff'] > 0 ) text-success @elseif($data['diff'] < 0 ) text-danger @endif ">{{$data['countUpload']}}</div>--}}
+{{--                            </div>--}}
+{{--                        @endforeach--}}
                     </div>
                 </div>
             </div>
@@ -127,16 +127,16 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        @foreach($data_tags as $data)
-                            <div class="browser-states">
-                            <div class="d-flex">
-                                <h6 class="align-self-center mb-0">{{$data['tags_name']}}</h6>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <div class="fw-bold text-body-heading me-1">{{$data['tags_count']}}</div>
-                            </div>
-                        </div>
-                        @endforeach
+{{--                        @foreach($data_tags as $data)--}}
+{{--                            <div class="browser-states">--}}
+{{--                            <div class="d-flex">--}}
+{{--                                <h6 class="align-self-center mb-0">{{$data['tags_name']}}</h6>--}}
+{{--                            </div>--}}
+{{--                            <div class="d-flex align-items-center">--}}
+{{--                                <div class="fw-bold text-body-heading me-1">{{$data['tags_count']}}</div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                        @endforeach--}}
 
                     </div>
                 </div>
@@ -156,31 +156,5 @@
 @endsection
 @section('page-script')
     {{-- Page js files --}}
-    <script>
-        function timeTop () {
-            var time = document.getElementById("select_time").value;
-            $.get('{{route('home.topUpload')}}?time='+time,function (data) {
-                var html = '';
-                data.forEach(function(item, index, array) {
-                    if(item.diff > 0 ) {
-                        diff =  'text-success';
-                    }else if(item.diff < 0 ){
-                        diff =  'text-danger';
-                    }else{
-                        diff  = '';
-                    }
-                    html += '<div class="transaction-item">'+
-                        '<div class="d-flex">'+item.avatar+
-                        '<div class="transaction-percentage">'+
-                        '<h6 class="transaction-title">'+item.name+'</h6>'+
-                    '<small>'+item.email+'</small>'+
-                '</div>'+
-                '</div>'+
-                    '<div class="fw-bolder '+diff+' ">'+item.countUpload+'</div>'+
-                '</div>';
-                })
-                $('#topTime').html(html);
-            })
-        }
-    </script>
+
 @endsection
