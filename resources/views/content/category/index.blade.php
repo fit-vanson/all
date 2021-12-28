@@ -419,6 +419,7 @@
                   type: "get",
                   url: "category/" + id + "/edit",
                   success: function (data) {
+                      console.log(data)
                       if(data.error){
                           toastr['error']('', data.error, {
                               showMethod: 'fadeIn',
