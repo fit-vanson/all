@@ -32,53 +32,6 @@
 @section('content')
 <!-- users list start -->
 <section class="app-user-list">
-  <div class="row">
-    <div class="col-lg-4 col-sm-6">
-      <div class="card">
-        <div class="card-body d-flex align-items-center justify-content-between">
-          <div>
-            <h3 class="fw-bolder mb-75">{{count($users)}}</h3>
-            <span>Total Category</span>
-          </div>
-          <div class="avatar bg-light-primary p-50">
-            <span class="avatar-content">
-              <i data-feather="user" class="font-medium-4"></i>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-4 col-sm-6">
-      <div class="card">
-        <div class="card-body d-flex align-items-center justify-content-between">
-          <div>
-            <h3 class="fw-bolder mb-75">{{\App\Models\User::role('Admin')->count()}}</h3>
-            <span>Category Real</span>
-          </div>
-          <div class="avatar bg-light-danger p-50">
-            <span class="avatar-content">
-              <i data-feather="user-plus" class="font-medium-4"></i>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-4 col-sm-6">
-      <div class="card">
-        <div class="card-body d-flex align-items-center justify-content-between">
-          <div>
-            <h3 class="fw-bolder mb-75">{{\App\Models\User::role('User')->count()}}</h3>
-            <span>Category Fake</span>
-          </div>
-          <div class="avatar bg-light-success p-50">
-            <span class="avatar-content">
-              <i data-feather="user-check" class="font-medium-4"></i>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
   <!-- list and filter start -->
   <div class="card">
     <div class="card-datatable table-responsive pt-0">
@@ -228,6 +181,7 @@
                   },
                   {
                       targets: 1,
+                      responsivePriority: 0,
                       render: function (data, type, full, meta) {
                           var $output ='<img src="{{asset('storage/wallpapers/thumbnail')}}/'+data+'" alt="wallpaper" height="100px">';
                       return $output;
@@ -235,6 +189,7 @@
                   },
                   {
                       targets: 2,
+                      responsivePriority: 2,
                       render: function (data, type, full, meta) {
                           var $output ='<span class="fw-bolder">'+data+'</span>';
                           return $output;
@@ -260,6 +215,7 @@
                       // Actions
                       targets: -1,
                       title: 'Actions',
+                      responsivePriority: 3,
                       orderable: false,
                       render: function (data, type, full, meta) {
                           return (

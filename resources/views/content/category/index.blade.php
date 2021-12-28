@@ -33,12 +33,12 @@
       <div class="card">
         <div class="card-body d-flex align-items-center justify-content-between">
           <div>
-            <h3 class="fw-bolder mb-75">{{count($users)}}</h3>
+            <h3 class="fw-bolder mb-75">{{$categoriesReal + $categoriesPhace}}</h3>
             <span>Total Category</span>
           </div>
           <div class="avatar bg-light-primary p-50">
             <span class="avatar-content">
-              <i data-feather="user" class="font-medium-4"></i>
+              <i data-feather="file" class="font-medium-4"></i>
             </span>
           </div>
         </div>
@@ -48,27 +48,27 @@
       <div class="card">
         <div class="card-body d-flex align-items-center justify-content-between">
           <div>
-            <h3 class="fw-bolder mb-75">{{\App\Models\User::role('Admin')->count()}}</h3>
+            <h3 class="fw-bolder mb-75">{{$categoriesReal}}</h3>
             <span>Category Real</span>
-          </div>
-          <div class="avatar bg-light-danger p-50">
-            <span class="avatar-content">
-              <i data-feather="user-plus" class="font-medium-4"></i>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-4 col-sm-6">
-      <div class="card">
-        <div class="card-body d-flex align-items-center justify-content-between">
-          <div>
-            <h3 class="fw-bolder mb-75">{{\App\Models\User::role('User')->count()}}</h3>
-            <span>Category Fake</span>
           </div>
           <div class="avatar bg-light-success p-50">
             <span class="avatar-content">
-              <i data-feather="user-check" class="font-medium-4"></i>
+              <i data-feather="file-plus" class="font-medium-4"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-sm-6">
+      <div class="card">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <h3 class="fw-bolder mb-75">{{$categoriesPhace}}</h3>
+            <span>Category Fake</span>
+          </div>
+          <div class="avatar bg-light-danger p-50">
+            <span class="avatar-content">
+              <i data-feather="file-minus" class="font-medium-4"></i>
             </span>
           </div>
         </div>
@@ -184,6 +184,7 @@
               columnDefs: [
                   {
                       targets: 0,
+                      responsivePriority: 0,
                       render: function (data, type, full, meta) {
                           var $image = full['image']
                           var $output ='<img src="'+ $image + '" alt="Avatar" height="100px">';
@@ -192,6 +193,7 @@
                   },
                   {
                       targets: 1,
+                      responsivePriority: 1,
                       render: function (data, type, full, meta) {
                           var $output ='<span class="fw-bolder">'+data+'</span>';
                           return $output;
@@ -213,6 +215,7 @@
                   },
                   {
                       // Actions
+                      responsivePriority: 2,
                       targets: -1,
                       title: 'Actions',
                       orderable: false,

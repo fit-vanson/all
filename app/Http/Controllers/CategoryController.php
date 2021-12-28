@@ -24,12 +24,15 @@ class CategoryController extends Controller
         $pageConfigs = ['pageHeader' => false];
         $users = $this->user->all();
         $roles = $this->role->all();
-        $categories = CategoryManage::all();
+        $categoriesReal = CategoryManage::where('checked_ip',1)->count();
+        $categoriesPhace = CategoryManage::where('checked_ip',0)->count();
         return view('content.category.index', [
             'pageConfigs' => $pageConfigs,
             'users'=>$users,
             'roles'=>$roles,
-            'categories' => $categories
+            'categoriesReal' => $categoriesReal,
+            'categoriesPhace' => $categoriesPhace,
+
             ]);
 
     }

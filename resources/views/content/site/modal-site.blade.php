@@ -41,7 +41,7 @@
 
                       <div class="row">
                           <div class="col-10">
-                              <select class="form-control" id="select_category" name="select_category[]" multiple required >
+                              <select class="form-control" id="select_category" name="select_category[]" multiple >
                                   @foreach($categories as $category)
                                       <option value="{{$category->id}}">{{$category->category_name}}</option>
                                   @endforeach
