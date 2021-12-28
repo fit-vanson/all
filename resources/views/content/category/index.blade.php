@@ -419,21 +419,31 @@
                   type: "get",
                   url: "category/" + id + "/edit",
                   success: function (data) {
-                      $('#CategoryModal').modal('show');
-                      $('.categoryModalLabel').html("Edit Category");
-                      $('#submitButton').prop('class','btn btn-success');
-                      $('#submitButton').text('Update');
-                      $('#submitButton').val('update');
-                      $('#id').val(data.id);
-                      $('#category_order').val(data.category_order);
-                      $('#category_name').val(data.category_name);
-                      $('#view_count').val(data.view_count);
-                      if(data.checked_ip == 1){
-                          $('#checked_ip').prop('checked', true);
-                      }else {
-                          $('#checked_ip').prop('checked', false);
+                      if(data.error){
+                          toastr['error']('', data.error, {
+                              showMethod: 'fadeIn',
+                              hideMethod: 'fadeOut',
+                              timeOut: 3000,
+                          });
                       }
-                      $('#avatar').attr('src',data.image);
+                      if(data.success) {
+                          console.log(data)
+                          $('#CategoryModal').modal('show');
+                          $('.categoryModalLabel').html("Edit Category");
+                          $('#submitButton').prop('class','btn btn-success');
+                          $('#submitButton').text('Update');
+                          $('#submitButton').val('update');
+                          $('#id').val(data.data.id);
+                          $('#category_order').val(data.data.category_order);
+                          $('#category_name').val(data.data.category_name);
+                          $('#view_count').val(data.data.view_count);
+                          if(data.data.checked_ip == 1){
+                              $('#checked_ip').prop('checked', true);
+                          }else {
+                              $('#checked_ip').prop('checked', false);
+                          }
+                          $('#avatar').attr('src',data.data.image);
+                      }
                   },
                   error: function (data) {
                   }
