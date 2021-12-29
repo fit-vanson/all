@@ -53,6 +53,12 @@ Route::get('routes', function () {
 Route::get('/phpinfo',function (){
     echo phpinfo();
 });
+
+Route::get('/updateapp', function()
+{
+    Artisan::call('dump-autoload');
+    echo 'dump-autoload complete';
+});
 Route::get('/', [HomeController::class, 'home'])->middleware(['auth'])->name('home');
 
 
