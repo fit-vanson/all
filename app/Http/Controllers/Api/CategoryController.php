@@ -14,6 +14,8 @@ class CategoryController extends Controller
 {
     public function index()
     {
+        $domain=$_SERVER['SERVER_NAME'];
+        dd($domain);
         if(checkBlockIp()){
             $data = CategoryManage::where('checked_ip',1)->inRandomOrder()->get();
             return CategoryResource::collection($data);
