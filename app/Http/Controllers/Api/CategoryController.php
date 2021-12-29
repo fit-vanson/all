@@ -8,6 +8,7 @@ use App\Models\BlockIp;
 use App\Http\Controllers\Controller;
 use App\Models\CategoryManage;
 use App\Models\LoadFeature;
+use App\Models\SiteManage;
 
 
 class CategoryController extends Controller
@@ -15,17 +16,29 @@ class CategoryController extends Controller
     public function index()
     {
         $domain=$_SERVER['SERVER_NAME'];
-        dd($domain);
         if(checkBlockIp()){
             $data = CategoryManage::where('checked_ip',1)->inRandomOrder()->get();
-            return CategoryResource::collection($data);
+            $data = SiteManage::with('category')
+                ->leftJoin('tbl_category_has_site', 'tbl_category_has_site.site_id', '=', 'tbl_site_manages.id')
+                ->leftJoin('tbl_category_manages', 'tbl_category_manages.id', '=', 'tbl_category_has_site.category_id')
+                ->where('site_name',$domain)
+                ->where('tbl_category_manages.checked_ip',1)
+                ->inRandomOrder()
+                ->get();
+
         } else{
-            $data = CategoryManage::has('wallpaper')->where('checked_ip',0)->get();
-            return CategoryResource::collection($data);
+            $data = SiteManage::with('category')
+                ->leftJoin('tbl_category_has_site', 'tbl_category_has_site.site_id', '=', 'tbl_site_manages.id')
+                ->leftJoin('tbl_category_manages', 'tbl_category_manages.id', '=', 'tbl_category_has_site.category_id')
+                ->where('site_name',$domain)
+                ->where('tbl_category_manages.checked_ip',0)
+                ->get();
         }
+        return CategoryResource::collection($data);
     }
     public function getWallpapers($id)
     {
+        $domain=$_SERVER['SERVER_NAME'];
         try{
             $wallpapers = CategoryManage::findOrFail($id)
                 ->wallpaper()

@@ -186,8 +186,7 @@
                       targets: 0,
                       responsivePriority: 0,
                       render: function (data, type, full, meta) {
-                          var $image = full['image']
-                          var $output ='<img src="'+ $image + '" alt="Avatar" height="100px">';
+                          var $output ='<img src="{{asset('storage/categories')}}/'+data+'" alt="Avatar" height="100px">';
                       return $output;
                       }
                   },
@@ -445,7 +444,7 @@
                           }else {
                               $('#checked_ip').prop('checked', false);
                           }
-                          $('#avatar').attr('src',data.data.image);
+                          $('#avatar').attr('src','storage/categories/'+data.data.image);
                       }
                   },
                   error: function (data) {

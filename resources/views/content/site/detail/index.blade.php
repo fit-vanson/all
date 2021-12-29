@@ -212,8 +212,7 @@
                     targets: 0,
                     responsivePriority: 4,
                     render: function (data, type, full, meta) {
-                        var $image = full['image']
-                        var $output ='<img src="'+ $image + '" alt="Avatar" height="100px">';
+                        var $output ='<img src="{{asset('storage/categories')}}/'+data+'" alt="Avatar" height="100px">';
                         return $output;
                     }
                 },
@@ -529,10 +528,11 @@
                     $('#id').val(data[0].id);
                     $('#category_site_name_edit').val(data[1].category_name);
                     if(data[0].image){
-                        $('#avatar_edit').attr('src',data[0].image);
+                        $('#avatar_edit').attr('src','../storage/categories/'+data[0].image);
                     }else {
-                        $('#avatar_edit').attr('src',data[1].image);
+                        $('#avatar_edit').attr('src','../storage/categories/'+data[1].image);
                     }
+
                 },
                 error: function (data) {
                 }

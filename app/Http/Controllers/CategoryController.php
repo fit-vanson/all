@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 
 use App\Models\CategoryManage;
 use App\Models\User;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 use Spatie\Permission\Models\Role;
 
 class CategoryController extends Controller
@@ -126,11 +129,26 @@ class CategoryController extends Controller
             $data['checked_ip'] = 0;
         }
         if($request->image){
-            $image = $request->image;
-            $type = $request->image->getClientOriginalExtension();
-            $image = base64_encode(file_get_contents($image));
-            $base64 = 'data:image/' . $type . ';base64,' . $image;
-            $data['image'] = $base64;
+            $file = $request->image;
+            $filenameWithExt=$file->getClientOriginalName();
+            $filename = Str::slug($request->category_name);
+
+            $extension = $file->getClientOriginalExtension();
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $now = new \DateTime('now'); //Datetime
+            $monthNum = $now->format('m');
+            $dateObj   = DateTime::createFromFormat('!m', $monthNum);
+            $monthName = $dateObj->format('F'); // Month
+            $year = $now->format('Y'); // Year
+            $monthYear = $monthName.$year;
+            $path_image    =  storage_path('app/public/categories/'.$monthYear.'/');
+            if (!file_exists($path_image)) {
+                mkdir($path_image, 0777, true);
+            }
+            $img = Image::make($file);
+            $image = $img->save($path_image.$fileNameToStore);
+            $path_image =  $monthYear.'/'.$fileNameToStore;
+            $data['image'] = $path_image;
         }
         $data->save();
         $allCategory = CategoryManage::latest()->get();
@@ -165,11 +183,26 @@ class CategoryController extends Controller
         }
 
         if($request->image){
-            $image = $request->image;
-            $type = $request->image->getClientOriginalExtension();
-            $image = base64_encode(file_get_contents($image));
-            $base64 = 'data:image/' . $type . ';base64,' . $image;
-            $data->image = $base64;
+            $file = $request->image;
+            $filenameWithExt=$file->getClientOriginalName();
+            $filename = Str::slug($request->category_name);
+
+            $extension = $file->getClientOriginalExtension();
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $now = new \DateTime('now'); //Datetime
+            $monthNum = $now->format('m');
+            $dateObj   = DateTime::createFromFormat('!m', $monthNum);
+            $monthName = $dateObj->format('F'); // Month
+            $year = $now->format('Y'); // Year
+            $monthYear = $monthName.$year;
+            $path_image    =  storage_path('app/public/categories/'.$monthYear.'/');
+            if (!file_exists($path_image)) {
+                mkdir($path_image, 0777, true);
+            }
+            $img = Image::make($file);
+            $image = $img->save($path_image.$fileNameToStore);
+            $path_image =  $monthYear.'/'.$fileNameToStore;
+            $data->image = $path_image;
         }
         $data->save();
         return response()->json(['success'=>'Cập nhật thành công']);

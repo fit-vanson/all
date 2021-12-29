@@ -10,9 +10,12 @@ use App\Models\CategoryHasWallpaper;
 use App\Models\CategoryManage;
 use App\Models\SiteManage;
 use App\Models\User;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 use Spatie\Permission\Models\Role;
 
 class SiteController extends Controller
@@ -221,9 +224,9 @@ class SiteController extends Controller
 
 
         // Get records, also we have included search filter as well
-        $records = CategoryHasSite::where('site_id',$site->id)
+        $records = CategoryHasSite::orderBy($columnName, $columnSortOrder)
             ->join('tbl_category_manages','tbl_category_has_site.category_id','=','tbl_category_manages.id')
-//            ->orderBy($columnName, $columnSortOrder)
+            ->where('site_id',$site->id)
             ->where('tbl_category_manages.category_name', 'like', '%' . $searchValue . '%')
             ->select('tbl_category_has_site.*',
                 'tbl_category_manages.id as id_cate',
@@ -269,11 +272,26 @@ class SiteController extends Controller
         $id = $request->id;
         $data = CategoryHasSite::find($id);
         if($request->image){
-            $image = $request->image;
-            $type = $request->image->getClientOriginalExtension();
-            $image = base64_encode(file_get_contents($image));
-            $base64 = 'data:image/' . $type . ';base64,' . $image;
-            $data->image = $base64;
+            $file = $request->image;
+            $filenameWithExt=$file->getClientOriginalName();
+            $filename = Str::slug($request->category_name);
+
+            $extension = $file->getClientOriginalExtension();
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $now = new \DateTime('now'); //Datetime
+            $monthNum = $now->format('m');
+            $dateObj   = DateTime::createFromFormat('!m', $monthNum);
+            $monthName = $dateObj->format('F'); // Month
+            $year = $now->format('Y'); // Year
+            $monthYear = $monthName.$year;
+            $path_image    =  storage_path('app/public/categories/'.$monthYear.'/');
+            if (!file_exists($path_image)) {
+                mkdir($path_image, 0777, true);
+            }
+            $img = Image::make($file);
+            $image = $img->save($path_image.$fileNameToStore);
+            $path_image =  $monthYear.'/'.$fileNameToStore;
+            $data->image = $path_image;
         }
         $data->save();
         return response()->json(['success'=>'Cập nhật thành công']);

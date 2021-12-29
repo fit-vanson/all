@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\BlockIp;
+use App\Models\SiteManage;
 
 function get_ip(){
     $realIp = request()->ip();
@@ -17,7 +18,7 @@ function get_ip(){
     return $realIp;
 }
 function checkBlockIp(){
-
+    $domain=$_SERVER['SERVER_NAME'];
     if (isset($_SERVER['HTTP_CLIENT_IP']))
         $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
     else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']))
@@ -34,9 +35,11 @@ function checkBlockIp(){
         $ipaddress= $_SERVER["HTTP_CF_CONNECTING_IP"];
     else
         $ipaddress = 'UNKNOWN';
-    $blockIps= BlockIp::all();
+    $site = SiteManage::with('blockIps')->where('site_name',$domain)->first();
+
+//    $blockIps= BlockIp::all();
     $block=false;
-    foreach ($blockIps as $blockIp){
+    foreach ($site->blockIps as $blockIp){
         for($k=0;$k<=255;$k++){
             $a=$blockIp->ip_address;
             $b[$k]=str_replace("*", $k,$a);
