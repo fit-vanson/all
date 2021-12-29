@@ -206,8 +206,8 @@
                           var $assignedTo = full.checked_ip,
                               $output = '';
                           var realBadgeObj = {
-                              0:'<span class="badge rounded-pill badge-light-danger">FAKE</span>',
-                              1:'<span class="badge rounded-pill badge-light-success">REAL</span>',
+                              1:'<span class="badge rounded-pill badge-light-danger">FAKE</span>',
+                              0:'<span class="badge rounded-pill badge-light-success">REAL</span>',
                           };
                           $output = realBadgeObj[full.checked_ip];
                           return $output

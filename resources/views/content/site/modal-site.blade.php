@@ -27,7 +27,7 @@
                               <select class="form-control" id="select_api_key" name="select_api_key" >
                                   <option value="0">----- Chọn Api Key -----</option>
                                   @foreach($apiKeys as $api)
-                                      <option value="{{$api->id}}">{{$api->apikey_name}}</option>
+                                      <option value="{{$api->id}}">{{$api->name}}</option>
                                   @endforeach
                               </select>
                           </div>

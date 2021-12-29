@@ -123,7 +123,7 @@ class CategoryController extends Controller
             $data['view_count'] = rand(500,2000);
         }
         if($request->checked_ip){
-            $data['checked_ip'] = 1;
+            $data['checked_ip'] = 0;
         }
         if($request->image){
             $image = $request->image;
@@ -159,9 +159,9 @@ class CategoryController extends Controller
         $data->category_order = $request->category_order;
         $data->view_count = $request->view_count;
         if($request->checked_ip){
-            $data->checked_ip  = 1;
-        }else{
             $data->checked_ip  = 0;
+        }else{
+            $data->checked_ip  = 1;
         }
 
         if($request->image){

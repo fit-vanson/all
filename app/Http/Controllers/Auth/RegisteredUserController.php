@@ -18,8 +18,9 @@ class RegisteredUserController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function create()
+    public function create(Request $request)
     {
+//        dd($request->all());
 //        dd('Liên hệ quản trị viên');
         return view('auth.register');
     }

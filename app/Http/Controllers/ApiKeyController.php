@@ -6,7 +6,9 @@ namespace App\Http\Controllers;
 use App\Models\ApiKeys;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 
 class ApiKeyController extends Controller
@@ -53,13 +55,13 @@ class ApiKeyController extends Controller
         // Total records
         $totalRecords = ApiKeys::select('count(*) as allcount')->count();
         $totalRecordswithFilter = ApiKeys::select('count(*) as allcount')
-            ->where('apikey_name', 'like', '%' . $searchValue . '%')
+            ->where('name', 'like', '%' . $searchValue . '%')
             ->count();
 
 
         // Get records, also we have included search filter as well
         $records = ApiKeys::with('sites')->orderBy($columnName, $columnSortOrder)
-            ->where('apikey_name', 'like', '%' . $searchValue . '%')
+            ->where('name', 'like', '%' . $searchValue . '%')
             ->select('*')
             ->skip($start)
             ->take($rowperpage)
@@ -73,7 +75,7 @@ class ApiKeyController extends Controller
 
             $data_arr[] = array(
                 "id" => $record->id,
-                "apikey_name" => $record->apikey_name,
+                "name" => $record->name,
                 "key" => $record->key,
                 "active" => $record->active,
             );
@@ -91,13 +93,11 @@ class ApiKeyController extends Controller
     {
 //        dd($request->all());
         $rules = [
-            'apikey_name' => 'required|unique:api_keys,apikey_name',
-            'key' => 'required',
+            'apikey_name' => 'required|unique:api_keys,name',
         ];
         $message = [
             'apikey_name.unique'=>'Tên Api Key đã tồn tại',
             'apikey_name.required'=>'Tên Api Key không để trống',
-            'key.required'=>'Key hông để trống',
         ];
 
         $error = Validator::make($request->all(),$rules, $message );
@@ -105,15 +105,7 @@ class ApiKeyController extends Controller
         if($error->fails()){
             return response()->json(['errors'=> $error->errors()->all()]);
         }
-        $data = new ApiKeys();
-        $data['apikey_name'] = $request->apikey_name;
-        $data['key'] = $request->key;
-        if($request->active){
-            $data['active'] = 1;
-        }else{
-            $data['active'] = 0;
-        }
-        $data->save();
+        $data =  Artisan::call('apikey:generate '.Str::slug($request->apikey_name));
         $allApiKeys = ApiKeys::latest()->get();
         return response()->json([
             'success'=>'Thêm mới thành công',
@@ -121,31 +113,21 @@ class ApiKeyController extends Controller
         ]);
     }
     public function update(Request $request){
-//        dd($request->all());
+
         $id = $request->id;
         $rules = [
-            'apikey_name' =>'required|unique:api_keys,apikey_name,'.$id.',id',
-            'key' => 'required',
-
+            'apikey_name' =>'required|unique:api_keys,name,'.$id.',id',
         ];
         $message = [
             'apikey_name.unique'=>'Tên Api Key đã tồn tại',
             'apikey_name.required'=>'Tên Api Key không để trống',
-            'key.required'=>'Key hông để trống',
         ];
         $error = Validator::make($request->all(),$rules, $message );
         if($error->fails()){
             return response()->json(['errors'=> $error->errors()->all()]);
         }
         $data = ApiKeys::find($id);
-        $data->apikey_name = $request->apikey_name;
-        $data->key = $request->key;
-
-        if($request->active){
-            $data->active  = 1;
-        }else{
-            $data->active  = 0;
-        }
+        $data->name = $request->apikey_name;
         $data->save();
         return response()->json(['success'=>'Cập nhật thành công']);
     }
@@ -156,9 +138,9 @@ class ApiKeyController extends Controller
     }
     public function delete($id)
     {
-            $category = ApiKeys::find($id);
-            $category->delete();
-            return response()->json(['success'=>'Xóa thành công.']);
+        $category = ApiKeys::find($id);
+        $category->delete();
+        return response()->json(['success'=>'Xóa thành công.']);
 
     }
 }

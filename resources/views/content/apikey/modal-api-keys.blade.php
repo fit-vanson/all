@@ -16,22 +16,6 @@
                       <label class="form-label" for="basic-icon-default-uname">Key Name</label>
                       <input type="text" id="apikey_name" class="form-control" placeholder="Key Name" name="apikey_name">
                   </div>
-                  <div class="mb-1">
-                      <label class="form-label" for="basic-icon-default-uname">Key</label>
-                      <input type="text" id="key" class="form-control" placeholder="Key" name="key">
-                  </div>
-                  <div class="mb-1">
-                      <div class="d-flex align-items-center mt-1">
-                          <div class="form-check form-switch form-check-primary">
-                              <input type="checkbox" class="form-check-input" id="active" name="active" checked />
-                              <label class="form-check-label" for="active">
-                                  <span class="switch-icon-left"><i data-feather="check"></i></span>
-                                  <span class="switch-icon-right"><i data-feather="x"></i></span>
-                              </label>
-                          </div>
-                          <label class="form-check-label fw-bolder" for="active">Active</label>
-                      </div>
-                  </div>
                   <button type="submit" class="btn btn-primary" id="submitButton" value="create">Create</button>
                   <button type="reset" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Cancel</button>
               </div>

@@ -481,7 +481,6 @@
           }
       }
       function rebuildApiKeysOption(apikeys){
-
           var elementSelect = $("#select_api_key");
 
           if(elementSelect.length <= 0){
@@ -493,7 +492,7 @@
               elementSelect.append(
                   $("<option></option>", {
                       value : apikey.id
-                  }).text(apikey.apikey_name)
+                  }).text(apikey.name)
               );
           }
       }

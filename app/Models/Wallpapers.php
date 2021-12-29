@@ -14,4 +14,8 @@ class Wallpapers extends Model
         return $this->belongsToMany('App\Models\CategoryManage', 'tbl_category_has_wallpaper', 'wallpaper_id', 'category_id');
     }
 
+    public function visitors(){
+        return $this->belongsToMany(Visitor::class,'visitor_favorites');
+    }
+
 }

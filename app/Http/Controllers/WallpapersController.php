@@ -176,6 +176,7 @@ class WallpapersController extends Controller
 
             $wallpaper->view_count = rand(500,1000);
             $wallpaper->like_count = rand(500,1000);
+            $wallpaper->feature = 0;
             $wallpaper->save();
             $wallpaper->category()->attach($request->select_category);
             return response()->json(['success'=>'Thành công']);

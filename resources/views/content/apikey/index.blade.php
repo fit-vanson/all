@@ -115,7 +115,7 @@
               },
               columns: [
                   // columns according to JSON
-                  { data: 'apikey_name' },
+                  { data: 'name' },
                   { data: 'key' },
                   { data: 'active' },
                   { data: 'action' }
@@ -124,8 +124,7 @@
                   {
                       targets: 0,
                       render: function (data, type, full, meta) {
-                          var $name = full['apikey_name']
-                          var $output ='<span class="fw-bolder">'+$name+'</span>';
+                          var $output ='<span class="fw-bolder">'+data+'</span>';
                           return $output;
                       }
                   },
@@ -346,7 +345,7 @@
                       $('#submitButton').text('Update');
                       $('#submitButton').val('update');
                       $('#id').val(data.id);
-                      $('#apikey_name').val(data.apikey_name);
+                      $('#apikey_name').val(data.name);
                       $('#key').val(data.key);
                       if(data.active == 1){
                           $('#active').prop('checked', true);
