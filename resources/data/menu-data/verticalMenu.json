@@ -1,7 +1,7 @@
 {
   "menu": [
     {
-      "url": "/",
+      "url": "/admin",
       "name": "Home",
       "icon": "home",
       "slug": "home"
@@ -17,34 +17,64 @@
           "slug": "",
           "submenu": [
               {
-                  "url": "category",
+                  "url": "admin/category",
                   "name": "Category",
                   "icon": "circle",
                   "slug": "category.index"
               },
               {
-                  "url": "wallpaper",
+                  "url": "admin/wallpaper",
                   "name": "Wallpaper",
                   "icon": "circle",
                   "slug": "wallpaper.index"
               },
               {
-                  "url": "api-keys",
+                  "url": "admin/api-keys",
                   "name": "Api Keys",
                   "icon": "circle",
                   "slug": "api_keys.index"
               },
               {
-                  "url": "block-ips",
+                  "url": "admin/block-ips",
                   "name": "Block IPs",
                   "icon": "circle",
                   "slug": "block_ips.index"
               },
               {
-                  "url": "site",
+                  "url": "admin/site",
                   "name": "Site",
                   "icon": "circle",
                   "slug": "site.index"
+              }
+          ]
+      },
+      {
+          "navheader": "Web view",
+          "slug": ""
+      },
+
+      {
+          "name": "Web view",
+          "icon": "home",
+          "slug": "",
+          "submenu": [
+              {
+                  "url": "admin/home",
+                  "name": "Home",
+                  "icon": "circle",
+                  "slug": "home.index"
+              },
+              {
+                  "url": "admin/policies",
+                  "name": "Policy",
+                  "icon": "circle",
+                  "slug": "policies.index"
+              },
+              {
+                  "url": "admin/feature-images",
+                  "name": "Feature Images",
+                  "icon": "circle",
+                  "slug": "feature_images.index"
               }
           ]
       },
@@ -60,7 +90,7 @@
           "badgeClass": "badge rounded-pill badge-light-danger ms-auto me-1",
           "submenu": [
               {
-                  "url": "user",
+                  "url": "admin/user",
                   "name": "Quản lý tài khoản",
                   "icon": "circle",
                   "slug": "user.index"

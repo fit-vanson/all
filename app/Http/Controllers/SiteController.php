@@ -44,7 +44,6 @@ class SiteController extends Controller
     }
     public function getIndex(Request $request)
     {
-
         $draw = $request->get('draw');
         $start = $request->get("start");
         $rowperpage = $request->get("length"); // total number of rows per page
@@ -83,13 +82,10 @@ class SiteController extends Controller
             foreach ($record->category as $category){
                 $cate_name[] =$category->category_name;
             }
-            $btn = ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$record->id.'" data-original-title="Edit" class="btn btn-warning editSite">Edit</i></a>';
-            $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$record->id.'" data-original-title="Delete" class="btn btn-danger deleteSite">Del</i></a>';
             $data_arr[] = array(
                 "id" => $record->id,
                 "logo" => $record->logo,
                 "site_name" => $record->site_name,
-                "key" => $record->api_key ? $record->api_key->apikey_name: 'null',
                 "category" => $cate_name,
             );
         }
@@ -165,7 +161,6 @@ class SiteController extends Controller
     {
         $site = SiteManage::find($id);
         $site->category()->detach();
-        $site->sites()->detach();
         $site->delete();
         return response()->json(['success'=>'Xóa thành công.']);
     }

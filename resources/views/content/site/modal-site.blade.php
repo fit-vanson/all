@@ -14,7 +14,7 @@
                   <input type="hidden" name="id" id="id" value="">
 
                   <input  id="image_logo" type="file" name="image_logo" class="form-control" hidden accept="image/*" onchange="changeImg(this)">
-                  <img id="logo" class="thumbnail" width="200px" src="images/avatars/1.png">
+                  <img id="logo" class="thumbnail" width="200px" src="../images/avatars/1.png">
 
                   <div class="mb-1">
                       <label class="form-label" >Tên site</label>

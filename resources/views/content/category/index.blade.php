@@ -299,7 +299,7 @@
               $('#submitButton').prop('class','btn btn-primary ');
               $('#submitButton').text('Create');
               $('#submitButton').val('create');
-              $('#avatar').attr('src','images/avatars/1.png');
+              $('#avatar').attr('src','../images/avatars/1.png');
           });
 
           CategoryForm.on('submit', function (e) {
@@ -439,12 +439,12 @@
                           $('#category_order').val(data.data.category_order);
                           $('#category_name').val(data.data.category_name);
                           $('#view_count').val(data.data.view_count);
-                          if(data.data.checked_ip == 1){
+                          if(data.data.checked_ip == 0){
                               $('#checked_ip').prop('checked', true);
                           }else {
                               $('#checked_ip').prop('checked', false);
                           }
-                          $('#avatar').attr('src','storage/categories/'+data.data.image);
+                          $('#avatar').attr('src','../storage/categories/'+data.data.image);
                       }
                   },
                   error: function (data) {

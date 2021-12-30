@@ -11,5 +11,6 @@ return [
     "Site" => "Site",
     "Wallpaper" => "Wallpaper",
     "Api Keys" => "Api Keys",
+    "Web view" => "Web view",
 
     ];

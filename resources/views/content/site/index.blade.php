@@ -142,7 +142,7 @@
                       orderable: false,
                       render: function (data, type, full, meta) {
                           return (
-                              '<a href="/site/'+ full.site_name +'" data-id="'+full.id+'" class="btn btn-sm btn-icon">' +
+                              '<a href="/admin/site/'+ full.site_name +'" data-id="'+full.id+'" class="btn btn-sm btn-icon">' +
                               feather.icons['list'].toSvg({ class: 'font-medium-2 text-success' }) +
                               '</a>'+
                               '<a data-id="'+full.id+'" class="btn btn-sm btn-icon editSite">' +
