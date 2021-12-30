@@ -16,6 +16,10 @@
                       <label class="form-label" for="basic-icon-default-uname">Key Name</label>
                       <input type="text" id="apikey_name" class="form-control" placeholder="Key Name" name="apikey_name">
                   </div>
+                  <div class="mb-1">
+                      <label class="form-label" for="basic-icon-default-uname">Key</label>
+                      <input type="text" id="apikey" class="form-control" placeholder="Key" name="apikey">
+                  </div>
                   <button type="submit" class="btn btn-primary" id="submitButton" value="create">Create</button>
                   <button type="reset" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Cancel</button>
               </div>

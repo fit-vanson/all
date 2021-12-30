@@ -346,12 +346,7 @@
                       $('#submitButton').val('update');
                       $('#id').val(data.id);
                       $('#apikey_name').val(data.name);
-                      $('#key').val(data.key);
-                      if(data.active == 1){
-                          $('#active').prop('checked', true);
-                      }else {
-                          $('#active').prop('checked', false);
-                      }
+                      $('#apikey').val(data.key);
                   },
                   error: function (data) {
                   }

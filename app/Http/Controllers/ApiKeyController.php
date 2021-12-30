@@ -91,7 +91,6 @@ class ApiKeyController extends Controller
     }
     public function create(Request $request)
     {
-//        dd($request->all());
         $rules = [
             'apikey_name' => 'required|unique:api_keys,name',
         ];
@@ -105,7 +104,15 @@ class ApiKeyController extends Controller
         if($error->fails()){
             return response()->json(['errors'=> $error->errors()->all()]);
         }
-        $data =  Artisan::call('apikey:generate '.Str::slug($request->apikey_name));
+        if($request->apikey){
+            $data = new ApiKeys();
+            $data->name  = Str::slug($request->apikey_name);
+            $data->key = $request->apikey;
+            $data->save();
+        }else{
+            $data =  Artisan::call('apikey:generate '.Str::slug($request->apikey_name));
+        }
+
         $allApiKeys = ApiKeys::latest()->get();
         return response()->json([
             'success'=>'Thêm mới thành công',
@@ -127,7 +134,8 @@ class ApiKeyController extends Controller
             return response()->json(['errors'=> $error->errors()->all()]);
         }
         $data = ApiKeys::find($id);
-        $data->name = $request->apikey_name;
+        $data->name  = Str::slug($request->apikey_name);
+        $data->key = $request->apikey;
         $data->save();
         return response()->json(['success'=>'Cập nhật thành công']);
     }
