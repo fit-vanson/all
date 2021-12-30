@@ -25,7 +25,7 @@ Route::get('/test-api',function (){
    return ['a'=>'ssss'];
 });
 
-Route::group([], function() {
+Route::group([ 'middleware' => 'auth.apikey'], function() {
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/categories/{category_id}/wallpapers', [CategoryController::class, 'getWallpapers']);
 
