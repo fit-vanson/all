@@ -24,6 +24,7 @@ class CategoryController extends Controller
                 ->where('tbl_category_manages.checked_ip',1)
                 ->inRandomOrder()
                 ->get();
+            return CategoryResource::collection($data);
 
         } else{
             $data = SiteManage::with('category')
@@ -32,8 +33,8 @@ class CategoryController extends Controller
                 ->where('site_name',$domain)
                 ->where('tbl_category_manages.checked_ip',0)
                 ->get();
+            return CategoryResource::collection($data);
         }
-        return CategoryResource::collection($data);
     }
     public function getWallpapers($id)
     {
