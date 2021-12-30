@@ -17,7 +17,6 @@ class CategoryController extends Controller
     {
         $domain=$_SERVER['SERVER_NAME'];
         if(checkBlockIp()){
-            $data = CategoryManage::where('checked_ip',1)->inRandomOrder()->get();
             $data = SiteManage::with('category')
                 ->leftJoin('tbl_category_has_site', 'tbl_category_has_site.site_id', '=', 'tbl_site_manages.id')
                 ->leftJoin('tbl_category_manages', 'tbl_category_manages.id', '=', 'tbl_category_has_site.category_id')
