@@ -54,6 +54,17 @@ Route::get('/phpinfo',function (){
     echo phpinfo();
 });
 
+Route::get('test', function (){
+    $get_url = 'http://127.0.0.1:8000/api/categories';
+//    dd($get_url);
+    $ch = curl_init($get_url);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-Authorization: J6YZ4712Fv3yAyXFohHiLPWQHytB3pJjobEpCSEJD3rWbFLuYem65Y5N9WTdRWna'));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $result = curl_exec($ch);
+    curl_close($ch);
+    dd($result);
+});
+
 Route::get('/updateapp', function()
 {
     Artisan::call('dump-autoload');

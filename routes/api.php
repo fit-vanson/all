@@ -25,13 +25,16 @@ Route::get('/test-api',function (){
    return ['a'=>'ssss'];
 });
 
-Route::group([ 'middleware' => 'auth.apikey'], function() {
+Route::group([], function() {
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/categories/{category_id}/wallpapers', [CategoryController::class, 'getWallpapers']);
+
     Route::get('/wallpaper-detail/{id}/{device_id}', [WallpaperController::class, 'show']);
     Route::get('/wallpapers/featured', [WallpaperController::class, 'getFeatured']);
     Route::get('/wallpapers/popular', [WallpaperController::class, 'getPopulared']);
     Route::get('/wallpapers/newest', [WallpaperController::class, 'getNewest']);
+
+
     Route::post('/wallpaper-favorite', [FavoriteController::class, 'likeWallpaper']);
     Route::post('/wallpaper-favorite-unsaved', [FavoriteController::class, 'disLikeWallpaper']);
     Route::get('/favorite/{device_id}', [FavoriteController::class, 'getSaved']);

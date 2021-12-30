@@ -40,7 +40,6 @@ class FavoriteController extends Controller
         return response()->json($response, ResponseAlias::HTTP_OK);
     }
 
-
     public function disLikeWallpaper(Request $request)
     {
         $visitorFavorite = VisitorFavorite::where([

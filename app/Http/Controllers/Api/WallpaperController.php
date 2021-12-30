@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\CategoryManage;
 use App\Models\ListIp;
 use App\Models\LoadFeature;
+use App\Models\SiteManage;
 use App\Models\Visitor;
 use App\Models\VisitorFavorite;
 use App\Models\Wallpaper;
@@ -60,6 +61,7 @@ class WallpaperController extends Controller
 
     public function getFeatured()
     {
+        $domain=$_SERVER['SERVER_NAME'];
         if (isset($_SERVER['HTTP_CLIENT_IP']))
             $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
         else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']))
@@ -77,6 +79,7 @@ class WallpaperController extends Controller
         else
             $ipaddress = 'UNKNOWN';
         $listIp=ListIp::where('ip_address',$ipaddress)->first();
+
         $ad=Ad::find(1,['ad_switch']);
         if(!$listIp){
             ListIp::create([
@@ -93,55 +96,158 @@ class WallpaperController extends Controller
         $load_feature=LoadFeature::find(1);
         if (checkBlockIp()) {
             if($load_feature->load_view_by==0){
-                $categories =CategoryManage::where('checked_ip',1)
+
+                $data = CategoryManage::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name',$domain)
+                    ->where('tbl_category_manages.checked_ip',1)
+                    ->select('tbl_category_manages.*')
                     ->has('wallpaper')
                     ->with(['wallpaper'=>function ($q) {
-                    $q->latest();
+                        $q->latest();
                     }])
-                    ->inRandomOrder()->get();
-                dd($categories);
-                $getResource= FeatureWallpaperResource::collection($categories);
-                dd(1);
+                    ->inRandomOrder()
+                    ->get();
+//                $categories =CategoryManage::where('checked_ip',1)
+//                    ->has('wallpaper')
+//                    ->with(['wallpaper'=>function ($q) {
+//                    $q->latest();
+//                    }])
+//                    ->inRandomOrder()->get();
+                $getResource= FeatureWallpaperResource::collection($data);
             }elseif($load_feature->load_view_by==1){
-                $categories =CategoryManage::where('checked_ip',1)->has('wallpaper')->with(['wallpaper'=>function ($q) {
-                    $q->latest();
-                }])->orderBy('order', 'desc')->get();
-                $getResource= FeatureWallpaperResource::collection($categories);
+
+                $data = CategoryManage::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name',$domain)
+                    ->where('tbl_category_manages.checked_ip',1)
+                    ->select('tbl_category_manages.*')
+                    ->has('wallpaper')
+                    ->with(['wallpaper'=>function ($q) {
+                        $q->latest();
+                    }])
+                    ->orderBy('order', 'desc')->get();
+
+//                $categories =CategoryManage::where('checked_ip',1)
+//                    ->has('wallpaper')->with(['wallpaper'=>function ($q) {
+//                    $q->latest();
+//                }])->orderBy('order', 'desc')->get();
+
+                $getResource= FeatureWallpaperResource::collection($data);
             }elseif($load_feature->load_view_by==2){
-                $categories =CategoryManage::where('checked_ip',1)->has('wallpaper')->with(['wallpaper'=>function ($q) {
-                    $q->latest();
-                }])->orderBy('view_count', 'desc')->get();
-                $getResource= FeatureWallpaperResource::collection($categories);
+
+//                $categories =CategoryManage::where('checked_ip',1)->has('wallpaper')->with(['wallpaper'=>function ($q) {
+//                    $q->latest();
+//                }])->orderBy('view_count', 'desc')->get();
+
+                $data = CategoryManage::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name',$domain)
+                    ->where('tbl_category_manages.checked_ip',1)
+                    ->select('tbl_category_manages.*')
+                    ->has('wallpaper')
+                    ->with(['wallpaper'=>function ($q) {
+                        $q->latest();
+                    }])
+                    ->orderBy('view_count', 'desc')->get();
+
+                $getResource= FeatureWallpaperResource::collection($data);
             }elseif($load_feature->load_view_by==3){
-                $data = Wallpapers::where('feature', 1)->whereHas('category', function ($q) {
-                    $q->where('checked_ip', '=', 1);
-                })->inRandomOrder()->take(12)->get();
+
+//                $data = Wallpapers::where('feature', 1)->whereHas('category', function ($q) {
+//                    $q->where('checked_ip', '=', 1);
+//                })->inRandomOrder()->take(12)->get();
+
+
+                $data = CategoryManage::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name',$domain)
+                    ->where('tbl_category_manages.checked_ip',1)
+                    ->select('tbl_category_manages.*')
+                    ->has('wallpaper')
+                    ->with(['wallpaper'=>function ($q) {
+                        $q->latest();
+                    }])
+                    ->inRandomOrder()->take(12)->get();
+
                 $getResource = WallpaperResource::collection($data);
             }
         } else {
             if($load_feature->load_view_by==0){
-                $categories =CategoryManage::where('checked_ip',0)
+
+                $data = CategoryManage::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name',$domain)
+                    ->where('tbl_category_manages.checked_ip',0)
+                    ->select('tbl_category_manages.*')
                     ->has('wallpaper')
                     ->with(['wallpaper'=>function ($q) {
-                    $q->latest();
+                        $q->latest();
                     }])
-                    ->inRandomOrder()
-                    ->get();
-                $getResource= FeatureWallpaperResource::collection($categories);
+                    ->inRandomOrder()->get();
+//
+//                $categories =CategoryManage::where('checked_ip',0)
+//                    ->has('wallpaper')
+//                    ->with(['wallpaper'=>function ($q) {
+//                    $q->latest();
+//                    }])
+//                    ->inRandomOrder()
+//                    ->get();
+                $getResource= FeatureWallpaperResource::collection($data);
             }elseif($load_feature->load_view_by==1){
-                $categories =CategoryManage::where('checked_ip',0)->has('wallpaper')->with(['wallpaper'=>function ($q) {
-                    $q->latest();
-                }])->orderBy('order', 'desc')->get();
-                $getResource= FeatureWallpaperResource::collection($categories);
+
+//                $categories =CategoryManage::where('checked_ip',0)->has('wallpaper')->with(['wallpaper'=>function ($q) {
+//                    $q->latest();
+//                }])->orderBy('order', 'desc')->get();
+
+                $data = CategoryManage::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name',$domain)
+                    ->where('tbl_category_manages.checked_ip',0)
+                    ->select('tbl_category_manages.*')
+                    ->has('wallpaper')
+                    ->with(['wallpaper'=>function ($q) {
+                        $q->latest();
+                    }])
+                    ->orderBy('order', 'desc')->get();
+                $getResource= FeatureWallpaperResource::collection($data);
             }elseif($load_feature->load_view_by==2){
-                $categories =CategoryManage::where('checked_ip',0)->has('wallpaper')->with(['wallpaper'=>function ($q) {
-                    $q->latest();
-                }])->orderBy('view_count', 'desc')->get();
-                $getResource= FeatureWallpaperResource::collection($categories);
+
+                $data = CategoryManage::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name',$domain)
+                    ->where('tbl_category_manages.checked_ip',0)
+                    ->select('tbl_category_manages.*')
+                    ->has('wallpaper')
+                    ->with(['wallpaper'=>function ($q) {
+                        $q->latest();
+                    }])
+                    ->orderBy('view_count', 'desc')->get();
+
+
+//                $categories =CategoryManage::where('checked_ip',0)->has('wallpaper')->with(['wallpaper'=>function ($q) {
+//                    $q->latest();
+//                }])->orderBy('view_count', 'desc')->get();
+                $getResource= FeatureWallpaperResource::collection($data);
+
+
             }elseif($load_feature->load_view_by==3){
-                $data = Wallpapers::where('feature', 1)->whereHas('category', function ($q) {
-                    $q->where('checked_ip', '=', 0);
-                })->inRandomOrder()->take(12)->get();
+
+                $data = CategoryManage::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name',$domain)
+                    ->where('tbl_category_manages.checked_ip',0)
+                    ->select('tbl_category_manages.*')
+                    ->has('wallpaper')
+                    ->with(['wallpaper'=>function ($q) {
+                        $q->latest();
+                    }])
+                    ->inRandomOrder()->take(12)->get();
+
+
+//                $data = Wallpapers::where('feature', 1)->whereHas('category', function ($q) {
+//                    $q->where('checked_ip', '=', 0);
+//                })->inRandomOrder()->take(12)->get();
                 $getResource = WallpaperResource::collection($data);
             }
         }
@@ -154,43 +260,100 @@ class WallpaperController extends Controller
     }
     public function getPopulared()
     {
+        $domain=$_SERVER['SERVER_NAME'];
         if (checkBlockIp()){
+
+//            $data = CategoryManage::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+//                ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+//                ->where('site_name',$domain)
+//                ->where('tbl_category_manages.checked_ip',1)
+//                ->where('wallpapers.like_count','>=',1)
+//                ->select('tbl_category_manages.*')
+//                ->has('wallpaper')
+//                ->with(['wallpaper'=>function ($q) {
+//                    $q->latest();
+//                }])
+//                ->inRandomOrder()
+//                ->get();
+//            dd($data);
+
+
+
+
             $data = Wallpapers::where('like_count','>=',1)
                 ->orderBy('like_count','desc')
-                ->whereHas('category', function ($q)
-                {
-                    $q->where('checked_ip','=', 1);
+                ->whereHas('category', function ($q) use ($domain) {
+                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                        ->where('site_name',$domain)
+                        ->where('checked_ip','=', 1);
                 })
                 ->paginate(70);
         }else{
+
+
             $data = Wallpapers::where('like_count','>=',1)
                 ->orderBy('like_count','desc')
-                ->whereHas('category', function ($q)
-                {
-                    $q->where('checked_ip','=', 0);
+                ->whereHas('category', function ($q) use ($domain) {
+                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                        ->where('site_name',$domain)
+                        ->where('checked_ip','=', 0);
                 })
                 ->paginate(70);
+
+
+//            $data = Wallpapers::where('like_count','>=',1)
+//                ->orderBy('like_count','desc')
+//                ->whereHas('category', function ($q)
+//                {
+//                    $q->where('checked_ip','=', 0);
+//                })
+//                ->paginate(70);
         }
         $getResource=WallpaperResource::collection($data);
         return $getResource;
     }
-
     public function getNewest()
     {
+        $domain=$_SERVER['SERVER_NAME'];
         if (checkBlockIp()){
             $data = Wallpapers::orderBy('created_at','desc')
-                ->whereHas('category', function ($q)
-                {
-                    $q->where('checked_ip','=', 1);
+                ->where('like_count','>=',1)
+                ->orderBy('like_count','desc')
+                ->whereHas('category', function ($q) use ($domain) {
+                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                        ->where('site_name',$domain)
+                        ->where('checked_ip','=', 1);
                 })
                 ->paginate(70);
+
+
+//            $data = Wallpapers::orderBy('created_at','desc')
+//                ->whereHas('category', function ($q)
+//                {
+//                    $q->where('checked_ip','=', 1);
+//                })
+//                ->paginate(70);
         }else {
+
             $data = Wallpapers::orderBy('created_at','desc')
-                ->whereHas('category', function ($q)
-                {
-                    $q->where('checked_ip','=', 0);
+                ->where('like_count','>=',1)
+                ->orderBy('like_count','desc')
+                ->whereHas('category', function ($q) use ($domain) {
+                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                        ->where('site_name',$domain)
+                        ->where('checked_ip','=', 0);
                 })
                 ->paginate(70);
+//            $data = Wallpapers::orderBy('created_at','desc')
+//                ->whereHas('category', function ($q)
+//                {
+//                    $q->where('checked_ip','=', 0);
+//                })
+//                ->paginate(70);
         }
         $getResource=WallpaperResource::collection($data);
         return $getResource;
