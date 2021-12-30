@@ -119,8 +119,6 @@ class SiteController extends Controller
         }
         $data =new SiteManage();
         $data['site_name'] = $request->site_name;
-        $data['apikey_id'] = $request->select_api_key;
-
         $image = $request->image_logo;
         $type = $request->image_logo->getClientOriginalExtension();
         $image = base64_encode(file_get_contents($image));
@@ -146,8 +144,6 @@ class SiteController extends Controller
         }
         $data = SiteManage::find($id);
         $data->site_name = $request->site_name;
-        $data->apikey_id = $request->select_api_key;
-
         if( $request->image_logo){
             $image = $request->image_logo;
             $type = $request->image_logo->getClientOriginalExtension();

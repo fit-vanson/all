@@ -36,7 +36,6 @@
           <tr>
             <th style="width: 120px;">Logo</th>
             <th>Name</th>
-            <th>Key</th>
             <th>Category</th>
             <th>Actions</th>
           </tr>
@@ -100,7 +99,6 @@
                   // columns according to JSON
                   { data: 'logo',className: "text-center" },
                   { data: 'site_name' },
-                  { data: 'key' },
                   { data: 'category' },
                   { data: 'action' }
               ],
@@ -123,21 +121,6 @@
                   },
                   {
                       targets: 2,
-                      orderable: false,
-                      render: function (data, type, full, meta) {
-                          var $output;
-                          if(data == 'null'){
-                              $output = '<span class="btn btn-sm btn-icon">' +
-                                  feather.icons['x-circle'].toSvg({ class: 'font-medium-2 text-danger' }) +
-                                  '</span>';
-                          }else {
-                              $output = data;
-                          }
-                          return $output;
-                      }
-                  },
-                  {
-                      targets: 3,
                       orderable: false,
                       render: function (data, type, full, meta) {
                           var categories = full['category'],
@@ -342,8 +325,6 @@
                       $('#select_category').val(id_cate);
                       $('#select_category').select2();
                       $('#logo').attr('src',data.logo);
-                      $('#select_api_key').val(data.apikey_id);
-                      $('#select_api_key').select2();
                   },
                   error: function (data) {
                   }
@@ -422,48 +403,6 @@
           }
       });
 
-      $("#apiKeysForm").on('submit', function (e) {
-          e.preventDefault();
-          var formData = new FormData($("#apiKeysForm")[0]);
-          if($('#submitButton').val() == 'create'){
-              $.ajax({
-                  data: formData,
-                  url: '{{route('api_keys.create')}}',
-                  type: "POST",
-                  dataType: 'json',
-                  processData: false,
-                  contentType: false,
-                  success: function (data) {
-                      if(data.errors){
-                          for( var count=0 ; count <data.errors.length; count++){
-                              toastr['error']('', data.errors[count], {
-                                  showMethod: 'fadeIn',
-                                  hideMethod: 'fadeOut',
-                                  timeOut: 3000,
-                              });
-                          }
-                      }
-                      if (data.success) {
-                          toastr['success']('', data.success, {
-                              showMethod: 'fadeIn',
-                              hideMethod: 'fadeOut',
-                              timeOut: 2000,
-                          });
-                          $('#apiKeysForm').trigger("reset");
-                          $('#ApiKeysModal').modal('hide');
-
-                          if(typeof data.all_apiKeys == 'undefined'){
-                              data.all_apiKeys = {};
-                          }
-                          if(typeof rebuildApiKeysOption == 'function'){
-                              rebuildApiKeysOption(data.all_apiKeys)
-                          }
-                      }
-                  },
-              });
-          }
-      });
-
       function rebuildCategoryOption(categories){
           var elementSelect = $("#select_category");
 
@@ -480,22 +419,7 @@
               );
           }
       }
-      function rebuildApiKeysOption(apikeys){
-          var elementSelect = $("#select_api_key");
 
-          if(elementSelect.length <= 0){
-              return false;
-          }
-          elementSelect.empty();
-
-          for(var apikey of apikeys){
-              elementSelect.append(
-                  $("<option></option>", {
-                      value : apikey.id
-                  }).text(apikey.name)
-              );
-          }
-      }
 
   </script>
 @endsection

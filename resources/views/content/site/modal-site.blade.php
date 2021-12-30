@@ -21,27 +21,10 @@
                       <input type="text" id="site_name" class="form-control" placeholder="Site Name" name="site_name">
                   </div>
                   <div class="mb-1">
-                      <label class="form-label" >Api Key</label>
-                      <div class="row">
-                          <div class="col-10">
-                              <select class="form-control" id="select_api_key" name="select_api_key" >
-                                  <option value="0">----- Chọn Api Key -----</option>
-                                  @foreach($apiKeys as $api)
-                                      <option value="{{$api->id}}">{{$api->name}}</option>
-                                  @endforeach
-                              </select>
-                          </div>
-                          <div class="col-2">
-                              <a data-bs-toggle="modal" href="#ApiKeysModal" class="btn btn-secondary">...</a>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="mb-1">
                       <label class="form-label" >Category</label>
-
                       <div class="row">
                           <div class="col-10">
-                              <select class="form-control" id="select_category" name="select_category[]" multiple >
+                              <select class="form-control" id="select_category" name="select_category[]" multiple required>
                                   @foreach($categories as $category)
                                       <option value="{{$category->id}}">{{$category->category_name}}</option>
                                   @endforeach

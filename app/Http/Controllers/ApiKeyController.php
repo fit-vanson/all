@@ -112,11 +112,8 @@ class ApiKeyController extends Controller
         }else{
             $data =  Artisan::call('apikey:generate '.Str::slug($request->apikey_name));
         }
-
-        $allApiKeys = ApiKeys::latest()->get();
         return response()->json([
-            'success'=>'Thêm mới thành công',
-            'all_apiKeys' => $allApiKeys
+            'success'=>'Thêm mới thành công'
         ]);
     }
     public function update(Request $request){
