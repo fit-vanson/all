@@ -13,7 +13,7 @@
               <div class="modal-body flex-grow-1">
                   <input type="hidden" name="id" id="id" value="">
                   <input  id="image" type="file" name="image" class="form-control" hidden accept="image/*" onchange="changeImg(this)">
-                  <img id="avatar" class="thumbnail" width="200px" src="../avatars/1.png">
+                  <img id="avatar" class="thumbnail" width="200px" src="{{asset('images/avatars/1.png')}}">
                   <div class="mb-1">
                       <label class="form-label" for="basic-icon-default-uname">Order</label>
                       <input type="text" id="category_order" class="form-control" value="1" name="category_order">

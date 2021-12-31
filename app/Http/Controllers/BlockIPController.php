@@ -103,7 +103,7 @@ class BlockIPController extends Controller
         $allBlockIps = BlockIP::latest()->get();
         return response()->json([
             'success'=>'Thêm mới thành công',
-            'all_apiKeys' => $allBlockIps
+            'allBlockIps' => $allBlockIps
         ]);
     }
     public function update(Request $request){

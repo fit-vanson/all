@@ -29,7 +29,7 @@
 <body>
 <style>
     .hero-section .figure-holder {
-        background: {{$home->header_image}} no-repeat right top;
+        background: url({{asset('storage/homes/'. preg_replace('/[^A-Za-z0-9\-._]/',"/",$home->header_image))}}) no-repeat right top;
         background-size: 375px auto;
         min-height: 600px;
         display: block;
@@ -131,9 +131,9 @@
 
                 </ul><!--//social-list-->
 
-                <div class="mb-2">
+{{--                <div class="mb-2">--}}
 {{--                    {!! setting('site.company_info') !!}--}}
-                </div>
+{{--                </div>--}}
             </div><!--//footer-col-->
             <div class="footer-col col-6 col-lg-4">
                 <h4 class="col-heading">Legal</h4>

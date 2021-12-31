@@ -39,15 +39,57 @@
                   "name": "Block IPs",
                   "icon": "circle",
                   "slug": "block_ips.index"
-              },
-              {
-                  "url": "admin/site",
-                  "name": "Site",
-                  "icon": "circle",
-                  "slug": "site.index"
               }
           ]
       },
+
+      {
+          "name": "Site",
+          "icon": "chrome",
+          "slug": "",
+          "submenu": [
+              {
+                  "url": "admin/site/list",
+                  "name": "List",
+                  "icon": "circle",
+                  "slug": "site.index"
+              },
+              {
+                  "name": "View",
+                  "icon": "circle",
+                  "slug": "",
+                  "submenu": [
+                      {
+                          "url": "admin/site/view",
+                          "name": "Categories",
+                          "slug": "site.site_index"
+                      },
+                      {
+                          "url": "admin/site/view",
+                          "name": "Block Ips",
+                          "slug": "site.BlockIps"
+                      },
+                      {
+                          "url": "admin/site/view",
+                          "name": "Home",
+                          "slug": "site.home"
+                      },
+                      {
+                          "url": "app/user/view/notifications",
+                          "name": "Notifications",
+                          "slug": "app-user-view-notifications"
+                      },
+                      {
+                          "url": "app/user/view/connections",
+                          "name": "Connections",
+                          "slug": "app-user-view-connections"
+                      }
+                  ]
+              }
+          ]
+      },
+
+
       {
           "navheader": "Web view",
           "slug": ""

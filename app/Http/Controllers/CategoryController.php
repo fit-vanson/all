@@ -75,7 +75,7 @@ class CategoryController extends Controller
 //        dd($records->wallpaper_count);
         $data_arr = array();
         foreach ($records as $key => $record) {
-            $image_count = '<a href="/wallpaper?category='.$record->category_name.'"> <span>'.$record->wallpaper->count().'</span></a>';
+            $image_count = '<a href="/admin/wallpaper?category='.$record->category_name.'"> <span>'.$record->wallpaper->count().'</span></a>';
 //            $image_count = '<a data-id="'.$record->category_name.'" class="category_name_search"> <span>'.$record->wallpaper->count().'</span></a>';
 
             $data_arr[] = array(
@@ -183,6 +183,11 @@ class CategoryController extends Controller
         }
 
         if($request->image){
+
+            $path_Remove =   storage_path('app/public/categories/').$data->image;
+            if(file_exists($path_Remove)){
+                unlink($path_Remove);
+            }
             $file = $request->image;
             $filenameWithExt=$file->getClientOriginalName();
             $filename = Str::slug($request->category_name);

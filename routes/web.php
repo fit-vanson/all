@@ -75,7 +75,6 @@ Route::get('/updateapp', function()
 Route::get('/', [HomeController::class, 'show'])->name('show');
 Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
     Route::get('/', [HomeController::class, 'home'])->middleware(['auth'])->name('home');
-
     Route::group([ "prefix" => "home", "middleware" => ["auth"]], function() {
         Route::get('/', [HomeController::class, 'index'])->name('home.index');
         Route::post('/getIndex', [HomeController::class, 'getIndex'])->name('home.getIndex');
@@ -83,8 +82,18 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
         Route::post('/update', [HomeController::class, 'update'])->name('home.update');
         Route::get('/{id}/edit', [HomeController::class, 'edit'])->name('home.edit');
         Route::get('/{id}/delete', [HomeController::class, 'delete'])->name('home.delete');
-
     });
+
+    Route::group([ "prefix" => "feature-images", "middleware" => ["auth"]], function() {
+        Route::get('/', [HomeController::class, 'index'])->name('home.index');
+        Route::post('/getIndex', [HomeController::class, 'getIndex'])->name('home.getIndex');
+        Route::post('/create', [HomeController::class, 'create'])->name('home.create');
+        Route::post('/update', [HomeController::class, 'update'])->name('home.update');
+        Route::get('/{id}/edit', [HomeController::class, 'edit'])->name('home.edit');
+        Route::get('/{id}/delete', [HomeController::class, 'delete'])->name('home.delete');
+    });
+
+
 
     Route::group([ "prefix" => "user", "middleware" => ["auth"]], function() {
         Route::get('/', [UserController::class, 'index'])->name('user.index');
@@ -96,7 +105,7 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
 //    Route::get('/info', [UserController::class, 'infoUser'])->name('user.info');
         Route::post('/change-info', [UserController::class, 'changeInfo'])->name('user.changeInfo');
     });
-    Route::group([ "prefix" => "site", "middleware" => ["auth"]], function() {
+    Route::group([ "prefix" => "site1", "middleware" => ["auth"]], function() {
         Route::get('/', [SiteController::class, 'index'])->name('site.index');
         Route::post('/getIndex', [SiteController::class, 'getIndex'])->name('site.getIndex');
         Route::post('/create', [SiteController::class, 'create'])->name('site.create');
@@ -148,6 +157,59 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
         Route::get('/{id}/edit', [BlockIPController::class, 'edit'])->name('block_ips.edit');
         Route::get('/{id}/delete', [BlockIPController::class, 'delete'])->name('block_ips.delete');
     });
+
+
+    Route::group([ "prefix" => "site", "middleware" => ["auth"]], function() {
+        Route::get('/list', [SiteController::class, 'index'])->name('site.index');
+        Route::post('/getIndex', [SiteController::class, 'getIndex'])->name('site.getIndex');
+        Route::post('/create', [SiteController::class, 'create'])->name('site.create');
+        Route::post('/update', [SiteController::class, 'update'])->name('site.update');
+        Route::get('/{id}/edit', [SiteController::class, 'edit'])->name('site.edit');
+        Route::get('/{id}/delete', [SiteController::class, 'delete'])->name('site.delete');
+
+
+        Route::get('view/{id}', [SiteController::class, 'site_index'])->name('site.site_index');
+        Route::post('view/{id}/category', [SiteController::class, 'site_getCategory'])->name('site.getCategory');
+        Route::post('view/{id}/add-category', [SiteController::class, 'site_addCategory'])->name('site.addCategory');
+        Route::post('view/{id}/update-category', [SiteController::class, 'site_updateCategory'])->name('site.site_updateCategory');
+        Route::get('view/{id}/category/{id1}/edit', [SiteController::class, 'site_editCategory'])->name('site.editCategory');
+        Route::get('view/{id}/category/edit', [SiteController::class, 'site_editAddCategory'])->name('site.editAddCategory');
+
+
+
+
+        Route::get('view/{id}/block-ips', [SiteController::class, 'site_BlockIps'])->name('site.BlockIps');
+        Route::post('view/{id}/block-ips/get', [SiteController::class, 'site_getBlockIps'])->name('site.getBlockIps');
+        Route::post('view/{id}/block-ips/update-block-ips', [SiteController::class, 'site_updateBlockIp'])->name('site.site_updateBlockIp');
+        Route::get('view/{id}/block-ips/edit', [SiteController::class, 'site_editBlockIp'])->name('site.editBlockIp');
+        Route::get('view/{id}/block-ips/{id1}/delete', [SiteController::class, 'site_deleteBlockIp'])->name('site.deleteBlockIp');
+
+
+        Route::get('view/{id}/home', [SiteController::class, 'site_Home'])->name('site.home');
+
+
+//        Route::post('view/{id}/add-category', [SiteController::class, 'site_addCategory'])->name('site.addCategory');
+//        Route::post('view/{id}/update-category', [SiteController::class, 'site_updateCategory'])->name('site.site_updateCategory');
+//        Route::get('view/{id}/category/{id1}/edit', [SiteController::class, 'site_editCategory'])->name('site.editCategory');
+//        Route::get('view/{id}/category/edit', [SiteController::class, 'site_editAddCategory'])->name('site.editAddCategory');
+//
+//        Route::post('view/{id}/wallpaper', [SiteController::class, 'site_getWallpaper'])->name('site.getWallpaper');
+//
+
+
+
+
+
+    });
+
+
+
+
+
+
+
+
+
 });
 
 

@@ -8,12 +8,15 @@ use App\Models\Home;
 use App\Models\SiteManage;
 use App\Models\User;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Session\Store;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use ImageOrientationFix\ImageOrientationFixer;
 use Illuminate\Support\Facades\Validator;
 use Imagick;
+use Intervention\Image\Facades\Image;
 use Monolog\Logger;
 use PHPExiftool\Reader;
 use PHPExiftool\Driver\Value\ValueInterface;
@@ -33,16 +36,21 @@ class HomeController extends Controller
         $site = SiteManage::where('site_name',$domain)->first();
         if($site){
             $home=Home::where('site_id',$site->id)->first();
-//            dd($home);
+
             $images=FeatureImage::all();
             return view('content.index')->with(compact('images','home'));
         }
-
-
-        $home=Home::find(1);
-        $images=FeatureImage::all();
-        return view('index')->with(compact('images','home'));
+        else{
+            return 'Site không tồn tại';
+        }
     }
+
+
+    public function home()
+    {
+        return view('content.home');
+    }
+
     public function index(Request $request)
     {
         $pageConfigs = ['pageHeader' => false];
@@ -80,14 +88,8 @@ class HomeController extends Controller
         $totalRecordswithFilter = Home::with('site')->select('count(*) as allcount')
 //            ->where('site_name', 'like', '%' . $searchValue . '%')
             ->count();
-
-
-
         // Get records, also we have included search filter as well
         $records = Home::with('site')
-//            orderBy($columnName, $columnSortOrder)
-//            ->where('site->site_name', 'like', '%' . $searchValue . '%')
-
             ->whereHas('site', function ($q) use ($searchValue) {
                 $q->where('site_name','like', '%' . $searchValue . '%');
             })
@@ -100,8 +102,6 @@ class HomeController extends Controller
 //        dd($records->wallpaper_count);
         $data_arr = array();
         foreach ($records as $key => $record) {
-//            dd($record->with('site')->get());
-
             $data_arr[] = array(
                 "id" => $record->id,
                 "logo" => $record->header_image,
@@ -136,17 +136,31 @@ class HomeController extends Controller
 
         $data = new Home();
         $image = $request->header_image;
-        $type = $request->header_image->getClientOriginalExtension();
-        $image = base64_encode(file_get_contents($image));
-        $base64 = 'data:image/' . $type . ';base64,' . $image;
-        $data['header_image'] = $base64;
+        $filenameWithExt=$image->getClientOriginalName();
+        $filename = $request->select_site;
+        $extension = $image->getClientOriginalExtension();
+        $fileNameToStore = $filename.'_'.time().'.'.$extension;
+        $now = new \DateTime('now'); //Datetime
+        $monthNum = $now->format('m');
+        $dateObj   = DateTime::createFromFormat('!m', $monthNum);
+        $monthName = $dateObj->format('F'); // Month
+        $year = $now->format('Y'); // Year
+        $monthYear = $monthName.$year;
+        $path_image    =  storage_path('app/public/homes/'.$monthYear.'/');
+        if (!file_exists($path_image)) {
+            mkdir($path_image, 0777, true);
+        }
+        $img = Image::make($image);
+        $image = $img->save($path_image.$fileNameToStore);
+        $path_image =  $monthYear.'/'.$fileNameToStore;
+        $data['header_image'] = $path_image;
         $data['header_title'] = $request->header_title;
         $data['header_content'] = $request->header_content;
         $data['body_title'] = $request->body_title;
         $data['body_content'] = $request->body_content;
         $data['footer_title'] = $request->footer_title;
         $data['footer_content'] = $request->footer_content;
-        $data['site_id'] = $request->select_site;
+        $data['site_id'] = $request->id;
         $data->save();
 
         return response()->json([
@@ -158,12 +172,33 @@ class HomeController extends Controller
         $id = $request->id;
 
         $data = Home::find($id);
+
         if( $request->header_image){
+            $path_Remove =   storage_path('app/public/homes/').$data->header_image;
+            if(file_exists($path_Remove)){
+                unlink($path_Remove);
+            }
+
             $image = $request->header_image;
-            $type = $request->header_image->getClientOriginalExtension();
-            $image = base64_encode(file_get_contents($image));
-            $base64 = 'data:image/' . $type . ';base64,' . $image;
-            $data['header_image'] = $base64;
+            $filenameWithExt=$image->getClientOriginalName();
+            $filename = $request->select_site;
+            $extension = $image->getClientOriginalExtension();
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $now = new \DateTime('now'); //Datetime
+            $monthNum = $now->format('m');
+            $dateObj   = DateTime::createFromFormat('!m', $monthNum);
+            $monthName = $dateObj->format('F'); // Month
+            $year = $now->format('Y'); // Year
+            $monthYear = $monthName.$year;
+            $path_image    =  storage_path('app/public/homes/'.$monthYear.'/');
+            if (!file_exists($path_image)) {
+                mkdir($path_image, 0777, true);
+            }
+            $img = Image::make($image);
+            $image = $img->save($path_image.$fileNameToStore);
+            $path_image =  $monthYear.'/'.$fileNameToStore;
+            $data['header_image'] = $path_image;
+
         }
         $data['header_title'] = $request->header_title;
         $data['header_content'] = $request->header_content;

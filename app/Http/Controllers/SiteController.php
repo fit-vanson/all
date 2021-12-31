@@ -8,6 +8,7 @@ use App\Models\BlockIpsHasSite;
 use App\Models\CategoryHasSite;
 use App\Models\CategoryHasWallpaper;
 use App\Models\CategoryManage;
+use App\Models\Home;
 use App\Models\SiteManage;
 use App\Models\User;
 use DateTime;
@@ -34,7 +35,7 @@ class SiteController extends Controller
         $roles = $this->role->all();
         $categories = CategoryManage::where('id', '<>', 1)->get();;
         $apiKeys = ApiKeys::where('active',1)->get();
-        return view('content.site.index', [
+        return view('content.site.site-list', [
             'pageConfigs' => $pageConfigs,
             'users'=>$users,'roles'=>$roles,
             'categories' => $categories,
@@ -115,11 +116,26 @@ class SiteController extends Controller
         }
         $data =new SiteManage();
         $data['site_name'] = $request->site_name;
+
         $image = $request->image_logo;
-        $type = $request->image_logo->getClientOriginalExtension();
-        $image = base64_encode(file_get_contents($image));
-        $base64 = 'data:image/' . $type . ';base64,' . $image;
-        $data['logo'] = $base64;
+        $filenameWithExt=$image->getClientOriginalName();
+        $filename = Str::slug($request->site_name);
+        $extension = $image->getClientOriginalExtension();
+        $fileNameToStore = $filename.'_'.time().'.'.$extension;
+        $now = new \DateTime('now'); //Datetime
+        $monthNum = $now->format('m');
+        $dateObj   = DateTime::createFromFormat('!m', $monthNum);
+        $monthName = $dateObj->format('F'); // Month
+        $year = $now->format('Y'); // Year
+        $monthYear = $monthName.$year;
+        $path_image    =  storage_path('app/public/sites/'.$monthYear.'/');
+        if (!file_exists($path_image)) {
+            mkdir($path_image, 0777, true);
+        }
+        $img = Image::make($image);
+        $image = $img->save($path_image.$fileNameToStore);
+        $path_image =  $monthYear.'/'.$fileNameToStore;
+        $data['logo'] = $path_image;
         $data->save();
         $data->category()->attach($request->select_category);
         return response()->json(['success'=>'Thêm mới thành công']);
@@ -141,11 +157,29 @@ class SiteController extends Controller
         $data = SiteManage::find($id);
         $data->site_name = $request->site_name;
         if( $request->image_logo){
+            $path_Remove =   storage_path('app/public/sites/').$data->logo;
+            if(file_exists($path_Remove)){
+                unlink($path_Remove);
+            }
             $image = $request->image_logo;
-            $type = $request->image_logo->getClientOriginalExtension();
-            $image = base64_encode(file_get_contents($image));
-            $base64 = 'data:image/' . $type . ';base64,' . $image;
-            $data->logo = $base64;
+            $filenameWithExt=$image->getClientOriginalName();
+            $filename = Str::slug($request->site_name);
+            $extension = $image->getClientOriginalExtension();
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $now = new \DateTime('now'); //Datetime
+            $monthNum = $now->format('m');
+            $dateObj   = DateTime::createFromFormat('!m', $monthNum);
+            $monthName = $dateObj->format('F'); // Month
+            $year = $now->format('Y'); // Year
+            $monthYear = $monthName.$year;
+            $path_image    =  storage_path('app/public/sites/'.$monthYear.'/');
+            if (!file_exists($path_image)) {
+                mkdir($path_image, 0777, true);
+            }
+            $img = Image::make($image);
+            $image = $img->save($path_image.$fileNameToStore);
+            $path_image =  $monthYear.'/'.$fileNameToStore;
+            $data->logo = $path_image;
         }
         $data->category()->sync($request->select_category);
         $data->save();
@@ -177,7 +211,7 @@ class SiteController extends Controller
         $categories = CategoryManage::all();
         $blockIps = BlockIP::all();
 
-        return view('content.site.detail.index', [
+        return view('content.site.site-view-categories', [
             'pageConfigs' => $pageConfigs,
             'users'=>$users,
             'roles'=>$roles,
@@ -259,14 +293,21 @@ class SiteController extends Controller
         $site->save();
         return response()->json(['success'=>'Thêm mới thành công']);
     }
+    public function site_editAddCategory( $id){
+        $site = SiteManage::with('category')->where('site_name',$id)->first();
+        return response()->json($site);
+    }
     public function site_updateCategory(Request $request){
         $id = $request->id;
         $data = CategoryHasSite::find($id);
         if($request->image){
+            $path_Remove =   storage_path('app/public/categories/').$data->image;
+            if(file_exists($path_Remove)){
+                unlink($path_Remove);
+            }
             $file = $request->image;
             $filenameWithExt=$file->getClientOriginalName();
-            $filename = Str::slug($request->category_name);
-
+            $filename = $data->site_id.'_'.$data->category_id;
             $extension = $file->getClientOriginalExtension();
             $fileNameToStore = $filename.'_'.time().'.'.$extension;
             $now = new \DateTime('now'); //Datetime
@@ -292,6 +333,8 @@ class SiteController extends Controller
         $category = CategoryManage::find($site->category_id);
         return response()->json([$site,$category]);
     }
+
+    //=======================================================
 
     public function site_getWallpaper(Request $request,$id){
 //        dd($request->all(), $id);
@@ -406,6 +449,26 @@ class SiteController extends Controller
         echo json_encode($response);
     }
 
+    //===========================================================
+
+    public function site_BlockIps($id){
+        $site = SiteManage::where('site_name',$id)->first();
+        $pageConfigs = [
+            'pageHeader' => false,
+        ];
+        $users = $this->user->all();
+        $roles = $this->role->all();
+        $blockIps = BlockIP::all();
+
+        return view('content.site.site-view-block-ips', [
+            'pageConfigs' => $pageConfigs,
+            'users'=>$users,
+            'roles'=>$roles,
+            'blockIps' => $blockIps,
+            'site' =>$site
+        ]);
+
+    }
     public function site_getBlockIps(Request $request,$id){
         $site = SiteManage::with('blockIps')->where("site_name",$id)->first();
 
@@ -460,19 +523,16 @@ class SiteController extends Controller
         );
         echo json_encode($response);
     }
-
     public function site_deleteBlockIp($id,$id1){
         $site = SiteManage::where('site_name',$id)->first();
         $site_id = $site->id;
         BlockIpsHasSite::where('sites_id',$site_id)->where('blockIps_id',$id1)->delete();
         return response()->json(['success'=>'Xóa thành công.']);
     }
-
     public function site_editBlockIp( $id){
         $site = SiteManage::with('blockIps')->where('site_name',$id)->first();
         return response()->json($site);
     }
-
     public function site_updateBlockIp(Request $request){
         $id = $request->id_site;
         $site = SiteManage::find($id);
@@ -480,4 +540,31 @@ class SiteController extends Controller
         $site->save();
         return response()->json(['success'=>'Thêm mới thành công']);
     }
+
+    //==========================================================
+
+    public function site_Home($id){
+
+        $site = SiteManage::where('site_name',$id)->first();
+        $home = Home::where('site_id', $site->id)->first();
+
+
+        $pageConfigs = [
+            'pageHeader' => false,
+        ];
+        $users = $this->user->all();
+        $roles = $this->role->all();
+
+
+        return view('content.site.site-view-home', [
+            'pageConfigs' => $pageConfigs,
+            'users'=>$users,
+            'roles'=>$roles,
+            'site' =>$site,
+            'home' =>$home,
+        ]);
+
+    }
+
+
 }

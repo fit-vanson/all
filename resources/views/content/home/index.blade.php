@@ -127,7 +127,7 @@
                       responsivePriority: 4,
                       render: function (data, type, full, meta) {
                           var $output =
-                              '<div class="avatar"><img src="' + data + '" alt="Avatar" height="100" width="100"></div>';
+                              '<div class="avatar"><img src="{{asset('storage/homes')}}/'+data+'" alt="Avatar" height="100" width="100"></div>';
                           return $output;
                       }
                   },
@@ -345,9 +345,9 @@
                       $('#body_content').val(data.body_content);
                       $('#footer_title').val(data.footer_title);
                       $('#footer_content').val(data.footer_content);
-                      $('#logo').attr('src',data.header_image);
-                      // $('#select_site').val(data.site_id);
-                      // $('#select_site').select2();
+                      $('#logo').attr('src','../storage/homes/'+data.header_image);
+                      $('#select_site').val(data.site_id);
+                      $('#select_site').select2();
                   },
                   error: function (data) {
                   }
