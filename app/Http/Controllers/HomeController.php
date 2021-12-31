@@ -53,6 +53,7 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
+
         $pageConfigs = ['pageHeader' => false];
         $users = $this->user->all();
         $roles = $this->role->all();
@@ -121,50 +122,81 @@ class HomeController extends Controller
     }
     public function create(Request $request)
     {
-        $rules = [
-            'header_image' => 'required',
-        ];
-        $message = [
-            'header_image.required'=>'Header Image không để trống',
-        ];
+        $site = Home::where('site_id', $request->id)->first();
 
-        $error = Validator::make($request->all(),$rules, $message );
+        if($site){
+            if($request->header_image){
+                if($site->header_image){
+                    $path_Remove =   storage_path('app/public/homes/').$site->header_image;
+                    if(file_exists($path_Remove)){
+                        unlink($path_Remove);
+                    }
+                }
+                $image = $request->header_image;
+                $filenameWithExt=$image->getClientOriginalName();
+                $extension = $image->getClientOriginalExtension();
+                $fileNameToStore = time().'.'.$extension;
+                $now = new \DateTime('now'); //Datetime
+                $monthNum = $now->format('m');
+                $dateObj   = DateTime::createFromFormat('!m', $monthNum);
+                $monthName = $dateObj->format('F'); // Month
+                $year = $now->format('Y'); // Year
+                $monthYear = $monthName.$year;
+                $path_image    =  storage_path('app/public/homes/'.$monthYear.'/');
+                if (!file_exists($path_image)) {
+                    mkdir($path_image, 0777, true);
+                }
+                $img = Image::make($image);
+                $image = $img->save($path_image.$fileNameToStore);
+                $path_image =  $monthYear.'/'.$fileNameToStore;
+                $header_image = $path_image;
 
-        if($error->fails()){
-            return response()->json(['errors'=> $error->errors()->all()]);
+                Home::updateOrCreate(
+                    [
+                        "site_id" => $request->id,
+                    ],
+                    [
+                        "header_title" => $request->header_title,
+                        "header_content" => $request->header_content,
+                        "body_title" => $request->body_title,
+                        "body_content" => $request->body_content,
+                        "footer_title" => $request->footer_title,
+                        "footer_content" => $request->footer_content,
+                        "header_image" => $header_image,
+                    ]);
+            }else{
+                Home::updateOrCreate(
+                    [
+                        "site_id" => $request->id,
+                    ],
+                    [
+                        "header_title" => $request->header_title,
+                        "header_content" => $request->header_content,
+                        "body_title" => $request->body_title,
+                        "body_content" => $request->body_content,
+                        "footer_title" => $request->footer_title,
+                        "footer_content" => $request->footer_content,
+                    ]);
+            }
+        }else{
+            Home::updateOrCreate(
+                [
+                    "site_id" => $request->id,
+                ],
+                [
+                    "header_title" => $request->header_title,
+                    "header_content" => $request->header_content,
+                    "body_title" => $request->body_title,
+                    "body_content" => $request->body_content,
+                    "footer_title" => $request->footer_title,
+                    "footer_content" => $request->footer_content,
+                ]);
         }
 
-        $data = new Home();
-        $image = $request->header_image;
-        $filenameWithExt=$image->getClientOriginalName();
-        $filename = $request->select_site;
-        $extension = $image->getClientOriginalExtension();
-        $fileNameToStore = $filename.'_'.time().'.'.$extension;
-        $now = new \DateTime('now'); //Datetime
-        $monthNum = $now->format('m');
-        $dateObj   = DateTime::createFromFormat('!m', $monthNum);
-        $monthName = $dateObj->format('F'); // Month
-        $year = $now->format('Y'); // Year
-        $monthYear = $monthName.$year;
-        $path_image    =  storage_path('app/public/homes/'.$monthYear.'/');
-        if (!file_exists($path_image)) {
-            mkdir($path_image, 0777, true);
-        }
-        $img = Image::make($image);
-        $image = $img->save($path_image.$fileNameToStore);
-        $path_image =  $monthYear.'/'.$fileNameToStore;
-        $data['header_image'] = $path_image;
-        $data['header_title'] = $request->header_title;
-        $data['header_content'] = $request->header_content;
-        $data['body_title'] = $request->body_title;
-        $data['body_content'] = $request->body_content;
-        $data['footer_title'] = $request->footer_title;
-        $data['footer_content'] = $request->footer_content;
-        $data['site_id'] = $request->id;
-        $data->save();
+
 
         return response()->json([
-            'success'=>'Thêm mới thành công'
+            'success'=>'Cập nhật thành công'
         ]);
     }
     public function update(Request $request){

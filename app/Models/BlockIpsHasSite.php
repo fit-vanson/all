@@ -9,5 +9,5 @@ class BlockIpsHasSite extends Model
 {
     use HasFactory;
     protected $table= 'tbl_site_has_block_ip';
-    protected $fillable = [];
+
 }

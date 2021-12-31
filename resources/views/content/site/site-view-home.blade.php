@@ -155,7 +155,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <form class="row" id="HomeSiteForm" onsubmit="return false">
+                        <form class="row" id="HomeSiteForm">
                             <input type="hidden" name="id" id="id" value="{{$site->id}}">
                             <input  id="header_image" type="file" name="header_image" class="form-control" hidden accept="image/*" onchange="changeImg(this)">
                             <img id="logo_header_image" class="thumbnail" style="width: 200px" src="@if($home) {{asset('storage/homes/'.$home->header_image)}} @else {{asset('images/avatars/1.png')}} @endif">
@@ -184,8 +184,7 @@
                                 <textarea class="form-control" id="footer_content" name="footer_content" rows="8" placeholder="Footer Content">@if($home) {{$home->footer_content}} @endif</textarea>
                             </div>
                             <div class="mb-1">
-                                <button type="submit" class="btn btn-primary" id="submitButton" value="create">Create</button>
-                                <button type="reset" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary" id="submitButton" value="create">Update</button>
                             </div>
 
                         </form>
@@ -199,35 +198,13 @@
   </div>
 </section>
 
-{{--@include('content/_partials/_modals/modal-edit-user')--}}
-{{--@include('content.site.modal_edit_category')--}}
-{{--@include('content.site.modal_add_category')--}}
-{{--@include('content.category.modal-category')--}}
-{{--@include('content/_partials/_modals/modal-upgrade-plan')--}}
+
 @endsection
 
 @section('vendor-script')
   {{-- Vendor js files --}}
   <script src="{{asset('js/scripts/components/components-navs.js')}}"></script>
-  <script src="{{ asset(('vendors/js/forms/select/select2.full.min.js')) }}"></script>
   <script src="{{ asset(('vendors/js/extensions/toastr.min.js')) }}"></script>
-  <script src="{{ asset(('vendors/js/extensions/sweetalert2.all.min.js')) }}"></script>
-  <script src="{{ asset(('vendors/js/tables/datatable/jquery.dataTables.min.js')) }}"></script>
-  <script src="{{ asset(('vendors/js/tables/datatable/dataTables.bootstrap5.min.js')) }}"></script>
-  <script src="{{ asset(('vendors/js/tables/datatable/dataTables.responsive.min.js')) }}"></script>
-  <script src="{{ asset(('vendors/js/tables/datatable/responsive.bootstrap5.min.js')) }}"></script>
-  <script src="{{ asset(('vendors/js/tables/datatable/datatables.checkboxes.min.js')) }}"></script>
-  <script src="{{ asset(('vendors/js/tables/datatable/datatables.buttons.min.js')) }}"></script>
-  <script src="{{ asset(('vendors/js/tables/datatable/jszip.min.js')) }}"></script>
-  <script src="{{ asset(('vendors/js/tables/datatable/pdfmake.min.js')) }}"></script>
-  <script src="{{ asset(('vendors/js/tables/datatable/vfs_fonts.js')) }}"></script>
-  <script src="{{ asset(('vendors/js/tables/datatable/buttons.html5.min.js')) }}"></script>
-  <script src="{{ asset(('vendors/js/tables/datatable/buttons.print.min.js')) }}"></script>
-  <script src="{{ asset(('vendors/js/tables/datatable/dataTables.rowGroup.min.js')) }}"></script>
-  <script src="{{ asset(('vendors/js/pickers/flatpickr/flatpickr.min.js')) }}"></script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js"></script>
-  <script src="https://cdn.datatables.net/plug-ins/1.10.21/dataRender/datetime.js"></script>
   <script src="{{ asset(('vendors/js/forms/validation/jquery.validate.min.js')) }}"></script>
 @endsection
 
