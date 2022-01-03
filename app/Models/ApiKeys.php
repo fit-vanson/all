@@ -10,10 +10,4 @@ class ApiKeys extends Model
 {
     use HasFactory,
         SoftDeletes;
-
-
-    public function sites()
-    {
-        return $this->hasMany(SiteManage::class, 'apikey_id');
-    }
 }

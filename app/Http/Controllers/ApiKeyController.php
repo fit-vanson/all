@@ -58,15 +58,12 @@ class ApiKeyController extends Controller
             ->where('name', 'like', '%' . $searchValue . '%')
             ->count();
 
-
         // Get records, also we have included search filter as well
-        $records = ApiKeys::with('sites')->orderBy($columnName, $columnSortOrder)
+        $records = ApiKeys::orderBy($columnName, $columnSortOrder)
             ->where('name', 'like', '%' . $searchValue . '%')
-            ->select('*')
             ->skip($start)
             ->take($rowperpage)
             ->get();
-//        dd($records->wallpaper_count);
         $data_arr = array();
         foreach ($records as $key => $record) {
 //            dd($record);
