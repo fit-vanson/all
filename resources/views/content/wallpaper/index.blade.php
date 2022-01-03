@@ -35,24 +35,23 @@
   <!-- list and filter start -->
   <div class="card">
     <div class="card-datatable table-responsive pt-0">
-      <table class="list-table table">
-        <thead class="table-light">
-          <tr>
-              <th></th>
-              <th>Image</th>
-              <th>Name</th>
-              <th>View Count</th>
-              <th>Like Count</th>
-              <th>Category</th>
-              <th>Actions</th>
-          </tr>
-        </thead>
-      </table>
+        <form id="checkForm" name="checkForm">
+          <table class="list-table table">
+            <thead class="table-light">
+              <tr>
+                  <th></th>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>View Count</th>
+                  <th>Like Count</th>
+                  <th>Category</th>
+                  <th>Actions</th>
+              </tr>
+            </thead>
+          </table>
+        </form>
     </div>
   </div>
-
-{{--@include('content.category.modal-add-category')--}}
-{{--@include('content.category.modal-edit-category')--}}
 @include('content.wallpaper.modal-wallpaper')
   <!-- list and filter end -->
 </section>
@@ -129,7 +128,6 @@
       $('#select_category').select2();
       $('#select_category_edit').select2();
       Dropzone.autoDiscover = false;
-
       $(function () {
           $.ajaxSetup({
               headers: {
@@ -161,7 +159,7 @@
                   {
                       // For Checkboxes
                       targets: 0,
-                      visible: false,
+                      // visible: false,
                       orderable: false,
                       responsivePriority: 3,
                       render: function (data, type, full, meta) {
@@ -252,6 +250,16 @@
                       attr: {
                           'data-bs-toggle': 'modal',
                           'data-bs-target': '#WallpaperModal'
+                      },
+                      init: function (api, node, config) {
+                          $(node).removeClass('btn-secondary');
+                      }
+                  },
+                  {
+                      text: 'Delete',
+                      className: 'deleteSelect btn btn-danger',
+                      attr: {
+                          'type' :'submit'
                       },
                       init: function (api, node, config) {
                           $(node).removeClass('btn-secondary');
@@ -388,6 +396,32 @@
                   }
               });
           },
+          });
+          $(document).on('click','.deleteSelect', function (data){
+              Swal.fire({
+                  title: 'Are you sure?',
+                  text: "You won't be able to revert this!",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: 'Yes, delete it!',
+                  customClass: {
+                      confirmButton: 'btn btn-primary',
+                      cancelButton: 'btn btn-outline-danger ms-1'
+                  },
+                  buttonsStyling: false
+              }).then(function (result) {
+                  if (result.value) {
+                      $.ajax({
+                          data: $('#checkForm').serialize(),
+                          url: "{{ route('wallpaper.deleteSelect') }}",
+                          type: "post",
+                          dataType: 'json',
+                          success: function (data) {
+                              dtTable.draw();
+                          },
+                      });
+                  }
+              });
           });
       });
 

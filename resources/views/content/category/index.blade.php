@@ -81,26 +81,16 @@
       <table class="list-table table">
         <thead class="table-light">
           <tr>
-
               <th>Image</th>
               <th>Name</th>
               <th>View Count</th>
               <th>Real</th>
               <th>Count Image</th>
-{{--              <th>Count Site</th>--}}
               <th>Actions</th>
           </tr>
         </thead>
       </table>
     </div>
-    <!-- Modal to add new user starts-->
-    <div class="modal modal-slide-in fade" id="modals-slide-in">
-      <div class="modal-dialog">
-
-      </div>
-    </div>
-  </div>
-
 {{--@include('content.category.modal-add-category')--}}
 {{--@include('content.category.modal-edit-category')--}}
 @include('content.category.modal-category')

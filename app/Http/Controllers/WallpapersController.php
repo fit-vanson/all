@@ -326,14 +326,30 @@ class WallpapersController extends Controller
 
     public function deleteSelect(Request $request)
     {
-        dd($request->all());
-        if($id == 1){
-            return response()->json(['error'=>'Không thể xoá.']);
-        }else{
-            $category = CategoryManage::find($id);
-            $category->delete();
-            return response()->json(['success'=>'Xóa thành công.']);
+        $id = $request->id;
+        $wallpapers = Wallpapers::whereIn('id',$id)->get();
+        foreach ( $wallpapers as $wallpaper){
+            $path_thumbnail =   storage_path('app/public/wallpapers/thumbnail/').$wallpaper->thumbnail_image;
+            $path_detail    =   storage_path('app/public/wallpapers/detail/').$wallpaper->image;
+            $path_origin    =   storage_path('app/public/wallpapers/download/').$wallpaper->origin_image;
+//            dd($path_thumbnail);
+            try {
+                if(file_exists($path_thumbnail)){
+                    unlink($path_thumbnail);
+                }
+                if(file_exists($path_detail)){
+                    unlink($path_detail);
+                }
+                if(file_exists($path_origin)){
+                    unlink($path_origin);
+                }
+            }catch (Exception $ex) {
+                Log::error($ex->getMessage());
+            }
+            $wallpaper->category()->detach();
+            $wallpaper->delete();
         }
+        return response()->json(['success'=>'Xóa thành công.']);
     }
 
 }
