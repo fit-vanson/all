@@ -17,7 +17,6 @@ class FavoriteController extends Controller
 {
     public function likeWallpaper(Request $request)
     {
-        Log::error($request->all());
         $visitor = Visitor::where('device_id', $request->device_id)->first();
         if (!$visitor) {
             Visitor::create([
@@ -44,7 +43,6 @@ class FavoriteController extends Controller
 
     public function disLikeWallpaper(Request $request)
     {
-        Log::error($request->all());
         $visitorFavorite = VisitorFavorite::where([
             'wallpaper_id' => $request->wallpaper_id,
             'visitor_id' => Visitor::where('device_id', $request->device_id)->value('id')])->first();
@@ -54,7 +52,7 @@ class FavoriteController extends Controller
                 'wallpaper_id' => $request->wallpaper_id,
                 'visitor_id' => Visitor::where('device_id', $request->device_id)->value('id')
             ])->delete();
-            $wallpaper = Wallpaper::where('id', $request->wallpaper_id)->first();
+            $wallpaper = Wallpapers::where('id', $request->wallpaper_id)->first();
             $wallpaper->decrement('like_count');
             return response()->json(['success' => ['Completely Delete this Wallpaper out of your List']], 200);
         } else {
