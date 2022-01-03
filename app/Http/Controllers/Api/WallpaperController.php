@@ -21,6 +21,7 @@ class WallpaperController extends Controller
 {
     public function show($id,$device_id)
     {
+
         $wallpaper = Wallpapers::findOrFail($id);
         $wallpaper->increment('view_count');
         $visitorFavorite = VisitorFavorite::where([
@@ -29,7 +30,7 @@ class WallpaperController extends Controller
         if($visitorFavorite){
             return response()->json([
                 'categories' =>
-                    CategoryResource::collection($wallpaper->categories),
+                    CategoryResource::collection($wallpaper->category),
                 'id' => $wallpaper->id,
                 'name' => $wallpaper->name,
                 'thumbnail_image' => asset('storage/wallpapers/thumbnail/'. $wallpaper->thumbnail_image),
@@ -44,7 +45,7 @@ class WallpaperController extends Controller
         }else{
             return response()->json([
                 'categories' =>
-                    CategoryResource::collection($wallpaper->categories),
+                    CategoryResource::collection($wallpaper->category),
                 'id' => $wallpaper->id,
                 'name' => $wallpaper->name,
                 'thumbnail_image' => asset('storage/wallpapers/thumbnail/'.$wallpaper->thumbnail_image),
@@ -263,23 +264,6 @@ class WallpaperController extends Controller
         $domain=$_SERVER['SERVER_NAME'];
         if (checkBlockIp()){
 
-//            $data = CategoryManage::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
-//                ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
-//                ->where('site_name',$domain)
-//                ->where('tbl_category_manages.checked_ip',1)
-//                ->where('wallpapers.like_count','>=',1)
-//                ->select('tbl_category_manages.*')
-//                ->has('wallpaper')
-//                ->with(['wallpaper'=>function ($q) {
-//                    $q->latest();
-//                }])
-//                ->inRandomOrder()
-//                ->get();
-//            dd($data);
-
-
-
-
             $data = Wallpapers::where('like_count','>=',1)
                 ->orderBy('like_count','desc')
                 ->whereHas('category', function ($q) use ($domain) {
@@ -301,15 +285,6 @@ class WallpaperController extends Controller
                         ->where('checked_ip','=', 0);
                 })
                 ->paginate(70);
-
-
-//            $data = Wallpapers::where('like_count','>=',1)
-//                ->orderBy('like_count','desc')
-//                ->whereHas('category', function ($q)
-//                {
-//                    $q->where('checked_ip','=', 0);
-//                })
-//                ->paginate(70);
         }
         $getResource=WallpaperResource::collection($data);
         return $getResource;

@@ -10,12 +10,14 @@ use App\Models\Wallpapers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class FavoriteController extends Controller
 {
     public function likeWallpaper(Request $request)
     {
+        Log::error($request->all());
         $visitor = Visitor::where('device_id', $request->device_id)->first();
         if (!$visitor) {
             Visitor::create([
@@ -42,6 +44,7 @@ class FavoriteController extends Controller
 
     public function disLikeWallpaper(Request $request)
     {
+        Log::error($request->all());
         $visitorFavorite = VisitorFavorite::where([
             'wallpaper_id' => $request->wallpaper_id,
             'visitor_id' => Visitor::where('device_id', $request->device_id)->value('id')])->first();
