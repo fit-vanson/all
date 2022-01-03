@@ -418,6 +418,11 @@
                           dataType: 'json',
                           success: function (data) {
                               dtTable.draw();
+                              toastr['success']('', data.success, {
+                                  showMethod: 'fadeIn',
+                                  hideMethod: 'fadeOut',
+                                  timeOut: 2000,
+                              });
                           },
                       });
                   }
