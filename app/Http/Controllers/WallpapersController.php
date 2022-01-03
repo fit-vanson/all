@@ -57,13 +57,7 @@ class WallpapersController extends Controller
 
         if(isset($request->category)){
             $searchValue = $request->category;
-//            $start = 0;
-//            $rowperpage = 50;
         }
-//        dd($searchValue);
-
-//        dd($request->all());
-
 
         $totalRecords = Wallpapers::select('count(*) as allcount')->count();
         $totalRecordswithFilter = Wallpapers::with('category')->select('count(*) as allcount')
@@ -153,8 +147,6 @@ class WallpapersController extends Controller
             if (!file_exists($path_origin)) {
                 mkdir($path_origin, 0777, true);
             }
-
-
             $img = Image::make($file);
             $origin_image = $img->save($path_origin.$fileNameToStore);
 

@@ -40,5 +40,10 @@ class SiteManage extends Model
         return $this->hasOne(Home::class, 'site_id');
     }
 
+    public function feature_images()
+    {
+        return $this->hasMany(FeatureImage::class, 'site_id');
+    }
+
 
 }

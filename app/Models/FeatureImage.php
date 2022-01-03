@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class FeatureImage extends Model
 {
     use HasFactory;
+    public function site()
+    {
+        return $this->belongsTo(SiteManage::class);
+    }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApiKeyController;
 use App\Http\Controllers\BlockIPController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FeatureImagesController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KpopWallpapersController;
@@ -73,27 +74,17 @@ Route::get('/updateapp', function()
 
 
 Route::get('/', [HomeController::class, 'show'])->name('show');
+Route::get('/policy', [HomeController::class, 'policy'])->name('policy');
 Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
     Route::get('/', [HomeController::class, 'home'])->middleware(['auth'])->name('home');
     Route::group([ "prefix" => "home", "middleware" => ["auth"]], function() {
         Route::get('/', [HomeController::class, 'index'])->name('home.index');
-        Route::post('/getIndex', [HomeController::class, 'getIndex'])->name('home.getIndex');
-        Route::post('/create', [HomeController::class, 'create'])->name('home.create');
-        Route::post('/update', [HomeController::class, 'update'])->name('home.update');
-        Route::get('/{id}/edit', [HomeController::class, 'edit'])->name('home.edit');
-        Route::get('/{id}/delete', [HomeController::class, 'delete'])->name('home.delete');
+//        Route::post('/getIndex', [HomeController::class, 'getIndex'])->name('home.getIndex');
+//        Route::post('/create', [HomeController::class, 'create'])->name('home.create');
+//        Route::post('/update', [HomeController::class, 'update'])->name('home.update');
+//        Route::get('/{id}/edit', [HomeController::class, 'edit'])->name('home.edit');
+//        Route::get('/{id}/delete', [HomeController::class, 'delete'])->name('home.delete');
     });
-
-    Route::group([ "prefix" => "feature-images", "middleware" => ["auth"]], function() {
-        Route::get('/', [HomeController::class, 'index'])->name('home.index');
-        Route::post('/getIndex', [HomeController::class, 'getIndex'])->name('home.getIndex');
-        Route::post('/create', [HomeController::class, 'create'])->name('home.create');
-        Route::post('/update', [HomeController::class, 'update'])->name('home.update');
-        Route::get('/{id}/edit', [HomeController::class, 'edit'])->name('home.edit');
-        Route::get('/{id}/delete', [HomeController::class, 'delete'])->name('home.delete');
-    });
-
-
 
     Route::group([ "prefix" => "user", "middleware" => ["auth"]], function() {
         Route::get('/', [UserController::class, 'index'])->name('user.index');
@@ -102,27 +93,7 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
         Route::post('/update', [UserController::class, 'update'])->name('user.update');
         Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
         Route::get('/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
-//    Route::get('/info', [UserController::class, 'infoUser'])->name('user.info');
         Route::post('/change-info', [UserController::class, 'changeInfo'])->name('user.changeInfo');
-    });
-    Route::group([ "prefix" => "site1", "middleware" => ["auth"]], function() {
-        Route::get('/', [SiteController::class, 'index'])->name('site.index');
-        Route::post('/getIndex', [SiteController::class, 'getIndex'])->name('site.getIndex');
-        Route::post('/create', [SiteController::class, 'create'])->name('site.create');
-        Route::post('/update', [SiteController::class, 'update'])->name('site.update');
-        Route::get('/{id}/edit', [SiteController::class, 'edit'])->name('site.edit');
-        Route::get('/{id}/delete', [SiteController::class, 'delete'])->name('site.delete');
-        Route::get('/{id}', [SiteController::class, 'site_index'])->name('site.site_index');
-        Route::post('{id}/category', [SiteController::class, 'site_getCategory'])->name('site.getCategory');
-        Route::post('{id}/wallpaper', [SiteController::class, 'site_getWallpaper'])->name('site.getWallpaper');
-        Route::post('{id}/block-ips', [SiteController::class, 'site_getBlockIps'])->name('site.getBlockIps');
-//    Route::post('{id}/add-category', [SiteController::class, 'site_addCategory'])->name('site.addCategory');
-        Route::post('{id}/update-category', [SiteController::class, 'site_updateCategory'])->name('site.site_updateCategory');
-        Route::get('/{id}/category/{id1}/edit', [SiteController::class, 'site_editCategory'])->name('site.editCategory');
-
-        Route::get('/{id}/block-ips/edit', [SiteController::class, 'site_editBlockIp'])->name('site.editBlockIp');
-        Route::get('/{id}/block-ips/{id1}/delete', [SiteController::class, 'site_deleteBlockIp'])->name('site.deleteBlockIp');
-        Route::post('{id}/update-block-ips', [SiteController::class, 'site_updateBlockIp'])->name('site.site_updateBlockIp');
     });
     Route::group([ "prefix" => "category", "middleware" => ["auth"]], function() {
         Route::get('/', [CategoryController::class, 'index'])->name('category.index');
@@ -167,7 +138,6 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
         Route::get('/{id}/edit', [SiteController::class, 'edit'])->name('site.edit');
         Route::get('/{id}/delete', [SiteController::class, 'delete'])->name('site.delete');
 
-
         Route::get('view/{id}', [SiteController::class, 'site_index'])->name('site.site_index');
         Route::post('view/{id}/category', [SiteController::class, 'site_getCategory'])->name('site.getCategory');
         Route::post('view/{id}/add-category', [SiteController::class, 'site_addCategory'])->name('site.addCategory');
@@ -175,31 +145,25 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
         Route::get('view/{id}/category/{id1}/edit', [SiteController::class, 'site_editCategory'])->name('site.editCategory');
         Route::get('view/{id}/category/edit', [SiteController::class, 'site_editAddCategory'])->name('site.editAddCategory');
 
-
-
-
         Route::get('view/{id}/block-ips', [SiteController::class, 'site_BlockIps'])->name('site.BlockIps');
         Route::post('view/{id}/block-ips/get', [SiteController::class, 'site_getBlockIps'])->name('site.getBlockIps');
         Route::post('view/{id}/block-ips/update-block-ips', [SiteController::class, 'site_updateBlockIp'])->name('site.site_updateBlockIp');
         Route::get('view/{id}/block-ips/edit', [SiteController::class, 'site_editBlockIp'])->name('site.editBlockIp');
         Route::get('view/{id}/block-ips/{id1}/delete', [SiteController::class, 'site_deleteBlockIp'])->name('site.deleteBlockIp');
 
-
         Route::get('view/{id}/home', [SiteController::class, 'site_Home'])->name('site.home');
+        Route::post('view/{id}/home/update', [SiteController::class, 'site_updateHome'])->name('site.site_updateHome');
+
+        Route::get('view/{id}/policy', [SiteController::class, 'site_Policy'])->name('site.policy');
+        Route::post('view/{id}/policy/update', [SiteController::class, 'site_updatePolicy'])->name('site.site_updatePolicy');
 
 
-//        Route::post('view/{id}/add-category', [SiteController::class, 'site_addCategory'])->name('site.addCategory');
-//        Route::post('view/{id}/update-category', [SiteController::class, 'site_updateCategory'])->name('site.site_updateCategory');
-//        Route::get('view/{id}/category/{id1}/edit', [SiteController::class, 'site_editCategory'])->name('site.editCategory');
-//        Route::get('view/{id}/category/edit', [SiteController::class, 'site_editAddCategory'])->name('site.editAddCategory');
-//
-//        Route::post('view/{id}/wallpaper', [SiteController::class, 'site_getWallpaper'])->name('site.getWallpaper');
-//
-
-
-
-
-
+        Route::get('view/{id}/feature-images', [FeatureImagesController::class, 'index'])->name('site.FeatureImages');
+        Route::post('view/{id}/feature-images/get', [FeatureImagesController::class, 'getIndex'])->name('site.getFeatureImages');
+        Route::post('view/{id}/feature-images/create', [FeatureImagesController::class, 'create'])->name('site.site_createFeatureImages');
+        Route::post('view/{id}/feature-images/update', [FeatureImagesController::class, 'update'])->name('site.site_updateFeatureImages');
+        Route::get('view/{id}/feature-images/{id_image}/edit', [FeatureImagesController::class, 'edit'])->name('site.editFeatureImages');
+        Route::get('view/{id}/feature-images/{id1}/delete', [FeatureImagesController::class, 'delete'])->name('site.deleteFeatureImages');
     });
 
 

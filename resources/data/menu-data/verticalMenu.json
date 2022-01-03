@@ -75,48 +75,16 @@
                           "slug": "site.home"
                       },
                       {
-                          "url": "app/user/view/notifications",
-                          "name": "Notifications",
-                          "slug": "app-user-view-notifications"
+                          "url": "admin/site/view",
+                          "name": "Policy",
+                          "slug": "site.policy"
                       },
                       {
-                          "url": "app/user/view/connections",
-                          "name": "Connections",
-                          "slug": "app-user-view-connections"
+                          "url": "admin/site/view",
+                          "name": "Feature Images",
+                          "slug": "site.FeatureImages"
                       }
                   ]
-              }
-          ]
-      },
-
-
-      {
-          "navheader": "Web view",
-          "slug": ""
-      },
-
-      {
-          "name": "Web view",
-          "icon": "home",
-          "slug": "",
-          "submenu": [
-              {
-                  "url": "admin/home",
-                  "name": "Home",
-                  "icon": "circle",
-                  "slug": "home.index"
-              },
-              {
-                  "url": "admin/policies",
-                  "name": "Policy",
-                  "icon": "circle",
-                  "slug": "policies.index"
-              },
-              {
-                  "url": "admin/feature-images",
-                  "name": "Feature Images",
-                  "icon": "circle",
-                  "slug": "feature_images.index"
               }
           ]
       },

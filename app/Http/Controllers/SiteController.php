@@ -8,6 +8,7 @@ use App\Models\BlockIpsHasSite;
 use App\Models\CategoryHasSite;
 use App\Models\CategoryHasWallpaper;
 use App\Models\CategoryManage;
+use App\Models\FeatureImage;
 use App\Models\Home;
 use App\Models\SiteManage;
 use App\Models\User;
@@ -544,27 +545,115 @@ class SiteController extends Controller
     //==========================================================
 
     public function site_Home($id){
-
         $site = SiteManage::where('site_name',$id)->first();
-        $home = Home::where('site_id', $site->id)->first();
+        if($site){
+            $pageConfigs = [
+                'pageHeader' => false,
+            ];
+            $users = $this->user->all();
+            $roles = $this->role->all();
+            return view('content.site.site-view-home', [
+                'pageConfigs' => $pageConfigs,
+                'users'=>$users,
+                'roles'=>$roles,
+                'site' =>$site,
 
-
-        $pageConfigs = [
-            'pageHeader' => false,
-        ];
-        $users = $this->user->all();
-        $roles = $this->role->all();
-
-
-        return view('content.site.site-view-home', [
-            'pageConfigs' => $pageConfigs,
-            'users'=>$users,
-            'roles'=>$roles,
-            'site' =>$site,
-            'home' =>$home,
-        ]);
-
+            ]);
+        }else{
+            return 'Site không tồn tại';
+        }
     }
+
+    public function site_updateHome(Request $request){
+        $id = $request->id;
+        $site = SiteManage::find($id);
+        if($request->header_image){
+            if($site->header_image){
+                $path_Remove =   storage_path('app/public/homes/').$site->header_image;
+                if(file_exists($path_Remove)){
+                    unlink($path_Remove);
+                }
+            }
+            $image = $request->header_image;
+            $filenameWithExt=$image->getClientOriginalName();
+            $extension = $image->getClientOriginalExtension();
+            $fileNameToStore = time().'.'.$extension;
+            $now = new \DateTime('now'); //Datetime
+            $monthNum = $now->format('m');
+            $dateObj   = DateTime::createFromFormat('!m', $monthNum);
+            $monthName = $dateObj->format('F'); // Month
+            $year = $now->format('Y'); // Year
+            $monthYear = $monthName.$year;
+            $path_image    =  storage_path('app/public/homes/'.$monthYear.'/');
+            if (!file_exists($path_image)) {
+                mkdir($path_image, 0777, true);
+            }
+            $img = Image::make($image);
+            $image = $img->save($path_image.$fileNameToStore);
+            $path_image =  $monthYear.'/'.$fileNameToStore;
+            $header_image = $path_image;
+            $site->header_image = $header_image;
+        }
+        $site->header_title = $request->header_title;
+        $site->header_content = $request->header_content;
+        $site->body_title = $request->body_title;
+        $site->body_content = $request->body_content;
+        $site->footer_title = $request->footer_title;
+        $site->footer_content = $request->footer_content;
+        $site->save();
+        return response()->json(['success'=>'Cập nhật thành công']);
+    }
+
+    //===========================================================
+
+    public function site_Policy($id){
+        $site = SiteManage::where('site_name',$id)->first();
+        if($site){
+            $pageConfigs = [
+                'pageHeader' => false,
+            ];
+            $users = $this->user->all();
+            $roles = $this->role->all();
+            return view('content.site.site-view-policy', [
+                'pageConfigs' => $pageConfigs,
+                'users'=>$users,
+                'roles'=>$roles,
+                'site' =>$site,
+            ]);
+        }else{
+            return 'Site không tồn tại';
+        }
+    }
+
+    public function site_updatePolicy(Request $request){
+        $id = $request->id;
+        $site = SiteManage::find($id);
+        $site->policy = $request->policy;
+        $site->save();
+        return response()->json(['success'=>'Cập nhật thành công']);
+    }
+
+    //==========================================================
+
+
+//    public function site_deleteFeatureImages($id,$id1){
+//        $site = SiteManage::where('site_name',$id)->first();
+//        $site_id = $site->id;
+//        BlockIpsHasSite::where('sites_id',$site_id)->where('blockIps_id',$id1)->delete();
+//        return response()->json(['success'=>'Xóa thành công.']);
+//    }
+//    public function site_editFeatureImages( $id){
+//        $site = SiteManage::with('blockIps')->where('site_name',$id)->first();
+//        return response()->json($site);
+//    }
+//    public function site_updateFeatureImages(Request $request){
+//        $id = $request->id_site;
+//        $site = SiteManage::find($id);
+//        $site->blockIps()->sync($request->block_ips_site);
+//        $site->save();
+//        return response()->json(['success'=>'Thêm mới thành công']);
+//    }
+
 
 
 }

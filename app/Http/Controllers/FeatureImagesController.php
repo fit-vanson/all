@@ -2,30 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FeatureImage;
 use App\Models\Home;
 use App\Models\SiteManage;
+use App\Models\User;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
+use Spatie\Permission\Models\Role;
 
 class FeatureImagesController extends Controller
 {
-    public function index(Request $request)
+    private $user;
+    public $role;
+    public function __construct(User $user, Role $role)
     {
-        $pageConfigs = ['pageHeader' => false];
+        $this->user = $user;
+        $this->role = $role;
+    }
+    public function index($id)
+    {
+        $site = SiteManage::with('feature_images')->where('site_name',$id)->first();
+        $pageConfigs = [
+            'pageHeader' => false,
+        ];
         $users = $this->user->all();
         $roles = $this->role->all();
         $sites = SiteManage::all();
-        return view('content.home.index', [
+        return view('content.site.site-view-feature-images', [
             'pageConfigs' => $pageConfigs,
             'users'=>$users,
             'roles'=>$roles,
-            'sites' => $sites
+            'site' =>$site,
+            'sites' =>$sites,
         ]);
-
     }
-    public function getIndex(Request $request)
+    public function getIndex(Request $request,$id)
     {
+        $site = SiteManage::with('feature_images')->where("site_name",$id)->first();
+
         $draw = $request->get('draw');
         $start = $request->get("start");
         $rowperpage = $request->get("length"); // total number of rows per page
@@ -40,33 +57,22 @@ class FeatureImagesController extends Controller
         $columnName = $columnName_arr[$columnIndex]['data']; // Column name
         $columnSortOrder = $order_arr[0]['dir']; // asc or desc
         $searchValue = $search_arr['value']; // Search value
+        $totalRecords = count($site->feature_images);
 
-
-        // Total records
-        $totalRecords = Home::select('count(*) as allcount')->count();
-        $totalRecordswithFilter = Home::with('site')->select('count(*) as allcount')
-//            ->where('site_name', 'like', '%' . $searchValue . '%')
+        $totalRecordswithFilter = FeatureImage::where('site_id',$site->id)
+            ->where('name', 'like', '%' . $searchValue . '%')
             ->count();
-        // Get records, also we have included search filter as well
-        $records = Home::with('site')
-            ->whereHas('site', function ($q) use ($searchValue) {
-                $q->where('site_name','like', '%' . $searchValue . '%');
-            })
-
-            ->select('*')
+        $records = FeatureImage::where('site_id',$site->id)
+            ->where('name', 'like', '%' . $searchValue . '%')
             ->skip($start)
             ->take($rowperpage)
             ->get();
-
-//        dd($records->wallpaper_count);
         $data_arr = array();
         foreach ($records as $key => $record) {
             $data_arr[] = array(
                 "id" => $record->id,
-                "logo" => $record->header_image,
-                "header_title" => $record->header_title,
-                "site_name" => $record->site['site_name'],
-                "active" => $record->active,
+                "image" => $record->image,
+                "name" => $record->name,
             );
         }
         $response = array(
@@ -75,109 +81,88 @@ class FeatureImagesController extends Controller
             "iTotalDisplayRecords" => $totalRecordswithFilter,
             "aaData" => $data_arr,
         );
-
         echo json_encode($response);
     }
     public function create(Request $request)
     {
-        $rules = [
-            'header_image' => 'required',
-        ];
-        $message = [
-            'header_image.required'=>'Header Image không để trống',
-        ];
-
-        $error = Validator::make($request->all(),$rules, $message );
-
-        if($error->fails()){
-            return response()->json(['errors'=> $error->errors()->all()]);
-        }
-
-        $data = new Home();
-        $image = $request->header_image;
+        $data = new FeatureImage();
+        $image = $request->file;
         $filenameWithExt=$image->getClientOriginalName();
-        $filename = $request->select_site;
+        $filename = Str::slug(pathinfo($filenameWithExt, PATHINFO_FILENAME));
+        $nameSite = Str::slug($request->id_site);
         $extension = $image->getClientOriginalExtension();
-        $fileNameToStore = $filename.'_'.time().'.'.$extension;
+        $fileNameToStore = $nameSite.'_'.$filename.'.'.$extension;
         $now = new \DateTime('now'); //Datetime
         $monthNum = $now->format('m');
         $dateObj   = DateTime::createFromFormat('!m', $monthNum);
         $monthName = $dateObj->format('F'); // Month
         $year = $now->format('Y'); // Year
         $monthYear = $monthName.$year;
-        $path_image    =  storage_path('app/public/homes/'.$monthYear.'/');
+        $path_image    =  storage_path('app/public/feature-images/'.$monthYear.'/');
         if (!file_exists($path_image)) {
             mkdir($path_image, 0777, true);
         }
         $img = Image::make($image);
         $image = $img->save($path_image.$fileNameToStore);
         $path_image =  $monthYear.'/'.$fileNameToStore;
-        $data['header_image'] = $path_image;
-        $data['header_title'] = $request->header_title;
-        $data['header_content'] = $request->header_content;
-        $data['body_title'] = $request->body_title;
-        $data['body_content'] = $request->body_content;
-        $data['footer_title'] = $request->footer_title;
-        $data['footer_content'] = $request->footer_content;
-        $data['site_id'] = $request->select_site;
-        $data->save();
+        $data['image'] = $path_image;
+        $data['name'] = $filenameWithExt;
+        $data['site_id'] = $request->id_site;
 
+        $data->save();
         return response()->json([
             'success'=>'Thêm mới thành công'
         ]);
     }
     public function update(Request $request){
-
         $id = $request->id;
+        $data = FeatureImage::find($id);
 
-        $data = Home::find($id);
-
-        if( $request->header_image){
-            $path_Remove =   storage_path('app/public/homes/').$data->header_image;
+        if( $request->image){
+            $path_Remove =   storage_path('app/public/feature-images/').$data->image;
             if(file_exists($path_Remove)){
                 unlink($path_Remove);
             }
-
-            $image = $request->header_image;
+            $image = $request->image;
             $filenameWithExt=$image->getClientOriginalName();
-            $filename = $request->select_site;
+            $filename = Str::slug(pathinfo($filenameWithExt, PATHINFO_FILENAME));
+            $nameSite = Str::slug($request->site_id);
             $extension = $image->getClientOriginalExtension();
-            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $fileNameToStore = $nameSite.'_'.$filename.'.'.$extension;
             $now = new \DateTime('now'); //Datetime
             $monthNum = $now->format('m');
             $dateObj   = DateTime::createFromFormat('!m', $monthNum);
             $monthName = $dateObj->format('F'); // Month
             $year = $now->format('Y'); // Year
             $monthYear = $monthName.$year;
-            $path_image    =  storage_path('app/public/homes/'.$monthYear.'/');
+            $path_image    =  storage_path('app/public/feature-images/'.$monthYear.'/');
             if (!file_exists($path_image)) {
                 mkdir($path_image, 0777, true);
             }
             $img = Image::make($image);
             $image = $img->save($path_image.$fileNameToStore);
             $path_image =  $monthYear.'/'.$fileNameToStore;
-            $data['header_image'] = $path_image;
+            $data['image'] = $path_image;
 
         }
-        $data['header_title'] = $request->header_title;
-        $data['header_content'] = $request->header_content;
-        $data['body_title'] = $request->body_title;
-        $data['body_content'] = $request->body_content;
-        $data['footer_title'] = $request->footer_title;
-        $data['footer_content'] = $request->footer_content;
-        $data['site_id'] = $request->select_site;
+        $data['name'] = $request->feature_image_name;
+        $data['site_id'] = $request->site_id;
         $data->save();
         return response()->json(['success'=>'Cập nhật thành công']);
     }
-    public function edit($id)
+    public function edit($id,$id_image)
     {
-        $data = Home::find($id);
+        $data = FeatureImage::find($id_image);
         return response()->json($data);
     }
-    public function delete($id)
+    public function delete($id,$id1)
     {
-        $category = Home::find($id);
-        $category->delete();
+        $featureImage = FeatureImage::find($id1);
+        $path    =   storage_path('app/public/feature-images/').$featureImage->image;
+        if(file_exists($path)){
+            unlink($path);
+        }
+        $featureImage->delete();
         return response()->json(['success'=>'Xóa thành công.']);
 
     }

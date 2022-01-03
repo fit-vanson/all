@@ -29,7 +29,7 @@
 <body>
 <style>
     .hero-section .figure-holder {
-        background: url({{asset('storage/homes/'. preg_replace('/[^A-Za-z0-9\-._]/',"/",$home->header_image))}}) no-repeat right top;
+        background: url({{asset('storage/homes/'. preg_replace('/[^A-Za-z0-9\-._]/',"/",$site->header_image))}}) no-repeat right top;
         background-size: 375px auto;
         min-height: 600px;
         display: block;
@@ -56,7 +56,7 @@
         <div class="container position-relative">
 
             <nav class="navbar navbar-expand-lg" >
-                <h1 class="site-logo"><a class="navbar-brand" href="/"><span class="logo-text">Kpop Wallpapers</span></a></h1>
+                <h1 class="site-logo"><a class="navbar-brand" href="/"><span class="logo-text">{{$site->site_name}}</span></a></h1>
             </nav>
 
             <!-- // Free Version ONLY -->
@@ -77,8 +77,8 @@
     <div class="container">
         <div class="row figure-holder" style="padding-bottom: 0">
             <div class="col-12 col-md-6 pt-3 pt-md-4">
-                <h2 class="site-headline font-weight-bold mt-lg-5 pt-lg-5">{{$home->header_title}}</h2>
-                <div class="site-tagline mb-3">{{$home->header_content}}</div>
+                <h2 class="site-headline font-weight-bold mt-lg-5 pt-lg-5">{{$site->header_title}}</h2>
+                <div class="site-tagline mb-3">{{$site->header_content}}</div>
                 <div class="cta-btns"><ul class="app-stores list-unstyled list-inline mx-auto mx-md-0 d-inline-block">
                         <li class="list-inline-item mr-3"><a href="#"><img class="ios" src="{{asset('assets/images/appstore-apple.svg')}}" alt="app-store"></a></li>
                         <li class="list-inline-item"><a href="#"><img class="android" src="{{asset('assets/images/appstore-android.svg')}}" alt="google play"></a></li>
@@ -98,7 +98,7 @@
                 @foreach($images as $image)
                     <div class="flip-item text-center text-md-left">
                         <div class="item-inner shadow-lg rounded">
-                            <img src="{{asset('storage/'.$image->image)}}"/>
+                            <img src="{{asset('storage/feature-images/'.$image->image)}}"/>
                         </div><!--//item-inner-->
                     </div><!--//flip-item-->
                 @endforeach
@@ -113,8 +113,8 @@
 
 <section class="cta-section py-5 theme-bg-secondary text-center">
     <div class="container">
-        <h3 class="text-white font-weight-bold mb-3">{{$home->body_title}}</h3>
-        <div class="text-white mx-auto single-col-max-width section-intro">{{$home->body_content}}</div>
+        <h3 class="text-white font-weight-bold mb-3">{{$site->body_title}}</h3>
+        <div class="text-white mx-auto single-col-max-width section-intro">{{$site->body_content}}</div>
         <a class="btn theme-btn theme-btn-ghost theme-btn-on-bg mt-4" href="#">Download  Now</a>
     </div>
 </section><!--//cta-section-->
@@ -138,7 +138,7 @@
             <div class="footer-col col-6 col-lg-4">
                 <h4 class="col-heading">Legal</h4>
                 <ul class="list-unstyled">
-{{--                    <li><a href="{{route('policy')}}">Privacy</a></li>--}}
+                    <li><a href="{{route('policy')}}">Privacy</a></li>
                 </ul>
             </div><!--//footer-col-->
             <div class="footer-col col-6 col-lg-4"></div><!--//footer-col-->
@@ -149,8 +149,8 @@
     </div>
     <div class="download-area py-4">
         <div class="container text-center">
-            <h3 class="mb-3">{{$home->footer_title}}</h3>
-            <div class="section-intro mb-4 single-col-max-width mx-auto">{{$home->footer_content}} </div>
+            <h3 class="mb-3">{{$site->footer_title}}</h3>
+            <div class="section-intro mb-4 single-col-max-width mx-auto">{{$site->footer_content}} </div>
             <ul class="app-stores list-unstyled list-inline mx-auto  d-inline-block">
                 <li class="list-inline-item mr-3"><a href="#"><img class="ios" src="{{asset('assets/images/appstore-apple.svg')}}" alt="app-store"></a></li>
                 <li class="list-inline-item"><a href="#"><img class="android" src="{{asset('assets/images/appstore-android.svg')}}" alt="google play"></a></li>

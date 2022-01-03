@@ -135,14 +135,14 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{asset('app/user/view/notifications')}}">
-            <i data-feather="bell" class="font-medium-3 me-50"></i><span class="fw-bold">Notifications</span>
-          </a>
+            <a class="nav-link" href="{{asset('admin/site/view/'.$site->site_name.'/policy')}}">
+                <i data-feather="file-text" class="font-medium-3 me-50"></i><span class="fw-bold">Policy</span>
+            </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{asset('app/user/view/connections')}}">
-            <i data-feather="link" class="font-medium-3 me-50"></i><span class="fw-bold">Connections</span>
-          </a>
+            <a class="nav-link" href="{{asset('admin/site/view/'.$site->site_name.'/feature-images')}}">
+                <i data-feather="image" class="font-medium-3 me-50"></i><span class="fw-bold">Feature Images</span>
+            </a>
         </li>
       </ul>
       <!--/ User Pills -->
