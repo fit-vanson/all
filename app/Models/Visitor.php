@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Visitor extends Model
 {
     use HasFactory;
-    protected $fillable = [];
+    protected $fillable = [
+        'device_id'
+    ];
 
     public function wallpapers(){
         return $this->belongsToMany(Wallpapers::class,'visitor_favorites');
