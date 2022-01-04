@@ -214,8 +214,6 @@ class WallpaperController extends Controller
                 })
                 ->paginate(70);
         }else{
-
-
             $data = Wallpapers::where('like_count','>=',1)
                 ->orderBy('like_count','desc')
                 ->whereHas('category', function ($q) use ($domain) {
