@@ -509,7 +509,7 @@ class SiteController extends Controller
             ->leftJoin('tbl_site_has_block_ip', 'tbl_site_has_block_ip.sites_id', '=', 'tbl_site_manages.id')
             ->leftJoin('block_i_p_s', 'block_i_p_s.id', '=', 'tbl_site_has_block_ip.blockIps_id')
             ->where('ip_address', 'like', '%' . $searchValue . '%')
-//            ->orWhere('tbl_category_manages.category_name', 'like', '%' . $searchValue . '%')
+            ->where('id',$site->id)
             ->count();
 
 
@@ -518,6 +518,7 @@ class SiteController extends Controller
             ->leftJoin('tbl_site_has_block_ip', 'tbl_site_has_block_ip.sites_id', '=', 'tbl_site_manages.id')
             ->leftJoin('block_i_p_s', 'block_i_p_s.id', '=', 'tbl_site_has_block_ip.blockIps_id')
             ->where('ip_address', 'like', '%' . $searchValue . '%')
+            ->where('id',$site->id)
             ->select('block_i_p_s.*')
             ->skip($start)
             ->take($rowperpage)
