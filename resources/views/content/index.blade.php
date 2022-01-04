@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{{$site->site_name}} Mobile Apps</title>
+    <title>{{$site->name_site}} Mobile Apps</title>
 
     <!-- Meta -->
     <meta charset="utf-8">
@@ -56,7 +56,7 @@
         <div class="container position-relative">
 
             <nav class="navbar navbar-expand-lg" >
-                <h1 class="site-logo"><a class="navbar-brand" href="/"><span class="logo-text">{{$site->site_name}}</span></a></h1>
+                <h1 class="site-logo"><a class="navbar-brand" href="/"><span class="logo-text">{{$site->name_site}}</span></a></h1>
             </nav>
 
             <!-- // Free Version ONLY -->

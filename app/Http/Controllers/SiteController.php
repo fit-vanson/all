@@ -117,6 +117,7 @@ class SiteController extends Controller
         }
         $data =new SiteManage();
         $data['site_name'] = $request->site_name;
+        $data['name_site'] = $request->name_site;
 
         $image = $request->image_logo;
         $filenameWithExt=$image->getClientOriginalName();
@@ -142,11 +143,9 @@ class SiteController extends Controller
         return response()->json(['success'=>'Thêm mới thành công']);
     }
     public function update(Request $request){
-//        dd($request->all());
         $id = $request->id;
         $rules = [
             'site_name' =>'unique:tbl_site_manages,site_name,'.$id.',id',
-
         ];
         $message = [
             'site_name.unique'=>'Tên đã tồn tại',
@@ -157,6 +156,7 @@ class SiteController extends Controller
         }
         $data = SiteManage::find($id);
         $data->site_name = $request->site_name;
+        $data->name_site = $request->name_site;
         if( $request->image_logo){
             $path_Remove =   storage_path('app/public/sites/').$data->logo;
             if(file_exists($path_Remove)){
@@ -199,7 +199,6 @@ class SiteController extends Controller
         $site->delete();
         return response()->json(['success'=>'Xóa thành công.']);
     }
-
     public function changeAds($id)
     {
         $data = SiteManage::find($id);

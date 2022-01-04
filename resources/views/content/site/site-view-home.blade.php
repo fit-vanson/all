@@ -182,36 +182,40 @@
                   }
               });
               HomeSiteForm.on('submit', function (e) {
+                  var isValid = HomeSiteForm.valid();
                   e.preventDefault();
                   var formData = new FormData($("#HomeSiteForm")[0]);
-                  if($('#submitButton').val() == 'update'){
-                      $.ajax({
-                          data: formData,
-                          url: url +"/update",
-                          type: "POST",
-                          dataType: 'json',
-                          processData: false,
-                          contentType: false,
-                          success: function (data) {
-                              if(data.errors){
-                                  for( var count=0 ; count <data.errors.length; count++){
-                                      toastr['error']('', data.errors[count], {
+                  if(isValid){
+                      if($('#submitButton').val() == 'update'){
+                          $.ajax({
+                              data: formData,
+                              url: url +"/update",
+                              type: "POST",
+                              dataType: 'json',
+                              processData: false,
+                              contentType: false,
+                              success: function (data) {
+                                  if(data.errors){
+                                      for( var count=0 ; count <data.errors.length; count++){
+                                          toastr['error']('', data.errors[count], {
+                                              showMethod: 'fadeIn',
+                                              hideMethod: 'fadeOut',
+                                              timeOut: 3000,
+                                          });
+                                      }
+                                  }
+                                  if (data.success) {
+                                      toastr['success']('', data.success, {
                                           showMethod: 'fadeIn',
                                           hideMethod: 'fadeOut',
-                                          timeOut: 3000,
+                                          timeOut: 2000,
                                       });
                                   }
-                              }
-                              if (data.success) {
-                                  toastr['success']('', data.success, {
-                                      showMethod: 'fadeIn',
-                                      hideMethod: 'fadeOut',
-                                      timeOut: 2000,
-                                  });
-                              }
-                          },
-                      });
+                              },
+                          });
+                      }
                   }
+
 
               });
           }

@@ -329,7 +329,7 @@
 
                         $('#id').val(data.id);
                         $('#site_name').val(data.site_name);
-
+                        $('#name_site').val(data.name_site);
                         var id_cate =[];
                         $.each(data.category, function(i, item) {
                             id_cate.push(item.id)

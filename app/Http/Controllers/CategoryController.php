@@ -151,7 +151,7 @@ class CategoryController extends Controller
             $data['image'] = $path_image;
         }
         $data->save();
-        $allCategory = CategoryManage::latest()->get();
+        $allCategory = CategoryManage::where('id', '<>', 1)->latest()->get();
         return response()->json([
             'success'=>'Thêm mới thành công',
             'all_category' => $allCategory

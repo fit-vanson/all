@@ -18,7 +18,12 @@
 
                   <div class="mb-1">
                       <label class="form-label" >Tên site</label>
-                      <input type="text" id="site_name" class="form-control" placeholder="Site Name" name="site_name">
+                      <input type="text" id="name_site" class="form-control" placeholder="Site Name" name="name_site">
+                  </div>
+
+                  <div class="mb-1">
+                      <label class="form-label" >Website</label>
+                      <input type="text" id="site_name" class="form-control" placeholder="Website" name="site_name">
                   </div>
                   <div class="mb-1">
                       <label class="form-label" >Category</label>

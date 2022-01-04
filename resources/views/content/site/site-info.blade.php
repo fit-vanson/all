@@ -24,7 +24,7 @@
                 <ul class="list-unstyled">
                     <li class="mb-75">
                         <span class="fw-bolder me-25">Site Name:</span>
-                        <span>{{$site->site_name}}</span>
+                        <span>{{$site->name_site}}</span>
                     </li>
                     <li class="mb-75 site_categories">
                         <span class="fw-bolder me-25">Categories:</span>

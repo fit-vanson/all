@@ -87,6 +87,9 @@
 {{--  <script src="{{ asset(('js/scripts/pages/app-user-list.js')) }}"></script>--}}
   <script>
       $(document).ready(function() {
+          $('#select_category').select2({
+              dropdownParent: "#WallpaperModal"
+          });
 
           $('#avatar_thumbnail').click(function(){
               $('#image_thumbnail').click();
@@ -125,8 +128,6 @@
               reader.readAsDataURL(input.files[0]);
           }
       }
-      $('#select_category').select2();
-      $('#select_category_edit').select2();
       Dropzone.autoDiscover = false;
       $(function () {
           $.ajaxSetup({
@@ -324,7 +325,9 @@
                           id_cate.push(item.id)
                       });
                       $('#select_category_edit').val(id_cate);
-                      $('#select_category_edit').select2();
+                      $('#select_category_edit').select2({
+                          dropdownParent: "#EditWallpaperModal"
+                      });
                   },
                   error: function (data) {
                   }
@@ -429,8 +432,8 @@
               });
           });
       });
-
-
   </script>
 
 @endsection
+
+
