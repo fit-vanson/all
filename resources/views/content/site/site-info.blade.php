@@ -34,9 +34,9 @@
                         <span class="fw-bolder me-25">Feature Images:</span>
                         <span>{{count($site->feature_images)}}</span>
                     </li>
-                    <li class="mb-75 site_ads">
+                    <li class="mb-75 site_adss">
                         <span class="fw-bolder me-25">ADs:</span>
-                        @if($site->ad_switch != 0)
+                        @if($site->ad_switch ==1)
                             <a data-id="{{$site->id}}" class="badge bg-light-success changeAds">Active</a>
                         @else
                             <a data-id="{{$site->id}}" class="badge bg-light-danger changeAds">Deactivated</a>
@@ -88,7 +88,7 @@
                 url: "{{asset('admin/site')}}/"+id+"/change-ads",
                 // url: '../'+ id + "/change-ads",
                 success: function (data) {
-                    $(".site_ads").load(" .site_ads");
+                    $(".site_adss").load(" .site_adss");
                     toastr['success']('', data.success, {
                         showMethod: 'fadeIn',
                         hideMethod: 'fadeOut',
