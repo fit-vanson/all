@@ -49,7 +49,6 @@
                         @else
                             <span class="badge bg-light-danger">Deactivated</span>
                         @endif
-
                     </li>
                     <li class="mb-75 site_policy">
                         <span class="fw-bolder me-25">Policy:</span>
