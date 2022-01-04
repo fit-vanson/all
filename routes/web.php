@@ -119,6 +119,7 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
         Route::post('/update', [ApiKeyController::class, 'update'])->name('api_keys.update');
         Route::get('/{id}/edit', [ApiKeyController::class, 'edit'])->name('api_keys.edit');
         Route::get('/{id}/delete', [ApiKeyController::class, 'delete'])->name('api_keys.delete');
+        Route::get('/{id}/change-status', [ApiKeyController::class, 'changeStatus'])->name('api_keys.changeStatus');
     });
     Route::group([ "prefix" => "block-ips", "middleware" => ["auth"]], function() {
         Route::get('/', [BlockIPController::class, 'index'])->name('block_ips.index');

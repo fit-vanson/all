@@ -64,12 +64,12 @@ class ApiKeyController extends Controller
             ->skip($start)
             ->take($rowperpage)
             ->get();
+
+//        $records =  Artisan::call('apikey:list -D ');
+//        dd($records);
+
         $data_arr = array();
         foreach ($records as $key => $record) {
-//            dd($record);
-//            $image_count = '<a href="/wallpaper?category='.$record->category_name.'"> <span>'.$record->wallpaper->count().'</span></a>';
-//            $image_count = '<a data-id="'.$record->category_name.'" class="category_name_search"> <span>'.$record->wallpaper->count().'</span></a>';
-
             $data_arr[] = array(
                 "id" => $record->id,
                 "name" => $record->name,
@@ -140,9 +140,22 @@ class ApiKeyController extends Controller
     }
     public function delete($id)
     {
-        $category = ApiKeys::find($id);
-        $category->delete();
+        $data = ApiKeys::find($id);
+        $data->delete();
         return response()->json(['success'=>'Xóa thành công.']);
+
+    }
+    public function changeStatus($id)
+    {
+        $data = ApiKeys::find($id);
+        if($data->active == 1){
+            $data->active = 0;
+            $data->save();
+        }elseif ($data->active == 0){
+            $data->active = 1;
+            $data->save();
+        }
+        return response()->json(['success'=>'Thành công.']);
 
     }
 }

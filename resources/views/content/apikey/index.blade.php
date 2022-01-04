@@ -135,8 +135,8 @@
                           var $assignedTo = data,
                               $output = '';
                           var realBadgeObj = {
-                              0:'<span class="badge rounded-pill badge-light-danger">NoActive</span>',
-                              1:'<span class="badge rounded-pill badge-light-success">Active</span>',
+                              0:'<a data-id="'+full.id+'" class="badge rounded-pill badge-light-danger changeStatus">Deactivated</a>',
+                              1:'<a data-id="'+full.id+'" class="badge rounded-pill badge-light-success changeStatus">Active</a>',
                           };
                           $output = realBadgeObj[data];
                           return $output
@@ -347,6 +347,23 @@
                       $('#id').val(data.id);
                       $('#apikey_name').val(data.name);
                       $('#apikey').val(data.key);
+                  },
+                  error: function (data) {
+                  }
+              });
+          });
+          $(document).on('click','.changeStatus', function (data){
+              var id = $(this).data("id");
+              $.ajax({
+                  type: "get",
+                  url: "api-keys/" + id + "/change-status",
+                  success: function (data) {
+                      dtTable.draw();
+                      toastr['success']('', data.success, {
+                          showMethod: 'fadeIn',
+                          hideMethod: 'fadeOut',
+                          timeOut: 2000,
+                      });
                   },
                   error: function (data) {
                   }
