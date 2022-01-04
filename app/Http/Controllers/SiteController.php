@@ -260,7 +260,6 @@ class SiteController extends Controller
 
         $totalRecordswithFilter = CategoryHasSite::select('count(*) as allcount')
             ->where('site_id',$site->id)
-//            ->where('site_name', 'like', '%' . $searchValue . '%')
             ->count();
 
 
@@ -505,20 +504,21 @@ class SiteController extends Controller
         $totalRecords = count($site->blockIps);
 
 
+
+
         $totalRecordswithFilter = SiteManage::with('blockIps')->select('count(*) as allcount')
             ->leftJoin('tbl_site_has_block_ip', 'tbl_site_has_block_ip.sites_id', '=', 'tbl_site_manages.id')
             ->leftJoin('block_i_p_s', 'block_i_p_s.id', '=', 'tbl_site_has_block_ip.blockIps_id')
             ->where('ip_address', 'like', '%' . $searchValue . '%')
-            ->where('tbl_site_has_block_ip.site_id',$site->id)
+            ->where('tbl_site_has_block_ip.sites_id',$site->id)
             ->count();
 
-
         // Get records, also we have included search filter as well
-        $records = SiteManage::with('blockIps')->select('count(*) as allcount')
+        $records = SiteManage::with('blockIps')
             ->leftJoin('tbl_site_has_block_ip', 'tbl_site_has_block_ip.sites_id', '=', 'tbl_site_manages.id')
             ->leftJoin('block_i_p_s', 'block_i_p_s.id', '=', 'tbl_site_has_block_ip.blockIps_id')
             ->where('ip_address', 'like', '%' . $searchValue . '%')
-            ->where('tbl_site_has_block_ip.site_id',$site->id)
+            ->where('tbl_site_has_block_ip.sites_id',$site->id)
             ->select('block_i_p_s.*')
             ->skip($start)
             ->take($rowperpage)
