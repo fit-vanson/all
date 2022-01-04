@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\FeatureImage;
-use App\Models\Home;
 
 use App\Models\SiteManage;
 use App\Models\User;

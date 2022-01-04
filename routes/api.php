@@ -4,7 +4,9 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\WallpaperController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+if (App::environment('production', 'staging')) {
+    URL::forceScheme('https');
+}
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
@@ -25,7 +30,7 @@ Route::get('/test-api',function (){
    return ['a'=>'ssss'];
 });
 
-Route::group(['middleware' => 'auth.apikey'], function() {
+Route::group([], function() {
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/categories/{category_id}/wallpapers', [CategoryController::class, 'getWallpapers']);
 

@@ -9,7 +9,6 @@ use App\Models\CategoryHasSite;
 use App\Models\CategoryHasWallpaper;
 use App\Models\CategoryManage;
 use App\Models\FeatureImage;
-use App\Models\Home;
 use App\Models\SiteManage;
 use App\Models\User;
 use DateTime;
@@ -88,6 +87,7 @@ class SiteController extends Controller
                 "id" => $record->id,
                 "logo" => $record->logo,
                 "site_name" => $record->site_name,
+                "ad_switch" => $record->ad_switch,
                 "category" => $cate_name,
             );
         }
@@ -200,10 +200,26 @@ class SiteController extends Controller
         return response()->json(['success'=>'Xóa thành công.']);
     }
 
+    public function changeAds($id)
+    {
+        $data = SiteManage::find($id);
+        if($data->ad_switch == 1){
+            $data->ad_switch = 0;
+            $data->save();
+            return response()->json(['success'=>'Tắt Ads.']);
+        }elseif ($data->ad_switch == 0){
+            $data->ad_switch = 1;
+            $data->save();
+            return response()->json(['success'=>'Kích hoạt ADs.']);
+        }
+
+
+    }
+
 
     //===================================================
     public function site_index($id){
-        $site = SiteManage::where('site_name',$id)->first();
+        $site = SiteManage::with('category')->where('site_name',$id)->first();
         $pageConfigs = [
             'pageHeader' => false,
         ];
@@ -453,7 +469,7 @@ class SiteController extends Controller
     //===========================================================
 
     public function site_BlockIps($id){
-        $site = SiteManage::where('site_name',$id)->first();
+        $site = SiteManage::with('blockIps')->where('site_name',$id)->first();
         $pageConfigs = [
             'pageHeader' => false,
         ];
@@ -563,7 +579,6 @@ class SiteController extends Controller
             return 'Site không tồn tại';
         }
     }
-
     public function site_updateHome(Request $request){
         $id = $request->id;
         $site = SiteManage::find($id);
@@ -624,7 +639,6 @@ class SiteController extends Controller
             return 'Site không tồn tại';
         }
     }
-
     public function site_updatePolicy(Request $request){
         $id = $request->id;
         $site = SiteManage::find($id);
@@ -635,25 +649,30 @@ class SiteController extends Controller
 
     //==========================================================
 
+    public function site_LoadFeature($id){
+        $site = SiteManage::with('category')->where('site_name',$id)->first();
+        $pageConfigs = [
+            'pageHeader' => false,
+        ];
+        $users = $this->user->all();
+        $roles = $this->role->all();
+        $categories = CategoryManage::all();
+        $blockIps = BlockIP::all();
 
-//    public function site_deleteFeatureImages($id,$id1){
-//        $site = SiteManage::where('site_name',$id)->first();
-//        $site_id = $site->id;
-//        BlockIpsHasSite::where('sites_id',$site_id)->where('blockIps_id',$id1)->delete();
-//        return response()->json(['success'=>'Xóa thành công.']);
-//    }
-//    public function site_editFeatureImages( $id){
-//        $site = SiteManage::with('blockIps')->where('site_name',$id)->first();
-//        return response()->json($site);
-//    }
-//    public function site_updateFeatureImages(Request $request){
-//        $id = $request->id_site;
-//        $site = SiteManage::find($id);
-//        $site->blockIps()->sync($request->block_ips_site);
-//        $site->save();
-//        return response()->json(['success'=>'Thêm mới thành công']);
-//    }
+        return view('content.site.site-view-load-feature', [
+            'pageConfigs' => $pageConfigs,
+            'users'=>$users,
+            'roles'=>$roles,
+            'categories' => $categories,
+            'blockIps' => $blockIps,
+            'site' =>$site
+        ]);
 
+    }
 
+    public function site_updateLoadFeature(Request $request,$id){
+        $site = SiteManage::where('site_name',$id)->update(['load_view_by'=>$request->load_feature]);
+        return response()->json(['success'=>'Cập nhật thành công']);
+    }
 
 }

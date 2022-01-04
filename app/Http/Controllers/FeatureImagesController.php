@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\FeatureImage;
-use App\Models\Home;
 use App\Models\SiteManage;
 use App\Models\User;
 use DateTime;
@@ -38,6 +37,7 @@ class FeatureImagesController extends Controller
             'site' =>$site,
             'sites' =>$sites,
         ]);
+
     }
     public function getIndex(Request $request,$id)
     {

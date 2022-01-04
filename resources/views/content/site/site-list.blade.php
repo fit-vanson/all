@@ -36,6 +36,7 @@
                     <tr>
                         <th style="width: 120px;">Logo</th>
                         <th>Name</th>
+                        <th>Ads</th>
                         <th>Category</th>
                         <th>Actions</th>
                     </tr>
@@ -99,6 +100,7 @@
                     // columns according to JSON
                     { data: 'logo',className: "text-center" },
                     { data: 'site_name' },
+                    { data: 'ad_switch' },
                     { data: 'category' },
                     { data: 'action' }
                 ],
@@ -121,6 +123,20 @@
                     },
                     {
                         targets: 2,
+                        orderable: false,
+                        render: function (data, type, full, meta) {
+                            var $assignedTo = data,
+                                $output = '';
+                            var realBadgeObj = {
+                                0:'<a data-id="'+full.id+'" class="badge rounded-pill badge-light-danger changeAds">Deactivated</a>',
+                                1:'<a data-id="'+full.id+'" class="badge rounded-pill badge-light-success changeAds">Active</a>',
+                            };
+                            $output = realBadgeObj[data];
+                            return $output
+                        }
+                    },
+                    {
+                        targets: 3,
                         orderable: false,
                         render: function (data, type, full, meta) {
                             var categories = full['category'],
@@ -326,6 +342,23 @@
                     }
                 });
             });
+            $(document).on('click','.changeAds', function (data){
+                var id = $(this).data("id");
+                $.ajax({
+                    type: "get",
+                    url: "{{asset('admin/site')}}/"+id+"/change-ads",
+                    success: function (data) {
+                        dtSiteTable.draw();
+                        toastr['success']('', data.success, {
+                            showMethod: 'fadeIn',
+                            hideMethod: 'fadeOut',
+                            timeOut: 2000,
+                        });
+                    },
+                    error: function (data) {
+                    }
+                });
+            });
         });
         $(document).ready(function() {
             $('#avatar').click(function(){
@@ -424,7 +457,5 @@
                 $('#category_name').val('Phace_'+category_name)
             }
         };
-
-
     </script>
 @endsection

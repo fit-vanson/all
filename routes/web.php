@@ -10,8 +10,10 @@ use App\Http\Controllers\KpopWallpapersController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WallpapersController;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +25,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+if (App::environment('production', 'staging')) {
+    URL::forceScheme('https');
+}
 require __DIR__.'/auth.php';
 Route::get('/clear-cache',function (){
     echo  Artisan::call('optimize:clear');
@@ -138,6 +142,7 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
         Route::post('/update', [SiteController::class, 'update'])->name('site.update');
         Route::get('/{id}/edit', [SiteController::class, 'edit'])->name('site.edit');
         Route::get('/{id}/delete', [SiteController::class, 'delete'])->name('site.delete');
+        Route::get('/{id}/change-ads', [SiteController::class, 'changeAds'])->name('site.changeAds');
 
         Route::get('view/{id}', [SiteController::class, 'site_index'])->name('site.site_index');
         Route::post('view/{id}/category', [SiteController::class, 'site_getCategory'])->name('site.getCategory');
@@ -165,6 +170,9 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
         Route::post('view/{id}/feature-images/update', [FeatureImagesController::class, 'update'])->name('site.site_updateFeatureImages');
         Route::get('view/{id}/feature-images/{id_image}/edit', [FeatureImagesController::class, 'edit'])->name('site.editFeatureImages');
         Route::get('view/{id}/feature-images/{id1}/delete', [FeatureImagesController::class, 'delete'])->name('site.deleteFeatureImages');
+
+        Route::get('view/{id}/load-feature', [SiteController::class, 'site_LoadFeature'])->name('site.LoadFeature');
+        Route::get('view/{id}/load-feature/update', [SiteController::class, 'site_updateLoadFeature'])->name('site.site_updateLoadFeature');
     });
 
 

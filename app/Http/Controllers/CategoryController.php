@@ -118,7 +118,7 @@ class CategoryController extends Controller
         }
         $data = new CategoryManage();
         $data['category_name'] = $request->category_name;
-        $data['category_order'] = $request->category_order;
+        $data['order'] = $request->category_order;
         $data['view_count'] = $request->view_count;
         if($request->view_count){
             $data['view_count'] = $request->view_count;
@@ -174,7 +174,7 @@ class CategoryController extends Controller
         }
         $data = CategoryManage::find($id);
         $data->category_name = $request->category_name;
-        $data->category_order = $request->category_order;
+        $data->order = $request->category_order;
         $data->view_count = $request->view_count;
         if($request->checked_ip){
             $data->checked_ip  = 0;

@@ -35,10 +35,6 @@ class SiteManage extends Model
     {
         return $this->belongsToMany(BlockIP::class, 'tbl_site_has_block_ip', 'sites_id', 'blockIps_id');
     }
-    public function home()
-    {
-        return $this->hasOne(Home::class, 'site_id');
-    }
 
     public function feature_images()
     {

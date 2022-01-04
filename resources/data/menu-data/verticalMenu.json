@@ -83,6 +83,11 @@
                           "url": "admin/site/view",
                           "name": "Feature Images",
                           "slug": "site.FeatureImages"
+                      },
+                      {
+                          "url": "admin/site/view",
+                          "name": "Load Feature",
+                          "slug": "site.LoadFeature"
                       }
                   ]
               }
