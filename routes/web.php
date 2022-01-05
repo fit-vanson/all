@@ -198,7 +198,7 @@ Route::group([ "prefix" => "kpopwallpapers.net", "middleware" => ["auth"]], func
         Route::get('/edit/{id}', [KpopWallpapersController::class, 'edit'])->name('kpopwallpapers.category.edit');
         Route::get('/delete/{id}', [KpopWallpapersController::class, 'delete'])->name('kpopwallpapers.category.delete');
         //    Route::get('/info', [UserController::class, 'infoUser'])->name('user.info');
-        Route::post('/change-info', [KpopWallpapersController::class, 'changeInfo'])->name('user.changeInfo');
+//        Route::post('/change-info', [KpopWallpapersController::class, 'changeInfo'])->name('user.changeInfo');
     });
 });
 

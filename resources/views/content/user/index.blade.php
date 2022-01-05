@@ -521,7 +521,6 @@
               $image_crop.croppie('bind', {
                   url: event.target.result
               }).then(function(){
-                  console.log('complete');
               });
           }
           reader.readAsDataURL(this.files[0]);
@@ -533,7 +532,6 @@
               type: 'canvas',
               size: 'viewport'
           }).then(function(response){
-              console.log(response)
               $('#avatar').attr('src',response);
               $('#insertimageModal').modal('hide');
           });
