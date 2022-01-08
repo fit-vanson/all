@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{{ asset(('vendors/css/extensions/sweetalert2.min.css')) }}">
 
     <link rel="stylesheet" href="{{ asset(('vendors/css/extensions/toastr.min.css')) }}">
+    <link rel="stylesheet" href="{{ asset(('js/scripts/searchable/css/bootstrap-select.min.css')) }}">
 
 @endsection
 
@@ -77,6 +78,7 @@
 @section('page-script')
     {{-- Page js files --}}
     {{--  <script src="{{ asset(('js/scripts/pages/app-user-list.js')) }}"></script>--}}
+    <script src="{{ asset(('js/scripts/searchable/js/bootstrap-select.min.js')) }}"></script>
     <script>
         $(function () {
             $.ajaxSetup({
@@ -332,10 +334,9 @@
                         $('#name_site').val(data.name_site);
                         var id_cate =[];
                         $.each(data.category, function(i, item) {
-                            id_cate.push(item.id)
+                            id_cate.push(item.id.toString())
                         });
-                        $('#select_category').val(id_cate);
-                        $('#select_category').select2();
+                        $('#select_category').selectpicker('val', id_cate);
                         $('#logo').attr('src','{{asset('storage/sites')}}/'+data.logo);
                     },
                     error: function (data) {
@@ -373,8 +374,7 @@
                 $('#submitButton').prop('class','btn btn-primary');
                 $('#submitButton').text('Create');
                 $('#submitButton').val('create');
-                $('#select_category').select2();
-                $('#select_api_key').select2();
+                $('#select_category').selectpicker();
                 $('#logo').attr('src', '{{asset('images/avatars/1.png')}}');
             });
         });
@@ -447,6 +447,7 @@
                     }).text(category.category_name)
                 );
             }
+            $('#select_category').selectpicker('refresh');
         }
         document.getElementById('checked_ip').onclick = function(e){
             var category_name = $('#category_name').val();

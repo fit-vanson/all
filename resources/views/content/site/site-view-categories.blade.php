@@ -19,6 +19,8 @@
   <link rel="stylesheet" href="{{ asset(('css/base/plugins/forms/form-validation.css')) }}">
   <link rel="stylesheet" href="{{ asset(('css/base/plugins/extensions/ext-component-sweet-alerts.css')) }}">
   <link rel="stylesheet" href="{{ asset(('css/base/plugins/extensions/ext-component-toastr.css')) }}">
+
+  <link rel="stylesheet" href="{{ asset(('js/scripts/searchable/css/bootstrap-select.min.css')) }}">
 @endsection
 
 @section('content')
@@ -125,9 +127,8 @@
 
 @section('page-script')
   {{-- Page js files --}}
+  <script src="{{ asset(('js/scripts/searchable/js/bootstrap-select.min.js')) }}"></script>
   <script>
-      $('#select_category').select2();
-      $('#block_ips_site').select2();
       $(document).ready(function() {
           $('#avatar').click(function(){
               $('#image').click();
@@ -180,6 +181,15 @@
                       responsivePriority: 4,
                       render: function (data, type, full, meta) {
                           var $output ='<img src="{{asset('storage/categories')}}/'+data+'" alt="Avatar" height="100px">';
+                          return $output;
+                      }
+                  },
+
+                  {
+                      targets: 1,
+                      responsivePriority: 1,
+                      render: function (data, type, full, meta) {
+                          var $output ='<a href="/admin/wallpaper?category='+data+'"> <span class="fw-bolder">'+data+'</span>';
                           return $output;
                       }
                   },
@@ -308,10 +318,9 @@
                       $('#id_site').val(data.id);
                       var id_categoris =[];
                       $.each(data.category, function(i, item) {
-                          id_categoris.push(item.id)
+                          id_categoris.push(item.id.toString())
                       });
-                      $('#select_category').val(id_categoris);
-                      $('#select_category').select2();
+                      $('#select_category').selectpicker('val', id_categoris);
                   },
                   error: function (data) {
                   }
@@ -408,10 +417,9 @@
                       $('#id_site').val(data.id);
                       var id_categoris =[];
                       $.each(data.category, function(i, item) {
-                          id_categoris.push(item.id)
+                          id_categoris.push(item.id.toString())
                       });
-                      $('#select_category').val(id_categoris);
-                      $('#select_category').select2();
+                      $('#select_category').selectpicker('val', id_categoris);
                   },
                   error: function (data) {
                   }
@@ -424,6 +432,7 @@
                       }).text(category.category_name)
                   );
               }
+              $('#select_category').selectpicker('refresh');
           }
           document.getElementById('checked_ip').onclick = function(e){
               var category_name = $('#category_name').val();
