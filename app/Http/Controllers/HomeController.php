@@ -35,7 +35,7 @@ class HomeController extends Controller
             return view('content.index')->with(compact('images','site'));
         }
         else{
-            return 'Site không tồn tại';
+            return view('content.hp');
         }
     }
     public function policy(){
@@ -45,7 +45,7 @@ class HomeController extends Controller
             return view('content.policy')->with(compact('site'));
         }
         else{
-            return 'Site không tồn tại';
+            return view('content.hp');
         }
     }
 
