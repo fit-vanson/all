@@ -60,31 +60,31 @@ class CategoryController extends Controller
         // Total records
         $totalRecords = CategoryManage::select('count(*) as allcount')->count();
         $totalRecordswithFilter = CategoryManage::select('count(*) as allcount')
+            ->where('id', '<>', 1)
             ->where('category_name', 'like', '%' . $searchValue . '%')
             ->count();
 
 
         // Get records, also we have included search filter as well
-        $records = CategoryManage::with('wallpaper','site')->orderBy($columnName, $columnSortOrder)
+        $records = CategoryManage::with('wallpaper','site')
+            ->withCount('wallpaper')
+            ->orderBy($columnName, $columnSortOrder)
             ->where('category_name', 'like', '%' . $searchValue . '%')
             ->where('id', '<>', 1)
-            ->select('*')
             ->skip($start)
             ->take($rowperpage)
             ->get();
-//        dd($records->wallpaper_count);
+
+
         $data_arr = array();
         foreach ($records as $key => $record) {
-            $image_count = '<a href="/admin/wallpaper?category='.$record->category_name.'"> <span>'.$record->wallpaper->count().'</span></a>';
-//            $image_count = '<a data-id="'.$record->category_name.'" class="category_name_search"> <span>'.$record->wallpaper->count().'</span></a>';
-
+            $image_count = '<a href="/admin/wallpaper?category='.$record->category_name.'"> <span>'.$record->wallpaper_count.'</span></a>';
             $data_arr[] = array(
                 "id" => $record->id,
                 "category_name" => $record->category_name,
                 "image" => $record->image,
                 "view_count" => $record->view_count,
-                "image_count" => $image_count,
-                "site_count" => $record->site->count(),
+                "wallpaper_count" => $image_count,
                 "checked_ip" => $record->checked_ip,
             );
         }

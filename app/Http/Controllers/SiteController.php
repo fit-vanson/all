@@ -258,26 +258,22 @@ class SiteController extends Controller
 
         $totalRecords = CategoryHasSite::where('site_id',$site->id)->select('count(*) as allcount')->count();
 
-        $totalRecordswithFilter = CategoryHasSite::select('count(*) as allcount')
-            ->where('site_id',$site->id)
-            ->count();
-
-
-        // Get records, also we have included search filter as well
-        $records = CategoryHasSite::orderBy($columnName, $columnSortOrder)
-            ->join('tbl_category_manages','tbl_category_has_site.category_id','=','tbl_category_manages.id')
+        $totalRecordswithFilter = CategoryManage::select('count(*) as allcount')
+            ->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+            ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
             ->where('site_id',$site->id)
             ->where('tbl_category_manages.category_name', 'like', '%' . $searchValue . '%')
-            ->select('tbl_category_has_site.*',
-                'tbl_category_manages.id as id_cate',
-                'tbl_category_manages.category_name',
-                'tbl_category_manages.view_count',
-                'tbl_category_manages.checked_ip',
-                'tbl_category_manages.image as category_image')
+            ->count();
+        $records = CategoryManage::orderBy($columnName, $columnSortOrder)
+            ->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+            ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+            ->where('site_id',$site->id)
+            ->where('tbl_category_manages.category_name', 'like', '%' . $searchValue . '%')
+            ->select('tbl_category_manages.*')
+            ->withCount('wallpaper')
             ->skip($start)
             ->take($rowperpage)
             ->get();
-
         $data_arr = array();
         foreach ($records as $key => $record) {
             if($record->image){
@@ -290,7 +286,7 @@ class SiteController extends Controller
                 "id_cate" => $record->id_cate,
                 "category_name" => $record->category_name,
                 "image" => $image,
-                "view_count" => $record->view_count,
+                "wallpaper_count" => $record->wallpaper_count,
                 "checked_ip" => $record->checked_ip,
             );
         }

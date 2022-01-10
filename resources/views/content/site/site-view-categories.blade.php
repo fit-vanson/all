@@ -80,7 +80,7 @@
                   <tr>
                       <th>Image</th>
                       <th>Name</th>
-                      <th>View Count</th>
+                      <th>Image Count</th>
                       <th>Real</th>
                       <th>Actions</th>
                   </tr>
@@ -170,7 +170,7 @@
                   // columns according to JSON
                   { data: 'image' },
                   { data: 'category_name' },
-                  { data: 'view_count' },
+                  { data: 'wallpaper_count' },
                   { data: 'checked_ip' },
                   { data: 'action' }
               ],

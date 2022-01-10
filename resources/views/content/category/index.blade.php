@@ -168,7 +168,7 @@
                   { data: 'category_name' },
                   { data: 'view_count' },
                   { data: 'checked_ip' },
-                  { data: 'image_count' },
+                  { data: 'wallpaper_count' },
                   { data: 'action' }
               ],
               columnDefs: [
@@ -190,7 +190,7 @@
                   },
                   {
                       targets: 3,
-                      orderable: false,
+                      // orderable: false,
                       render: function (data, type, full, meta) {
                           var $assignedTo = full.checked_ip,
                               $output = '';
@@ -426,7 +426,7 @@
                           $('#submitButton').text('Update');
                           $('#submitButton').val('update');
                           $('#id').val(data.data.id);
-                          $('#category_order').val(data.data.category_order);
+                          $('#category_order').val(data.data.order);
                           $('#category_name').val(data.data.category_name);
                           $('#view_count').val(data.data.view_count);
                           if(data.data.checked_ip == 0){
