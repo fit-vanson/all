@@ -85,7 +85,7 @@ class SiteController extends Controller
             }
             $data_arr[] = array(
                 "id" => $record->id,
-                "logo" => $record->logo,
+                "logo" => $record->header_image,
                 "site_name" => $record->site_name,
                 "ad_switch" => $record->ad_switch,
                 "category" => $cate_name,
@@ -137,7 +137,7 @@ class SiteController extends Controller
         $img = Image::make($image);
         $image = $img->save($path_image.$fileNameToStore);
         $path_image =  $monthYear.'/'.$fileNameToStore;
-        $data['logo'] = $path_image;
+        $data['header_image'] = $path_image;
         $data->save();
         $data->category()->attach($request->select_category);
         return response()->json(['success'=>'Thêm mới thành công']);
@@ -180,7 +180,7 @@ class SiteController extends Controller
             $img = Image::make($image);
             $image = $img->save($path_image.$fileNameToStore);
             $path_image =  $monthYear.'/'.$fileNameToStore;
-            $data->logo = $path_image;
+            $data->header_image = $path_image;
         }
         $data->category()->sync($request->select_category);
         $data->save();
@@ -584,7 +584,7 @@ class SiteController extends Controller
         $site = SiteManage::find($id);
         if($request->header_image){
             if($site->header_image){
-                $path_Remove =   storage_path('app/public/homes/').$site->header_image;
+                $path_Remove =   storage_path('app/public/sites/').$site->header_image;
                 if(file_exists($path_Remove)){
                     unlink($path_Remove);
                 }
@@ -599,7 +599,7 @@ class SiteController extends Controller
             $monthName = $dateObj->format('F'); // Month
             $year = $now->format('Y'); // Year
             $monthYear = $monthName.$year;
-            $path_image    =  storage_path('app/public/homes/'.$monthYear.'/');
+            $path_image    =  storage_path('app/public/sites/'.$monthYear.'/');
             if (!file_exists($path_image)) {
                 mkdir($path_image, 0777, true);
             }

@@ -54,4 +54,9 @@ class HomeController extends Controller
         return view('content.home');
     }
 
+    public function file()
+    {
+        return view('content.file.index');
+    }
+
 }

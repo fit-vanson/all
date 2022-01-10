@@ -80,7 +80,7 @@
                         <form class="row" id="HomeSiteForm">
                             <input type="hidden" name="id" id="id" value="{{$site->id}}">
                             <input  id="header_image" type="file" name="header_image" class="form-control" hidden accept="image/*" onchange="changeImg(this)">
-                            <img id="logo_header_image" class="thumbnail" style="width: 200px" src="@if($site->header_image) {{asset('storage/homes/'.$site->header_image)}} @else {{asset('images/avatars/1.png')}} @endif">
+                            <img id="logo_header_image" class="thumbnail" style="width: 200px" src="@if($site->header_image) {{asset('storage/sites/'.$site->header_image)}} @else {{asset('images/avatars/1.png')}} @endif">
                             <div class="mb-1">
                                 <label class="form-label" for="basic-icon-default-uname">Header Title</label>
                                 <input type="text" id="header_title" class="form-control" placeholder="Header Title" value="{{$site->header_title}}" name="header_title">

@@ -81,6 +81,7 @@ Route::get('/', [HomeController::class, 'show'])->name('show');
 Route::get('/policy', [HomeController::class, 'policy'])->name('policy');
 Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
     Route::get('/', [HomeController::class, 'home'])->middleware(['auth'])->name('home');
+    Route::get('/file', [HomeController::class, 'file'])->name('home.file');
     Route::group([ "prefix" => "home", "middleware" => ["auth"]], function() {
         Route::get('/', [HomeController::class, 'index'])->name('home.index');
 //        Route::post('/getIndex', [HomeController::class, 'getIndex'])->name('home.getIndex');

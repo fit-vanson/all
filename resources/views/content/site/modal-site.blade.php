@@ -13,8 +13,8 @@
               <div class="modal-body flex-grow-1">
                   <input type="hidden" name="id" id="id" value="">
 
-                  <input  id="image_logo" type="file" name="image_logo" class="form-control" hidden accept="image/*" onchange="changeImg(this)">
-                  <img id="logo" class="thumbnail" width="200px" src="{{asset('images/avatars/1.png')}}">
+                  <input  id="image_site" type="file" name="image_logo" class="form-control" hidden accept="image/*" onchange="changeImgSite(this)">
+                  <img id="logo_site" class="thumbnail" width="200px" src="{{asset('images/avatars/1.png')}}">
 
                   <div class="mb-1">
                       <label class="form-label" >Tên site</label>

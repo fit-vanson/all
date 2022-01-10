@@ -112,7 +112,7 @@
                         responsivePriority: 4,
                         render: function (data, type, full, meta) {
                             var $output =
-                                '<div class="avatar"><img src="{{asset('storage/sites')}}/'+data+'" alt="Avatar" height="100" width="100"></div>';
+                                '<a href="//'+full['site_name']+'" target="_blank" ><div class="avatar"><img src="{{asset('storage/sites')}}/'+data+'" alt="Avatar" height="100" width="100"></div></a>';
                             return $output;
                         }
                     },
@@ -337,7 +337,7 @@
                             id_cate.push(item.id.toString())
                         });
                         $('#select_category').selectpicker('val', id_cate);
-                        $('#logo').attr('src','{{asset('storage/sites')}}/'+data.logo);
+                        $('#logo_site').attr('src','{{asset('storage/sites')}}/'+data.logo);
                     },
                     error: function (data) {
                     }
@@ -365,8 +365,8 @@
             $('#avatar').click(function(){
                 $('#image').click();
             });
-            $('#logo').click(function(){
-                $('#image_logo').click();
+            $('#logo_site').click(function(){
+                $('#image_site').click();
             });
             $('.add-new-site').on('click',function (){
                 $('#siteForm').trigger("reset");
@@ -383,7 +383,15 @@
                 var reader = new FileReader();
                 reader.onload = function(e){
                     $('#avatar').attr('src',e.target.result);
-                    $('#logo').attr('src',e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        function changeImgSite(input){
+            if(input.files && input.files[0]){
+                var reader = new FileReader();
+                reader.onload = function(e){
+                    $('#logo_site').attr('src',e.target.result);
                 }
                 reader.readAsDataURL(input.files[0]);
             }
