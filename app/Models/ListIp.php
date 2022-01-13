@@ -9,7 +9,11 @@ class ListIp extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'ip_address'
+        'ip_address','id_site'
     ];
     protected $table ='list_ips';
+    public function site()
+    {
+        return $this->belongsTo(SiteManage::class);
+    }
 }

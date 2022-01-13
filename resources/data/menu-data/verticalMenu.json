@@ -39,60 +39,16 @@
                   "name": "Block IPs",
                   "icon": "circle",
                   "slug": "block_ips.index"
+              },
+              {
+                  "url": "admin/site/list",
+                  "name": "List Site",
+                  "icon": "circle",
+                  "slug": "site.index"
               }
           ]
       },
 
-      {
-          "name": "Site",
-          "icon": "chrome",
-          "slug": "",
-          "submenu": [
-              {
-                  "url": "admin/site/list",
-                  "name": "List",
-                  "icon": "circle",
-                  "slug": "site.index"
-              },
-              {
-                  "name": "View",
-                  "icon": "circle",
-                  "slug": "",
-                  "submenu": [
-                      {
-                          "url": "admin/site/view",
-                          "name": "Categories",
-                          "slug": "site.site_index"
-                      },
-                      {
-                          "url": "admin/site/view",
-                          "name": "Block Ips",
-                          "slug": "site.BlockIps"
-                      },
-                      {
-                          "url": "admin/site/view",
-                          "name": "Home",
-                          "slug": "site.home"
-                      },
-                      {
-                          "url": "admin/site/view",
-                          "name": "Policy",
-                          "slug": "site.policy"
-                      },
-                      {
-                          "url": "admin/site/view",
-                          "name": "Feature Images",
-                          "slug": "site.FeatureImages"
-                      },
-                      {
-                          "url": "admin/site/view",
-                          "name": "Load Feature",
-                          "slug": "site.LoadFeature"
-                      }
-                  ]
-              }
-          ]
-      },
       {
           "navheader": "Quản trị",
           "slug": ""

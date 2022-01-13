@@ -74,6 +74,12 @@
                   <span class="fw-bold">Load Feature</span>
               </a>
           </li>
+          <li class="nav-item">
+              <a class="nav-link"  href="{{asset('admin/site/view/'.$site->site_name.'/list-ip')}}">
+                  <i data-feather="list" class="font-medium-3 me-50"></i>
+                  <span class="fw-bold">List IP</span>
+              </a>
+          </li>
       </ul>
       <!--/ User Pills -->
 

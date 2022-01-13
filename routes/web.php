@@ -174,6 +174,11 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
 
         Route::get('view/{id}/load-feature', [SiteController::class, 'site_LoadFeature'])->name('site.LoadFeature');
         Route::get('view/{id}/load-feature/update', [SiteController::class, 'site_updateLoadFeature'])->name('site.site_updateLoadFeature');
+
+        Route::get('view/{id}/list-ip', [SiteController::class, 'site_listIP'])->name('site.listIP');
+        Route::post('view/{id}/list-ip/get', [SiteController::class, 'getSite_listIP'])->name('site.listIP');
+        Route::get('view/{id}/list-ip/{id_ip}/delete', [SiteController::class, 'site_deleteIP'])->name('site.deleteIP');
+        Route::post('view/{id}/list-ip/deleteMorethan', [SiteController::class, 'deleteMorethan'])->name('site.deleteMorethan');
     });
 });
 

@@ -9,8 +9,10 @@ use App\Models\CategoryHasSite;
 use App\Models\CategoryHasWallpaper;
 use App\Models\CategoryManage;
 use App\Models\FeatureImage;
+use App\Models\ListIp;
 use App\Models\SiteManage;
 use App\Models\User;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -669,6 +671,94 @@ class SiteController extends Controller
     public function site_updateLoadFeature(Request $request,$id){
         $site = SiteManage::where('site_name',$id)->update(['load_view_by'=>$request->load_feature]);
         return response()->json(['success'=>'Cập nhật thành công']);
+    }
+
+    //===========================================================
+
+    public function site_listIP($id){
+        $site = SiteManage::with('category')->where('site_name',$id)->first();
+        $pageConfigs = [
+            'pageHeader' => false,
+        ];
+        $categories = CategoryManage::all();
+        $blockIps = BlockIP::all();
+
+        return view('content.site.site-view-list-ip', [
+            'pageConfigs' => $pageConfigs,
+            'categories' => $categories,
+            'blockIps' => $blockIps,
+            'site' =>$site
+        ]);
+
+    }
+
+    public function getSite_listIP(Request $request,$id){
+        $site = SiteManage::where("site_name",$id)->first();
+
+
+        $draw = $request->get('draw');
+        $start = $request->get("start");
+        $rowperpage = $request->get("length"); // total number of rows per page
+
+        $columnIndex_arr = $request->get('order');
+        $columnName_arr = $request->get('columns');
+        $order_arr = $request->get('order');
+        $search_arr = $request->get('search');
+
+
+        $columnIndex = $columnIndex_arr[0]['column']; // Column index
+        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+        $searchValue = $search_arr['value']; // Search value
+        $totalRecords = ListIp::where("id_site",$site->id)->count();
+        $totalRecordswithFilter = SiteManage::with('list_ip')->select('count(*) as allcount')
+            ->leftJoin('list_ips', 'list_ips.id_site', '=', 'tbl_site_manages.id')
+            ->where('list_ips.ip_address', 'like', '%' . $searchValue . '%')
+            ->where('tbl_site_manages.id',$site->id)
+            ->count();
+
+        // Get records, also we have included search filter as well
+        $records = SiteManage::orderBy($columnName, $columnSortOrder)
+            ->with('list_ip')
+            ->leftJoin('list_ips', 'list_ips.id_site', '=', 'tbl_site_manages.id')
+            ->where('list_ips.ip_address', 'like', '%' . $searchValue . '%')
+            ->where('tbl_site_manages.id',$site->id)
+            ->skip($start)
+            ->take($rowperpage)
+            ->get();
+
+        $data_arr = array();
+        foreach ($records as $key => $record) {
+            $data_arr[] = array(
+                "id" => $record->id,
+                "ip_address" => $record->ip_address,
+                "updated_at" => $record->updated_at,
+            );
+        }
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordswithFilter,
+            "aaData" => $data_arr,
+        );
+        echo json_encode($response);
+    }
+    public function site_deleteIP($id,$ip_id){
+        ListIp::where('id',$ip_id)->delete();
+        return response()->json(['success'=>'Xóa thành công.']);
+    }
+
+    public function deleteMorethan($id){
+
+        $site = SiteManage::where('site_name',$id)->first();
+        $site_id = $site->id;
+        $list = ListIp::where('id_site',$site_id)->where('updated_at','<', Carbon::now()->subDays(30))->count();
+        if($list> 0){
+            ListIp::where('id_site',$site_id)->where('updated_at','<', Carbon::now()->subDays(30))->delete();
+            return response()->json(['success'=>'Xóa thành công.']);
+        }else{
+            return response()->json(['error'=>'Không có dữ liệu.']);
+        }
     }
 
 }

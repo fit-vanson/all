@@ -42,4 +42,10 @@ class SiteManage extends Model
     }
 
 
+    public function list_ip()
+    {
+        return $this->hasMany(ListIp::class, 'id_site');
+    }
+
+
 }
