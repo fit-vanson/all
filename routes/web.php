@@ -175,33 +175,12 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
         Route::get('view/{id}/load-feature', [SiteController::class, 'site_LoadFeature'])->name('site.LoadFeature');
         Route::get('view/{id}/load-feature/update', [SiteController::class, 'site_updateLoadFeature'])->name('site.site_updateLoadFeature');
     });
-
-
-
-
-
-
-
-
-
 });
 
 
 
 
 
-Route::group([ "prefix" => "kpopwallpapers.net", "middleware" => ["auth"]], function() {
-    Route::group([ "prefix" => "category", "middleware" => ["auth"]], function() {
-        Route::get('/', [KpopWallpapersController::class, 'category'])->name('kpopwallpapers.category.index');
-        Route::post('/getIndex', [KpopWallpapersController::class, 'getIndex'])->name('kpopwallpapers.category.getIndex');
-        Route::post('/create', [KpopWallpapersController::class, 'create'])->name('kpopwallpapers.category.create');
-        Route::post('/update', [KpopWallpapersController::class, 'update'])->name('kpopwallpapers.category.update');
-        Route::get('/edit/{id}', [KpopWallpapersController::class, 'edit'])->name('kpopwallpapers.category.edit');
-        Route::get('/delete/{id}', [KpopWallpapersController::class, 'delete'])->name('kpopwallpapers.category.delete');
-        //    Route::get('/info', [UserController::class, 'infoUser'])->name('user.info');
-//        Route::post('/change-info', [KpopWallpapersController::class, 'changeInfo'])->name('user.changeInfo');
-    });
-});
 
 
 
