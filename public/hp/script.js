@@ -1,5 +1,4 @@
-$( ".container" ).one("click", function() {
-    console.log(1)
+$( ".sound-btn" ).one("click", function() {
     audio = new Audio('storage/HappyNewYear-ABBA-1595921.mp3');
     audio.play();
 });
