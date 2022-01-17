@@ -104,6 +104,7 @@ class SiteController extends Controller
     }
     public function create(Request $request)
     {
+//        dd($request->all());
         $rules = [
             'site_name' => 'unique:tbl_site_manages,site_name',
             'image_logo' => 'required',
@@ -145,6 +146,8 @@ class SiteController extends Controller
         return response()->json(['success'=>'Thêm mới thành công']);
     }
     public function update(Request $request){
+
+//        dd($request->all());
         $id = $request->id;
         $rules = [
             'site_name' =>'unique:tbl_site_manages,site_name,'.$id.',id',
@@ -160,7 +163,7 @@ class SiteController extends Controller
         $data->site_name = $request->site_name;
         $data->name_site = $request->name_site;
         if( $request->image_logo){
-            $path_Remove =   storage_path('app/public/sites/').$data->logo;
+            $path_Remove =   storage_path('app/public/sites/').$data->header_image;
             if(file_exists($path_Remove)){
                 unlink($path_Remove);
             }

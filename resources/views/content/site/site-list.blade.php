@@ -337,7 +337,7 @@
                             id_cate.push(item.id.toString())
                         });
                         $('#select_category').selectpicker('val', id_cate);
-                        $('#logo_site').attr('src','{{asset('storage/sites')}}/'+data.logo);
+                        $('#logo_site').attr('src','{{asset('storage/sites')}}/'+data.header_image);
                     },
                     error: function (data) {
                     }
