@@ -20,26 +20,26 @@
     <section id="dashboard-ecommerce">
         <div class="row match-height">
             <!-- Medal Card -->
-            <div class="col-xl-4 col-md-6 col-12">
-                <div class="card card-congratulation-medal">
-                    <div class="card-body">
-{{--                        <h5>Xin chúc mừng 🎉 {{$data_users[0]['name']}}</h5>--}}
-                        <p class="card-text font-small-3">Upload nhiều trong tháng</p>
-                        <h3 class="mb-75 mt-2 pt-50">
-{{--                            <span  style="color: #7367f0">{{$data_users[0]['countUpload']}} </span><span class="card-text font-small-3">Files Upload</span>--}}
+        {{--            <div class="col-xl-4 col-md-6 col-12">--}}
+        {{--                <div class="card card-congratulation-medal">--}}
+        {{--                    <div class="card-body">--}}
+        {{--                        <h5>Xin chúc mừng 🎉 {{$data_users[0]['name']}}</h5>--}}
+        {{--                        <p class="card-text font-small-3">Upload nhiều trong tháng</p>--}}
+        {{--                        <h3 class="mb-75 mt-2 pt-50">--}}
+        {{--                            <span  style="color: #7367f0">{{$data_users[0]['countUpload']}} </span><span class="card-text font-small-3">Files Upload</span>--}}
 
-                        </h3>
-                        <img src="{{asset('images/illustration/badge.svg')}}" class="congratulation-medal" alt="Medal Pic" />
-                    </div>
-                </div>
-            </div>
-            <!--/ Medal Card -->
+        {{--                        </h3>--}}
+        {{--                        <img src="{{asset('images/illustration/badge.svg')}}" class="congratulation-medal" alt="Medal Pic" />--}}
+        {{--                    </div>--}}
+        {{--                </div>--}}
+        {{--            </div>--}}
+        <!--/ Medal Card -->
 
             <!-- Statistics Card -->
             <div class="col-xl-8 col-md-6 col-12">
                 <div class="card card-statistics">
                     <div class="card-header">
-                        <h4 class="card-title">Statistics</h4>
+                        <h4 class="card-title">Số liệu thống kê</h4>
                     </div>
                     <div class="card-body statistics-body">
                         <div class="row">
@@ -47,12 +47,12 @@
                                 <div class="d-flex flex-row">
                                     <div class="avatar bg-light-primary me-2">
                                         <div class="avatar-content">
-                                            <i data-feather="trending-up" class="avatar-icon"></i>
+                                            <i data-feather="file" class="avatar-icon"></i>
                                         </div>
                                     </div>
                                     <div class="my-auto">
-{{--                                        <h4 class="fw-bolder mb-0">{{$files}}</h4>--}}
-                                        <p class="card-text font-small-3 mb-0">File</p>
+                                        <h4 class="fw-bolder mb-0">{{count($categories)}}</h4>
+                                        <p class="card-text font-small-3 mb-0">Categories</p>
                                     </div>
                                 </div>
                             </div>
@@ -60,12 +60,12 @@
                                 <div class="d-flex flex-row">
                                     <div class="avatar bg-light-info me-2">
                                         <div class="avatar-content">
-                                            <i data-feather="user" class="avatar-icon"></i>
+                                            <i data-feather="image" class="avatar-icon"></i>
                                         </div>
                                     </div>
                                     <div class="my-auto">
-{{--                                        <h4 class="fw-bolder mb-0">{{$users}}</h4>--}}
-                                        <p class="card-text font-small-3 mb-0">User</p>
+                                        <h4 class="fw-bolder mb-0">{{count($wallpaper)}}</h4>
+                                        <p class="card-text font-small-3 mb-0">Wallpapers</p>
                                     </div>
                                 </div>
                             </div>
@@ -73,12 +73,12 @@
                                 <div class="d-flex flex-row">
                                     <div class="avatar bg-light-danger me-2">
                                         <div class="avatar-content">
-                                            <i data-feather="box" class="avatar-icon"></i>
+                                            <i data-feather="chrome" class="avatar-icon"></i>
                                         </div>
                                     </div>
                                     <div class="my-auto">
-{{--                                        <h4 class="fw-bolder mb-0">{{$tags}}</h4>--}}
-                                        <p class="card-text font-small-3 mb-0">Tags</p>
+                                        <h4 class="fw-bolder mb-0">{{count($sites)}}</h4>
+                                        <p class="card-text font-small-3 mb-0">Sites</p>
                                     </div>
                                 </div>
                             </div>
@@ -94,56 +94,63 @@
             <div class="col-lg-4 col-md-6 col-12">
                 <div class="card card-transaction">
                     <div class="card-header">
-                        <h4 class="card-title">Top Upload</h4>
+                        <h4 class="card-title">Top view</h4>
                         <div class="col-lg-5">
                             <select class="select2-size-sm form-control" id="select_time" onchange="timeTop()">
-                                <option value="inMonth">Trong Tháng</option>
-                                <option value="lastMonth">Tháng trước</option>
+                                <option value="inDay">Trong ngày</option>
+                                <option value="inWeek">Trong tuần</option>
+                                <option value="inMonth">Trong tháng</option>
                             </select>
                         </div>
                     </div>
                     <div class="card-body" id="topTime">
-{{--                        @foreach($data_users as $data)--}}
-{{--                            <div class="transaction-item">--}}
-{{--                                <div class="d-flex">--}}
-{{--                                    {!! $data['avatar'] !!}--}}
-{{--                                    <div class="transaction-percentage">--}}
-{{--                                        <h6 class="transaction-title">{{$data['name']}}</h6>--}}
-{{--                                        <small>{{$data['email']}}</small>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                                <div class="fw-bolder  @if($data['diff'] > 0 ) text-success @elseif($data['diff'] < 0 ) text-danger @endif ">{{$data['countUpload']}}</div>--}}
-{{--                            </div>--}}
-{{--                        @endforeach--}}
+                        @foreach($topViews as $item)
+                            <div class="transaction-item">
+                                <div class="d-flex">
+                                    <div class="d-flex justify-content-left align-items-center">
+                                        <div class="avatar-wrapper">
+                                            <div class="avatar me-1">
+                                                <img src="{{asset('storage/sites/'.$item['logo'])}}" alt="Avatar" height="40" width="40">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="transaction-percentage">
+                                        <h6 class="transaction-title">{{$item['name_site']}}</h6>
+                                        <a href="//{{$item['site_name']}}" target="_blank" ><small>{{$item['site_name']}}</small></a>
+                                    </div>
+                                </div>
+                                <div class="fw-bolder  text-success ">{{$item['count']}}</div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-4 col-md-6 col-12">
-                <div class="card card-browser-states">
-                    <div class="card-header">
-                        <div>
-                            <h4 class="card-title">Top Tags</h4>
-                        </div>
-                    </div>
-                    <div class="card-body">
-{{--                        @foreach($data_tags as $data)--}}
-{{--                            <div class="browser-states">--}}
-{{--                            <div class="d-flex">--}}
-{{--                                <h6 class="align-self-center mb-0">{{$data['tags_name']}}</h6>--}}
-{{--                            </div>--}}
-{{--                            <div class="d-flex align-items-center">--}}
-{{--                                <div class="fw-bold text-body-heading me-1">{{$data['tags_count']}}</div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                        @endforeach--}}
+        {{--            <div class="col-lg-4 col-md-6 col-12">--}}
+        {{--                <div class="card card-browser-states">--}}
+        {{--                    <div class="card-header">--}}
+        {{--                        <div>--}}
+        {{--                            <h4 class="card-title">Top Tags</h4>--}}
+        {{--                        </div>--}}
+        {{--                    </div>--}}
+        {{--                    <div class="card-body">--}}
+        {{--                        @foreach($data_tags as $data)--}}
+        {{--                            <div class="browser-states">--}}
+        {{--                            <div class="d-flex">--}}
+        {{--                                <h6 class="align-self-center mb-0">{{$data['tags_name']}}</h6>--}}
+        {{--                            </div>--}}
+        {{--                            <div class="d-flex align-items-center">--}}
+        {{--                                <div class="fw-bold text-body-heading me-1">{{$data['tags_count']}}</div>--}}
+        {{--                            </div>--}}
+        {{--                        </div>--}}
+        {{--                        @endforeach--}}
 
-                    </div>
-                </div>
-            </div>
+        {{--                    </div>--}}
+        {{--                </div>--}}
+        {{--            </div>--}}
 
 
-            <!--/ Revenue Report Card -->
+        <!--/ Revenue Report Card -->
         </div>
     </section>
     <!-- Dashboard Ecommerce ends -->
@@ -155,6 +162,33 @@
     <script src="{{ asset(('vendors/js/extensions/toastr.min.js')) }}"></script>
 @endsection
 @section('page-script')
-    {{-- Page js files --}}
+    <script>
+        function timeTop () {
+            var time = document.getElementById("select_time").value;
+            $.get('{{route('home.topView')}}?time='+time,function (data) {
+                var html = '';
+                data.forEach(function(item) {
+                    html += '<div class="transaction-item">'+
+                        '<div class="d-flex">'+
+
+                        '<div class="d-flex justify-content-left align-items-center">'+
+                        '<div class="avatar-wrapper">'+
+                        '<div class="avatar me-1">'+
+                        '<img src="{{asset('storage/sites')}}/'+item.logo+'"  alt="Avatar" height="40" width="40">'+
+                        '</div>'+
+                        '</div>'+
+                        '</div>'+
+                        '<div class="transaction-percentage">'+
+                        '<h6 class="transaction-title">'+item.name_site+'</h6>'+
+                        ' <a href="//'+item.site_name+'" target="_blank"><small>'+item.site_name+'</small></a>'+
+                        '</div>'+
+                        '</div>'+
+                        '<div class="fw-bolder text-success ">'+item.count+'</div>'+
+                        '</div>';
+                })
+                $('#topTime').html(html);
+            })
+        }
+    </script>
 
 @endsection

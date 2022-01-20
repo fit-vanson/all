@@ -153,7 +153,7 @@
                   { data: 'name' },
                   { data: 'view_count'},
                   { data: 'like_count'},
-                  { data: 'category'},
+                  { data: 'tbl_category_manages.category_name'},
                   { data: 'Actions' }
               ],
               columnDefs: [
@@ -196,17 +196,17 @@
                   },
                   {
                       targets: 5,
-                      orderable: false,
+                      // orderable: false,
                       render: function (data, type, full, meta) {
-                          var categories = full['category'],
+                          var categories = full['tbl_category_manages.category_name'],
                               $output = '';
-                          $.each(categories, function(i, item) {
+                          // $.each(categories, function(i, item) {
                               var stateNum = Math.floor(Math.random() * 6) + 1;
                               var states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
                               var $state = states[stateNum];
-                              $output += '<span style="margin-top: 5px;" class="badge rounded-pill badge-light-'+$state+'">'+item+'</span></br>';
-                              return i<2;
-                          });
+                              $output += '<span style="margin-top: 5px;" class="badge rounded-pill badge-light-'+$state+'">'+categories+'</span></br>';
+                              // return i<2;
+                          // });
                           return $output
                       }
                   },

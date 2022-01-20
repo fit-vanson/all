@@ -82,7 +82,7 @@ class WallpapersController extends Controller
         foreach ($records as $key => $record) {
             $cate_name = [];
             foreach ($record->category as $category){
-                $cate_name[] =$category->category_name;
+                $cate_name =$category->category_name;
             }
             $data_arr[] = array(
                 "id" => $record->id,
@@ -90,7 +90,7 @@ class WallpapersController extends Controller
                 "thumbnail_image" => $record->thumbnail_image,
                 "view_count" => $record->view_count,
                 "like_count" => $record->like_count,
-                "category" => $cate_name,
+                "tbl_category_manages.category_name" => $cate_name,
             );
         }
         $response = array(

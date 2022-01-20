@@ -34,6 +34,7 @@ Route::get('/clear-cache',function (){
 });
 Route::get('/link',function (){
     Artisan::call('storage:link');
+    echo 1;
 });
 Route::get('routes', function () {
     $routeCollection = Route::getRoutes();
@@ -59,17 +60,6 @@ Route::get('/phpinfo',function (){
     echo phpinfo();
 });
 
-Route::get('test', function (){
-    $get_url = 'http://127.0.0.1:8000/api/categories';
-//    dd($get_url);
-    $ch = curl_init($get_url);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-Authorization: J6YZ4712Fv3yAyXFohHiLPWQHytB3pJjobEpCSEJD3rWbFLuYem65Y5N9WTdRWna'));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $result = curl_exec($ch);
-    curl_close($ch);
-    dd($result);
-});
-
 Route::get('/updateapp', function()
 {
     Artisan::call('dump-autoload');
@@ -84,6 +74,7 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
     Route::get('/file', [HomeController::class, 'file'])->name('home.file');
     Route::group([ "prefix" => "home", "middleware" => ["auth"]], function() {
         Route::get('/', [HomeController::class, 'index'])->name('home.index');
+        Route::get('/topView', [HomeController::class, 'topView'])->name('home.topView');
 //        Route::post('/getIndex', [HomeController::class, 'getIndex'])->name('home.getIndex');
 //        Route::post('/create', [HomeController::class, 'create'])->name('home.create');
 //        Route::post('/update', [HomeController::class, 'update'])->name('home.update');
