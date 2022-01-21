@@ -11,8 +11,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
-use mysql_xdevapi\Exception;
 use Spatie\Permission\Models\Role;
+
+
+
 
 class WallpapersController extends Controller
 {
@@ -53,12 +55,9 @@ class WallpapersController extends Controller
         $columnName = $columnName_arr ?  $columnName_arr[$columnIndex]['data'] : 'name'; // Column name
         $columnSortOrder = $order_arr?  $order_arr[0]['dir'] :'asc'; // asc or desc
         $searchValue = $search_arr ? $search_arr['value'] :''; // Search value
-
-
         if(isset($request->category)){
             $searchValue = $request->category;
         }
-
         $totalRecords = Wallpapers::select('count(*) as allcount')->count();
         $totalRecordswithFilter = Wallpapers::with('category')->select('count(*) as allcount')
             ->leftJoin('tbl_category_has_wallpaper', 'tbl_category_has_wallpaper.wallpaper_id', '=', 'wallpapers.id')
@@ -133,7 +132,6 @@ class WallpapersController extends Controller
             $year = $now->format('Y'); // Year
             $monthYear = $monthName.$year;
 
-
             $path_origin    =  storage_path('app/public/wallpapers/download/'.$monthYear.'/');
             $path_detail    =  storage_path('app/public/wallpapers/detail/'.$monthYear.'/');
             $path_thumbnail =  storage_path('app/public/wallpapers/thumbnail/'.$monthYear.'/');
@@ -148,6 +146,7 @@ class WallpapersController extends Controller
             if (!file_exists($path_origin)) {
                 mkdir($path_origin, 0777, true);
             }
+
             $img = Image::make($file);
             $origin_image = $img->save($path_origin.$fileNameToStore);
 
@@ -173,6 +172,7 @@ class WallpapersController extends Controller
             $wallpaper->save();
             $wallpaper->category()->attach($request->select_category);
             return response()->json(['success'=>'Thành công']);
+
         }
     }
     public function update(Request $request){
