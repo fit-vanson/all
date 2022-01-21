@@ -78,9 +78,6 @@ class WallpaperController extends Controller
 
         $site=SiteManage::where('site_name',$domain)->first();
         $listIp=ListIp::where('ip_address',$ipaddress)->where('id_site',$site->id)->first();
-
-
-
         if(!$listIp){
             ListIp::create([
                 'ip_address'=>$ipaddress,
