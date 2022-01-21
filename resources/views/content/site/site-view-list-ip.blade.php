@@ -145,7 +145,7 @@
                 columns: [
                     // columns according to JSON
                     { data: 'ip_address' },
-                    { data: 'updated_at' },
+                    { data: 'created_at' },
                     { data: 'action' },
                 ],
                 columnDefs: [
@@ -160,7 +160,7 @@
                     },
                     {
                         targets: 1,
-                        orderable: false,
+                        orderable: true,
                         render: function(data, type, row){
                             if(type === "sort" || type === "type"){
                                 return data;

@@ -729,16 +729,19 @@ class SiteController extends Controller
             ->leftJoin('list_ips', 'list_ips.id_site', '=', 'tbl_site_manages.id')
             ->where('list_ips.ip_address', 'like', '%' . $searchValue . '%')
             ->where('tbl_site_manages.id',$site->id)
+            ->select('list_ips.*')
             ->skip($start)
             ->take($rowperpage)
             ->get();
+
+
 
         $data_arr = array();
         foreach ($records as $key => $record) {
             $data_arr[] = array(
                 "id" => $record->id,
                 "ip_address" => $record->ip_address,
-                "updated_at" => $record->updated_at,
+                "created_at" => $record->created_at,
             );
         }
         $response = array(
