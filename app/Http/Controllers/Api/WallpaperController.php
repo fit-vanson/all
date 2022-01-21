@@ -12,6 +12,7 @@ use App\Models\Visitor;
 use App\Models\VisitorFavorite;
 use App\Http\Controllers\Controller;
 use App\Models\Wallpapers;
+use Carbon\Carbon;
 
 class WallpaperController extends Controller
 {
@@ -77,14 +78,14 @@ class WallpaperController extends Controller
             $ipaddress = 'UNKNOWN';
 
         $site=SiteManage::where('site_name',$domain)->first();
-        $listIp=ListIp::where('ip_address',$ipaddress)->where('id_site',$site->id)->first();
+        $listIp=ListIp::where('ip_address',$ipaddress)->where('id_site',$site->id)->whereDate('created_at', Carbon::today())->first();
         if(!$listIp){
             ListIp::create([
                 'ip_address'=>$ipaddress,
                 'id_site' => $site->id
             ]);
         }else{
-            $listIp=ListIp::where('ip_address',get_ip())->where('id_site',$site->id)->first();
+            $listIp=ListIp::where('ip_address',get_ip())->where('id_site',$site->id)->whereDate('created_at', Carbon::today())->first();
             if(!$listIp){
                 ListIp::create([
                     'ip_address'=>get_ip(),
