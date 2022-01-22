@@ -59,7 +59,7 @@ class HomeController extends Controller
             'sites',
             'topViews'
 
-        ));;
+        ));
     }
 
     public function file()

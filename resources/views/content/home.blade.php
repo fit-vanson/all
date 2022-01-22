@@ -115,7 +115,7 @@
                                         </div>
                                     </div>
                                     <div class="transaction-percentage">
-                                        <h6 class="transaction-title">{{$item['name_site']}}</h6>
+                                        <a href="{{asset('admin/site/view/'.$item['site_name'])}}"> <h6 class="transaction-title">{{$item['name_site']}}</h6></a>
                                         <a href="//{{$item['site_name']}}" target="_blank" ><small>{{$item['site_name']}}</small></a>
                                     </div>
                                 </div>
@@ -179,7 +179,7 @@
                         '</div>'+
                         '</div>'+
                         '<div class="transaction-percentage">'+
-                        '<h6 class="transaction-title">'+item.name_site+'</h6>'+
+                        '<a href="admin/site/view/'+item.site_name+'"><h6 class="transaction-title">'+item.name_site+'</h6></a>'+
                         ' <a href="//'+item.site_name+'" target="_blank"><small>'+item.site_name+'</small></a>'+
                         '</div>'+
                         '</div>'+
