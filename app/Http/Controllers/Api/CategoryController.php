@@ -21,6 +21,7 @@ class CategoryController extends Controller
                 ->leftJoin('tbl_category_manages', 'tbl_category_manages.id', '=', 'tbl_category_has_site.category_id')
                 ->where('site_name',$domain)
                 ->where('tbl_category_manages.checked_ip',1)
+                ->select('tbl_category_manages.*','tbl_category_has_site.image as site_image')
                 ->get();
             return CategoryResource::collection($data);
 
@@ -30,7 +31,9 @@ class CategoryController extends Controller
                 ->leftJoin('tbl_category_manages', 'tbl_category_manages.id', '=', 'tbl_category_has_site.category_id')
                 ->where('site_name',$domain)
                 ->where('tbl_category_manages.checked_ip',0)
+                ->select('tbl_category_manages.*','tbl_category_has_site.image as site_image')
                 ->get();
+
             return CategoryResource::collection($data);
         }
     }

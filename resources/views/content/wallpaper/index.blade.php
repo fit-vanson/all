@@ -138,6 +138,7 @@
           ('use strict');
           var url = window.location.href;
           var hash = url.substring(url.indexOf('?')+1);
+          $.fn.dataTable.ext.errMode = 'none';
           var dtTable = $('.list-table').DataTable({
               processing: true,
               serverSide: true,

@@ -277,17 +277,18 @@ class SiteController extends Controller
             ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
             ->where('site_id',$site->id)
             ->where('tbl_category_manages.category_name', 'like', '%' . $searchValue . '%')
-            ->select('tbl_category_manages.*')
+            ->select('tbl_category_manages.*','tbl_category_has_site.image as site_image')
             ->withCount('wallpaper')
             ->skip($start)
             ->take($rowperpage)
             ->get();
+
         $data_arr = array();
         foreach ($records as $key => $record) {
-            if($record->image){
-                $image = $record->image;
+            if($record->site_image){
+                $image = $record->site_image;
             }else{
-                $image = $record->category_image;
+                $image = $record->image;
             }
             $data_arr[] = array(
                 "id" => $record->id,
@@ -317,15 +318,18 @@ class SiteController extends Controller
         return response()->json($site);
     }
     public function site_updateCategory(Request $request){
+
         $id = $request->id;
         $data = CategoryHasSite::find($id);
         if($request->image){
-            $path_Remove =   storage_path('app/public/categories/').$data->image;
-            if(file_exists($path_Remove)){
-                unlink($path_Remove);
+            if($data->image){
+                $path_Remove =   storage_path('app/public/categories/').$data->image;
+                if(file_exists($path_Remove)){
+                    unlink($path_Remove);
+                }
             }
+
             $file = $request->image;
-            $filenameWithExt=$file->getClientOriginalName();
             $filename = $data->site_id.'_'.$data->category_id;
             $extension = $file->getClientOriginalExtension();
             $fileNameToStore = $filename.'_'.time().'.'.$extension;
@@ -347,8 +351,10 @@ class SiteController extends Controller
         $data->save();
         return response()->json(['success'=>'Cập nhật thành công']);
     }
-    public function site_editCategory(Request $request,$id,$id1){
-        $site = CategoryHasSite::find($id1);
+    public function site_editCategory($id,$id1){
+
+        $site_name = SiteManage::where('site_name',$id)->first();
+        $site = CategoryHasSite::where('category_id',$id1)->where('site_id',$site_name->id)->first();
         $category = CategoryManage::find($site->category_id);
         return response()->json([$site,$category]);
     }

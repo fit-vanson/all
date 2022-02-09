@@ -301,6 +301,7 @@
                   type: "get",
                   url: url +"/category/" + id + "/edit",
                   success: function (data) {
+                      console.log(data)
                       $('#EditSiteCategoryModal').modal('show');
                       $('#id').val(data[0].id);
                       $('#category_site_name_edit').val(data[1].category_name);
