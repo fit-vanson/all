@@ -31,7 +31,7 @@ if (App::environment('production', 'staging')) {
 require __DIR__.'/auth.php';
 Route::get('/clear-cache',function (){
     echo  Artisan::call('optimize:clear');
-});
+})->name('clear-cache');
 Route::get('/link',function (){
     Artisan::call('storage:link');
     echo 1;

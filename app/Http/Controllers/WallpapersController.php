@@ -103,7 +103,6 @@ class WallpapersController extends Controller
     }
     public function create(Request $request)
     {
-        Log::error($request->all());
         if($request->file){
             $rules = [
                 'file' => 'max:20000|mimes:jpeg,jpg,png,gif',
@@ -176,7 +175,6 @@ class WallpapersController extends Controller
         }
     }
     public function update(Request $request){
-//        dd($request->all());
         $id = $request->id;
         $rules = [
             'wallpaper_name' =>'required|unique:wallpapers,name,'.$id.',id',

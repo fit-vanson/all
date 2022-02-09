@@ -165,7 +165,6 @@
                       orderable: false,
                       responsivePriority: 3,
                       render: function (data, type, full, meta) {
-                          console.log(full)
                           return (
                               '<div class="form-check"> <input class="form-check-input dt-checkboxes" type="checkbox" value="'+[full.id]+'" name="id[]" id="checkbox' +
                               data +
@@ -248,7 +247,7 @@
               buttons: [
                   {
                       text: 'Add New',
-                      className: 'add-new btn btn-primary',
+                      className: 'add-new-wallpaper btn btn-primary',
                       attr: {
                           'data-bs-toggle': 'modal',
                           'data-bs-target': '#WallpaperModal'
@@ -268,6 +267,16 @@
                       }
                   }
               ],
+          });
+
+
+          $('.add-new-wallpaper').on('click',function (){
+              var clear = '{{ route("clear-cache") }}';
+              $.ajax({
+                  type : "get",
+                  url : clear,
+              });
+
           });
           $(document).on('click','.deleteWallpaper', function (data){
               var id = $(this).data("id");
@@ -371,35 +380,37 @@
           });
           wallpaper.dropzone(
           {
-              maxFilesize: 20,
-              parallelUploads: 20,
+              maxFilesize: 2,
+              headers: {
+                  'X-CSRF-TOKEN': "{{ csrf_token() }}"
+              },
               acceptedFiles: ".jpeg,.jpg,.png,.gif",
               addRemoveLinks: true,
               timeout: 0,
               dictRemoveFile: 'Xoá',
               init: function() {
-              var _this = this; // For the closure
-              this.on('success', function(file, response) {
-                  if (response.success) {
-                      _this.removeFile(file);
-                      dtTable.draw();
-                      toastr['success'](file.name,response.success, {
-                          showMethod: 'slideDown',
-                          hideMethod: 'slideUp',
-                          timeOut: 1000,
-                      });
-                  } if (response.errors) {
-                      for( var count=0 ; count < response.errors.length; count++){
-                          toastr['error'](file.name,response.errors[count], {
+                  var _this = this; // For the closure
+                  this.on('success', function(file, response) {
+                      if (response.success) {
+                          _this.removeFile(file);
+                          toastr['success'](file.name,response.success, {
                               showMethod: 'slideDown',
                               hideMethod: 'slideUp',
-                              timeOut: 5000,
+                              timeOut: 1000,
                           });
-                      }
+                      } if (response.errors) {
+                          for( var count=0 ; count < response.errors.length; count++){
+                              toastr['error'](file.name,response.errors[count], {
+                                  showMethod: 'slideDown',
+                                  hideMethod: 'slideUp',
+                                  timeOut: 5000,
+                              });
+                          }
 
-                  }
-              });
-          },
+                      }
+                      dtTable.draw();
+                  });
+              },
           });
           $(document).on('click','.deleteSelect', function (data){
               Swal.fire({
