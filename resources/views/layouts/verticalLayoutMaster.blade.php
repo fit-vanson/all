@@ -14,7 +14,7 @@ data-asset-path="{{ asset('/')}}">
   @include('panels.sidebar')
   @endif
   <!-- END: Main Menu-->
-  <img class="bg_img"  src="{{asset('images/hp/bg.png')}}">
+
   <!-- BEGIN: Content-->
   <div class="app-content content {{ $configData['pageClass'] }}">
     <!-- BEGIN: Header-->

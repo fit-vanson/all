@@ -84,30 +84,8 @@ body {
     -webkit-tap-highlight-color: rgba(34, 41, 47, 0);
 }
 
-.hoa_img {
-    z-index: 99;
-    position: fixed;
-    top: 0;
-    right: -1px;
-    width: 20%;
-}
-.bg_img {
-    z-index: -1;
-    position: fixed;
-    top: 0;
-    /*right: -1px;*/
-    width: 100%;
-}
-.long_den {
-    z-index: 9999;
-    position: fixed;
-    top: 0;
-    left: 250px;
-    width: 8%;
-}
-/*.content_hoa{*/
-/*    text-align: right*/
-/*}*/
+
+
 
 hr {
     margin: 1rem 0;
@@ -17906,8 +17884,8 @@ html {
 }
 html body {
     height: 100%;
-    background-color: rgba(248, 217, 217, 0.3);
-    /*background-color: #f8f8f8;*/
+    /*background-color: rgba(248, 217, 217, 0.3);*/
+    background-color: #f8f8f8;
     direction: ltr;
 }
 html body p {

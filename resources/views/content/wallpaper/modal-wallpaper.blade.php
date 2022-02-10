@@ -44,21 +44,21 @@
                         <div class="mb-1">
                             <p class="form-label" for="basicInput">Image Thumbnail</p>
                             <input  id="image_thumbnail" type="file" name="image_thumbnail" class="form-control" hidden accept="image/*" onchange="changeImg_thumbnail(this)">
-                            <img id="avatar_thumbnail" class="thumbnail" height="100px" src="{{asset('images/avatars/2.png')}}">
+                            <img id="avatar_thumbnail" class="thumbnail" height="100px" src="{{asset('images/avatars/1.png')}}">
                         </div>
                     </div>
                     <div class="col-xl-4 col-md-6 col-12">
                         <div class="mb-1">
                             <p class="form-label" for="helpInputTop">Image Detail</p>
                             <input  id="image_detail" type="file" name="image_detail" class="form-control" hidden accept="image/*" onchange="changeImg_detail(this)">
-                            <img id="avatar_detail" class="thumbnail" height="100px" src="{{asset('images/avatars/2.png')}}">
+                            <img id="avatar_detail" class="thumbnail" height="100px" src="{{asset('images/avatars/1.png')}}">
                         </div>
                     </div>
                     <div class="col-xl-4 col-md-6 col-12">
                         <div class="mb-1">
                             <p class="form-label" for="helpInputTop">Image Download</p>
                             <input  id="image_download" type="file" name="image_download" class="form-control" hidden accept="image/*" onchange="changeImg_download(this)">
-                            <img id="avatar_download" class="thumbnail" height="100px" src="{{asset('images/avatars/2.png')}}">
+                            <img id="avatar_download" class="thumbnail" height="100px" src="{{asset('images/avatars/1.png')}}">
                         </div>
                     </div>
                     <div class="col-xl-4 col-md-6 col-12">
