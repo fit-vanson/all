@@ -183,7 +183,7 @@ class WallpaperController extends Controller
                     ->orderBy('view_count', 'desc')->get();
                 $getResource= FeatureWallpaperResource::collection($data);
             }elseif($load_feature ==3){
-                $data = Wallpapers::where('feature', 1)->whereHas('category', function ($q) use ($domain) {
+                $data = Wallpapers::where('feature', 0)->whereHas('category', function ($q) use ($domain) {
                     $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                         ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                         ->where('site_name',$domain)
@@ -202,45 +202,53 @@ class WallpaperController extends Controller
     }
     public function getPopulared()
     {
+
         $domain=$_SERVER['SERVER_NAME'];
         if (checkBlockIp()){
 
-            $data = Wallpapers::where('like_count','>=',1)
-                ->orderBy('like_count','desc')
-                ->whereHas('category', function ($q) use ($domain) {
-                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
-                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
-                        ->where('site_name',$domain)
-                        ->where('checked_ip','=', 1);
-                })
-                ->paginate(70);
+            $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
+                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name',$domain)
+                    ->where('tbl_category_manages.checked_ip',1)
+                    ->select('tbl_category_manages.*');
+            })->orderBy('like_count','desc')->paginate(70);
         }else{
-            $data = Wallpapers::where('like_count','>=',1)
-                ->orderBy('like_count','desc')
-                ->whereHas('category', function ($q) use ($domain) {
-                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
-                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
-                        ->where('site_name',$domain)
-                        ->where('checked_ip','=', 0);
-                })
-                ->paginate(70);
+            $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
+                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name',$domain)
+                    ->where('tbl_category_manages.checked_ip',1)
+                    ->select('tbl_category_manages.*');
+            })->orderBy('like_count','desc')->paginate(70);
         }
+
         return WallpaperResource::collection($data);
     }
     public function getNewest()
     {
         $domain=$_SERVER['SERVER_NAME'];
         if (checkBlockIp()){
-            $data = Wallpapers::orderBy('created_at','desc')
-                ->where('like_count','>=',1)
-                ->orderBy('like_count','desc')
-                ->whereHas('category', function ($q) use ($domain) {
-                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
-                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
-                        ->where('site_name',$domain)
-                        ->where('checked_ip','=', 1);
-                })
-                ->paginate(70);
+
+            $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
+                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name',$domain)
+                    ->where('tbl_category_manages.checked_ip',1)
+                    ->select('tbl_category_manages.*');
+            })->orderBy('created_at','desc')->paginate(70);
+
+
+//            $data = Wallpapers::orderBy('created_at','desc')
+//                ->where('like_count','>=',1)
+//                ->orderBy('like_count','desc')
+//                ->whereHas('category', function ($q) use ($domain) {
+//                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+//                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+//                        ->where('site_name',$domain)
+//                        ->where('checked_ip','=', 1);
+//                })
+//                ->paginate(70);
 
 
 //            $data = Wallpapers::orderBy('created_at','desc')
@@ -251,16 +259,13 @@ class WallpaperController extends Controller
 //                ->paginate(70);
         }else {
 
-            $data = Wallpapers::orderBy('created_at','desc')
-                ->where('like_count','>=',1)
-                ->orderBy('like_count','desc')
-                ->whereHas('category', function ($q) use ($domain) {
-                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
-                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
-                        ->where('site_name',$domain)
-                        ->where('checked_ip','=', 0);
-                })
-                ->paginate(70);
+            $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
+                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name',$domain)
+                    ->where('tbl_category_manages.checked_ip',0)
+                    ->select('tbl_category_manages.*');
+            })->orderBy('created_at','desc')->paginate(70);
 //            $data = Wallpapers::orderBy('created_at','desc')
 //                ->whereHas('category', function ($q)
 //                {
