@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CategoryHasWallpaper;
 use App\Models\CategoryManage;
 use App\Models\User;
 
@@ -27,6 +28,7 @@ class WallpapersController extends Controller
     }
     public function index(Request $request)
     {
+
         $pageConfigs = ['pageHeader' => false];
         $users = $this->user->all();
         $roles = $this->role->all();
@@ -67,29 +69,34 @@ class WallpapersController extends Controller
             ->count();
 
 
+
         // Get records, also we have included search filter as well
-        $records = Wallpapers::with('category')->orderBy($columnName, $columnSortOrder)
-            ->leftJoin('tbl_category_has_wallpaper', 'tbl_category_has_wallpaper.wallpaper_id', '=', 'wallpapers.id')
-            ->leftJoin('tbl_category_manages', 'tbl_category_manages.id', '=', 'tbl_category_has_wallpaper.category_id')
+        $records = Wallpapers::with('category')
+            ->orderBy($columnName, $columnSortOrder)
+//            ->leftJoin('tbl_category_has_wallpaper', 'tbl_category_has_wallpaper.wallpaper_id', '=', 'wallpapers.id')
+            ->leftJoin('tbl_category_manages', 'tbl_category_manages.id', '=', 'wallpapers.cate_id')
             ->where('name', 'like', '%' . $searchValue . '%')
             ->orWhere('tbl_category_manages.category_name', 'like', '%' . $searchValue . '%')
             ->select('wallpapers.*','tbl_category_manages.category_name')
             ->skip($start)
             ->take($rowperpage)
             ->get();
+
+
         $data_arr = array();
         foreach ($records as $key => $record) {
-            $cate_name = [];
-            foreach ($record->category as $category){
-                $cate_name =$category->category_name;
-            }
+//            $cate_name = [];
+//            foreach ($record->category as $category){
+//                $cate_name =$category->category_name;
+//            }
             $data_arr[] = array(
                 "id" => $record->id,
                 "name" => $record->name,
                 "thumbnail_image" => $record->thumbnail_image,
                 "view_count" => $record->view_count,
                 "like_count" => $record->like_count,
-                "tbl_category_manages.category_name" => $cate_name,
+//                "tbl_category_manages.category_name" => $cate_name,
+                "category_name" => $record->category_name,
             );
         }
         $response = array(
@@ -103,9 +110,10 @@ class WallpapersController extends Controller
     }
     public function create(Request $request)
     {
+
         if($request->file){
             $rules = [
-                'file' => 'max:20000|mimes:jpeg,jpg,png,gif',
+                'file.*' => 'max:20000|mimes:jpeg,jpg,png,gif',
                 'select_category' => 'required'
             ];
             $message = [
@@ -164,12 +172,12 @@ class WallpapersController extends Controller
             $wallpaper->thumbnail_image = $path_thumbnail;
             $wallpaper->image = $path_detail;
             $wallpaper->origin_image = $path_origin;
-
             $wallpaper->view_count = rand(500,1000);
             $wallpaper->like_count = rand(500,1000);
             $wallpaper->feature = 0;
+            $wallpaper->cate_id = $request->select_category;
             $wallpaper->save();
-            $wallpaper->category()->attach($request->select_category);
+//            $wallpaper->category()->attach($request->select_category);
             return response()->json(['success'=>'Thành công']);
 
         }
@@ -288,7 +296,8 @@ class WallpapersController extends Controller
             $path_origin =  $monthYear.'/'.$fileNameToStore;
             $data->origin_image = $path_origin;
         }
-        $data->category()->sync($request->select_category);
+        $data->cate_id = $request->select_category;
+//        $data->category()->sync($request->select_category);
         $data->save();
         return response()->json(['success'=>'Cập nhật thành công']);
     }
@@ -316,7 +325,7 @@ class WallpapersController extends Controller
         }catch (Exception $ex) {
             Log::error($ex->getMessage());
         }
-        $wallpaper->category()->detach();
+//        $wallpaper->category()->detach();
         $wallpaper->delete();
 
         return response()->json(['success'=>'Xóa thành công.']);
@@ -344,10 +353,26 @@ class WallpapersController extends Controller
             }catch (Exception $ex) {
                 Log::error($ex->getMessage());
             }
-            $wallpaper->category()->detach();
+//            $wallpaper->category()->detach();
             $wallpaper->delete();
         }
         return response()->json(['success'=>'Xóa thành công.']);
+    }
+
+
+    public function convert(){
+        $cateHasWalls = CategoryHasWallpaper::all();
+        foreach ($cateHasWalls as $cateHasWall){
+            Wallpapers::updateOrCreate(
+                [
+                    'id' =>$cateHasWall->wallpaper_id
+                ],
+                [
+                    'cate_id' =>$cateHasWall->category_id
+                ]);
+        }
+
+
     }
 
 }

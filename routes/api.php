@@ -41,7 +41,6 @@ Route::group([
     Route::get('/wallpapers/popular', [WallpaperController::class, 'getPopulared']);
     Route::get('/wallpapers/newest', [WallpaperController::class, 'getNewest']);
 
-
     Route::post('/wallpaper-favorite', [FavoriteController::class, 'likeWallpaper']);
     Route::post('/wallpaper-favorite-unsaved', [FavoriteController::class, 'disLikeWallpaper']);
     Route::get('/favorite/{device_id}', [FavoriteController::class, 'getSaved']);

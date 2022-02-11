@@ -14,7 +14,7 @@
               @csrf
               <div class="col-md-12">
                   <label class="form-label">Category</label>
-                  <select class="form-select" id="select_category" name="select_category[]" required >
+                  <select class="form-select" id="select_category" name="select_category" required >
                       @foreach($categories as $category)
                           <option value="{{$category->id}}">{{$category->category_name}}</option>
                       @endforeach
@@ -81,7 +81,7 @@
                     </div>
                     <div class="col-12">
                         <label class="form-label">Category</label>
-                        <select class="form-select" id="select_category_edit" name="select_category[]" required >
+                        <select class="form-select" id="select_category_edit" name="select_category" required >
                             @foreach($categories as $category)
                                 <option value="{{$category->id}}">{{$category->category_name}}</option>
                             @endforeach

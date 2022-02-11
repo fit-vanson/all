@@ -18,9 +18,15 @@ class CategoryManage extends Model
         return $this->belongsToMany('App\Models\SiteManage', 'tbl_category_has_site', 'category_id', 'site_id');
     }
 
+//    public function wallpaper()
+//    {
+//        return $this->belongsToMany(Wallpapers::class, 'tbl_category_has_wallpaper', 'category_id', 'wallpaper_id');
+//    }
+
+
     public function wallpaper()
     {
-        return $this->belongsToMany(Wallpapers::class, 'tbl_category_has_wallpaper', 'category_id', 'wallpaper_id');
+        return $this->hasMany(Wallpapers::class, 'cate_id');
     }
 
 

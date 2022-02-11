@@ -74,6 +74,7 @@ class CategoryController extends Controller
             ->skip($start)
             ->take($rowperpage)
             ->get();
+//        dd($records);
 
 
         $data_arr = array();
@@ -107,8 +108,6 @@ class CategoryController extends Controller
             'category_name.unique'=>'Tên Category đã tồn tại',
             'category_name.required'=>'Tên Category không để trống',
             'image.required'=>'Ảnh không để trống',
-
-
         ];
 
         $error = Validator::make($request->all(),$rules, $message );

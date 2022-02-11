@@ -94,6 +94,7 @@ class WallpaperController extends Controller
             }
         }
         $load_feature=$site->load_view_by;
+
         if (checkBlockIp()) {
             if($load_feature ==0){
                 $data = CategoryManage::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
@@ -120,6 +121,7 @@ class WallpaperController extends Controller
                     }])
                     ->orderBy('order', 'desc')->get();
                 $getResource= FeatureWallpaperResource::collection($data);
+
             }elseif($load_feature == 2){
                 $data = CategoryManage::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                     ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
@@ -191,6 +193,7 @@ class WallpaperController extends Controller
                         ->select('tbl_category_manages.*');
                 })->inRandomOrder()->take(12)->get();
                 $getResource = WallpaperResource::collection($data);
+                $getResource = WallpaperResource::collection($data);
             }
         }
         return response()->json([
@@ -258,7 +261,6 @@ class WallpaperController extends Controller
 //                })
 //                ->paginate(70);
         }else {
-
             $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
                 $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                     ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
