@@ -61,8 +61,8 @@ class WallpapersController extends Controller
         }
         $totalRecords = Wallpapers::select('count(*) as allcount')->count();
         $totalRecordswithFilter = Wallpapers::with('category')->select('count(*) as allcount')
-            ->leftJoin('tbl_category_has_wallpaper', 'tbl_category_has_wallpaper.wallpaper_id', '=', 'wallpapers.id')
-            ->leftJoin('tbl_category_manages', 'tbl_category_manages.id', '=', 'tbl_category_has_wallpaper.category_id')
+//            ->leftJoin('tbl_category_has_wallpaper', 'tbl_category_has_wallpaper.wallpaper_id', '=', 'wallpapers.id')
+            ->leftJoin('tbl_category_manages', 'tbl_category_manages.id', '=', 'wallpapers.cate_id')
             ->where('name', 'like', '%' . $searchValue . '%')
             ->orWhere('tbl_category_manages.category_name', 'like', '%' . $searchValue . '%')
             ->count();
