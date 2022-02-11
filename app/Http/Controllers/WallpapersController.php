@@ -28,6 +28,7 @@ class WallpapersController extends Controller
     }
     public function index(Request $request)
     {
+        $a =  $this->convert();
 
         $pageConfigs = ['pageHeader' => false];
         $users = $this->user->all();
