@@ -216,7 +216,7 @@ class WallpaperController extends Controller
                 $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                     ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                     ->where('site_name',$domain)
-                    ->where('tbl_category_manages.checked_ip',1)
+                    ->where('tbl_category_manages.checked_ip',0)
                     ->select('tbl_category_manages.*');
             })->orderBy('like_count','desc')->paginate(70);
         }
