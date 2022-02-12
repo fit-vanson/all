@@ -13,6 +13,7 @@ use App\Models\VisitorFavorite;
 use App\Http\Controllers\Controller;
 use App\Models\Wallpapers;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class WallpaperController extends Controller
 {
@@ -59,6 +60,7 @@ class WallpaperController extends Controller
 
     public function getFeatured()
     {
+
         $domain=$_SERVER['SERVER_NAME'];
         if (isset($_SERVER['HTTP_CLIENT_IP']))
             $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
@@ -133,7 +135,6 @@ class WallpaperController extends Controller
                         $q->latest();
                     }])
                     ->orderBy('view_count', 'desc')->get();
-
                 $getResource= FeatureWallpaperResource::collection($data);
             }elseif($load_feature == 3){
                 $data = Wallpapers::where('feature', 1)->whereHas('category', function ($q) use ($domain) {
@@ -143,7 +144,6 @@ class WallpaperController extends Controller
                         ->where('tbl_category_manages.checked_ip',1)
                         ->select('tbl_category_manages.*');
                 })->inRandomOrder()->take(12)->get();
-
                 $getResource = WallpaperResource::collection($data);
             }
         } else {
@@ -159,7 +159,6 @@ class WallpaperController extends Controller
                     }])
                     ->inRandomOrder()->get();
                 $getResource= FeatureWallpaperResource::collection($data);
-//                dd($getResource);
             }elseif($load_feature ==1){
                 $data = CategoryManage::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                     ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
@@ -193,7 +192,6 @@ class WallpaperController extends Controller
                         ->select('tbl_category_manages.*');
                 })->inRandomOrder()->take(12)->get();
                 $getResource = WallpaperResource::collection($data);
-                $getResource = WallpaperResource::collection($data);
             }
         }
         return response()->json([
@@ -201,14 +199,11 @@ class WallpaperController extends Controller
             'ad_switch'=>$site->ad_switch,
             'data'=>$getResource,
         ]);
-
     }
     public function getPopulared()
     {
-
         $domain=$_SERVER['SERVER_NAME'];
         if (checkBlockIp()){
-
             $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
                 $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                     ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
@@ -225,7 +220,6 @@ class WallpaperController extends Controller
                     ->select('tbl_category_manages.*');
             })->orderBy('like_count','desc')->paginate(70);
         }
-
         return WallpaperResource::collection($data);
     }
     public function getNewest()
