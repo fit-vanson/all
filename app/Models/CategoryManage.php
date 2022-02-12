@@ -26,7 +26,7 @@ class CategoryManage extends Model
 
     public function wallpaper()
     {
-        return $this->hasMany(Wallpapers::class, 'cate_id');
+        return $this->hasMany(Wallpapers::class,'cate_id');
     }
 
 
