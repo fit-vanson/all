@@ -18,7 +18,7 @@ class FeatureWallpaperResource extends JsonResource
             return [
                 'categories' =>
 //                    CategoryResource::collection($item->category),
-                    new CategoryResource($item->category),
+                    array(new CategoryResource($item->category)),
                 'id' => $item->id,
                 'name' => $item->name,
                 'thumbnail_image' => asset('storage/wallpapers/thumbnail/'.$item->thumbnail_image),
