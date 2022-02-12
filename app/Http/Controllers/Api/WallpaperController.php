@@ -28,7 +28,8 @@ class WallpaperController extends Controller
         if($visitorFavorite){
             return response()->json([
                 'categories' =>
-                    CategoryResource::collection($wallpaper->category),
+//                    CategoryResource::collection($wallpaper->category),
+                    array(new CategoryResource($wallpaper->category)),
                 'id' => $wallpaper->id,
                 'name' => $wallpaper->name,
                 'thumbnail_image' => asset('storage/wallpapers/thumbnail/'. $wallpaper->thumbnail_image),
@@ -43,7 +44,8 @@ class WallpaperController extends Controller
         }else{
             return response()->json([
                 'categories' =>
-                    CategoryResource::collection($wallpaper->category),
+//                    CategoryResource::collection($wallpaper->category),
+                    array(new CategoryResource($wallpaper->category)),
                 'id' => $wallpaper->id,
                 'name' => $wallpaper->name,
                 'thumbnail_image' => asset('storage/wallpapers/thumbnail/'.$wallpaper->thumbnail_image),
