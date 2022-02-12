@@ -226,7 +226,6 @@ class WallpaperController extends Controller
     {
         $domain=$_SERVER['SERVER_NAME'];
         if (checkBlockIp()){
-
             $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
                 $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                     ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
