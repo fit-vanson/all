@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Resources\WallpaperResource;
 use App\Models\Visitor;
 use App\Models\VisitorFavorite;
-use App\Models\Wallpaper;
 use App\Models\Wallpapers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

@@ -42,7 +42,6 @@ function checkBlockIp(){
         for($k=0;$k<=255;$k++){
             $a=$blockIp->ip_address;
             $b[$k]=str_replace("*", $k,$a);
-//            dd($b);
             if ($ipaddress == $b[$k]){
                 $block=true;
             }

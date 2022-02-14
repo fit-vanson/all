@@ -13,7 +13,7 @@ class Visitor extends Model
     ];
 
     public function wallpapers(){
-        return $this->belongsToMany(Wallpapers::class,'visitor_favorites');
+        return $this->belongsToMany(Wallpapers::class,'visitor_favorites','visitor_id','wallpaper_id');
     }
 
 }
