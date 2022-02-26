@@ -28,8 +28,8 @@ class WallpapersController extends Controller
     }
     public function index(Request $request)
     {
-        $a = $this->convert();
-        dd($a);
+//        $a = $this->convert();
+//        dd($a);
         $pageConfigs = ['pageHeader' => false];
         $users = $this->user->all();
         $roles = $this->role->all();
