@@ -30,7 +30,7 @@
                         <a href="{{url('app/ecommerce/details')}}">{{$item->name}}</a>
                     </div>
                     <p class="card-text item-description">
-                        {{$item->category->category_name}}
+                        {{@$item->category->category_name}}
                     </p>
                 </div>
                 <div class="item-options text-center">
