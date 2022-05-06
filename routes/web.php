@@ -108,6 +108,9 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
         Route::get('/{id}/delete', [WallpapersController::class, 'delete'])->name('wallpaper.delete');
         Route::post('/deleteSelect', [WallpapersController::class, 'deleteSelect'])->name('wallpaper.deleteSelect');
     });
+
+    Route::get('/compare', [WallpapersController::class, 'compare'])->name('wallpaper.compare');
+
     Route::group([ "prefix" => "api-keys", "middleware" => ["auth"]], function() {
         Route::get('/', [ApiKeyController::class, 'index'])->name('api_keys.index');
         Route::post('/getIndex', [ApiKeyController::class, 'getIndex'])->name('api_keys.getIndex');

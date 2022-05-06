@@ -6,6 +6,7 @@ use App\Models\CategoryHasWallpaper;
 use App\Models\CategoryManage;
 use App\Models\User;
 
+
 use App\Models\Wallpapers;
 use DateTime;
 use Illuminate\Http\Request;
@@ -374,6 +375,61 @@ class WallpapersController extends Controller
         }
 
 
+    }
+
+
+    public function compare(){
+
+        ini_set('memory_limit', '2000M');
+        ini_set('max_execution_time', 300);
+        $wallpapers = Wallpapers::all();
+        $hashImg = [];
+        $duplicate = [];
+        $compares = [];
+
+        foreach ($wallpapers as $wallpaper) {
+            $path = storage_path('app/public/wallpapers/thumbnail/'.$wallpaper->thumbnail_image);
+            $hashImg[$wallpaper->id] = hash_file('md5', $path);
+        }
+
+        foreach ($hashImg as $path1 => $item) {
+//            echo 'Compare ' . $path1 . PHP_EOL;
+            foreach ($hashImg as $path2 => $match) {
+                if ($path1 == $path2) {
+                    continue;
+                }
+
+                if ($item == $match) {
+                    if (!isset($duplicate[$item])) {
+                        $duplicate[$item] = [];
+                    }
+
+                    if (!in_array($path1, $duplicate[$item])) {
+                        $duplicate[$item][] = $path1;
+                    }
+
+                    if (!in_array($path2, $duplicate[$item])) {
+                        $duplicate[$item][] = $path2;
+                    }
+                }
+            }
+        }
+        if (!empty($duplicate)) {
+            foreach ($duplicate as $key =>$item) {
+                foreach ($item as $path) {
+                    $compares[] = Wallpapers::with('category')->where('id',$path)->first();
+                }
+            }
+        }
+        $pageConfigs = [
+            'pageClass' => 'ecommerce-application',
+        ];
+
+
+        return view('content.wallpaper.compare', [
+            'pageConfigs' => $pageConfigs,
+            'compares' => $compares
+        ]);
     }
 
 }
