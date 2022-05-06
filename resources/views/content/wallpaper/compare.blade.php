@@ -34,7 +34,7 @@
                     </p>
                 </div>
                 <div class="item-options text-center">
-                    <button type="button" class="btn btn-light btn-wishlist remove-wishlist">
+                    <button type="button" class="btn btn-danger btn-wishlist remove-wishlist">
                         <i data-feather="x"></i>
                         <span>Remove</span>
                     </button>
