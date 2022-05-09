@@ -17,7 +17,7 @@ class CategoryResource_V1 extends JsonResource
             'category_id' => $this->id,
             'category_name' => $this->category_name,
             'total_wallpaper'=>$this->wallpaper_count,
-            'category_image' => $this->site_image ?  asset('storage/categories/'.$this->site_image) : asset('storage/categories/'.$this->image),
+            'category_image' => $this->site_image ? $this->site_image : $this->image,
         ];
     }
 }
