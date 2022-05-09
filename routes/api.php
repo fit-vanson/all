@@ -55,12 +55,10 @@ Route::group([
 ], function() {
 
     Route::get('/get_categories',[ApiController::class, 'get_categories']);
+    Route::get('/get_wallpapers',[ApiController::class, 'get_wallpapers']);
+    Route::get('/get_category_details',[ApiController::class, 'get_category_details']);
 
-
-    Route::get('/test-api',function (){
-        return ['a'=>'tesst'];
-    });
-    Route::get('/api.php',[ApiController::class, 'index']);
+    Route::get('/',[ApiController::class, 'index']);
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/categories/{category_id}/wallpapers', [CategoryController::class, 'getWallpapers']);
 
