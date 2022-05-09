@@ -6,7 +6,7 @@ use App\Http\Resources\CategoryResource;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource_V1;
 use App\Models\CategoryManage;
-
+use Illuminate\Support\Facades\Log;
 
 
 class ApiController extends Controller
@@ -15,6 +15,7 @@ class ApiController extends Controller
     public $_content_type = "application/json";
     private $_code = 200;
     public function index(){
+        dd(1);
         $api_key = 'UMvz0pkHexZ3ApdN4fpmVSJSiBXEEqLd8mZhgywEXVQvJ4LPTOWcYYSt0j4QO8Zm';
         if(isset($_GET['keyapi']) && $_GET['keyapi'] == $api_key ){
             if (isset($_GET['action']) && $_GET['action'] == "get_category") {
@@ -700,13 +701,15 @@ class ApiController extends Controller
     }
 
     public function get_wallpapers() {
-
         if($this->get_request_method() != "GET") $this->response('',406);
         $limit = isset($this->_request['count']) ? ((int)$this->_request['count']) : 10;
         $page = isset($this->_request['page']) ? ((int)$this->_request['page']) : 1;
 
         $order = $_GET['order'];
         $filter = $_GET['filter'];
+
+
+
 
         $offset = ($page * $limit) - $limit;
         $count_total = $this->get_count_result("SELECT COUNT(DISTINCT g.id) FROM tbl_gallery g WHERE $filter $order");
