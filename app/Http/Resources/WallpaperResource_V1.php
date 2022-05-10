@@ -20,13 +20,17 @@ class WallpaperResource_V1 extends JsonResource
             'image_name' => $this->name,
             'image_upload' => $this->image,
             'image_url' => $this->image,
+            'type' => 'upload',
+            'resolution' => '856 x 1520',
+            'size' => '225.34 KB',
+            'mime' => 'image/jpeg',
             'views' => $this->view_count,
             'downloads' => $this->like_count,
             'featured' => $this->feature == 0 ? 'yes':'no',
             'tags' => $categories->category_name,
             'category_id' => $categories->id,
             'category_name' => $categories->category_name,
-            'last_update' => $this->updated_at,
+            'last_update' => $this->updated_at->format('Y-m-d h:i:s'),
         ];
     }
 }
