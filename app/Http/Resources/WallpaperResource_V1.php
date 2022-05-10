@@ -14,6 +14,12 @@ class WallpaperResource_V1 extends JsonResource
      */
     public function toArray($request)
     {
+        $path = storage_path('app/public/wallpapers/download/'.$this->image);
+        $image = $size = '';
+        if (file_exists($path)){
+            $image = getimagesize($path,$info);
+            $size = $this->filesize_formatted($path);
+        }
         $categories = (new CategoryResource_V1($this->category));
         return [
             'image_id' => $this->id,
@@ -21,9 +27,9 @@ class WallpaperResource_V1 extends JsonResource
             'image_upload' => $this->image,
             'image_url' => $this->image,
             'type' => 'upload',
-            'resolution' => '856 x 1520',
-            'size' => '225.34 KB',
-            'mime' => 'image/jpeg',
+            'resolution' =>$image ?  $image[0]. ' x '.$image[1]: 'n/a',
+            'size' => $size ? $size : 'n/a',
+            'mime' => $image ?  $image['mime'] : 'n/a',
             'views' => $this->view_count,
             'downloads' => $this->like_count,
             'featured' => $this->feature == 0 ? 'yes':'no',
@@ -33,4 +39,12 @@ class WallpaperResource_V1 extends JsonResource
             'last_update' => $this->updated_at->format('Y-m-d h:i:s'),
         ];
     }
+    function filesize_formatted($path)
+    {
+        $size = filesize($path);
+        $units = array( 'B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+        $power = $size > 0 ? floor(log($size, 1024)) : 0;
+        return number_format($size / pow(1024, $power), 2, '.', ',') . ' ' . $units[$power];
+    }
+
 }

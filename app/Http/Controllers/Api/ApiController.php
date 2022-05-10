@@ -718,6 +718,8 @@ class ApiController extends Controller
         if($this->get_request_method() != "GET") $this->response('',406);
         $limit = isset($_GET['count']) ? ((int)$_GET['count']) : 10;
         $page = isset($_GET['page']) ? ((int)$_GET['page']) : 1;
+        $order = isset($_GET['order']) ? ((int)$_GET['order']) : 1;
+
 
         if (isset($_SERVER['HTTP_CLIENT_IP']))
             $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
@@ -752,7 +754,7 @@ class ApiController extends Controller
                 ]);
             }
         }
-        $order=$_GET['order'];
+
         if (checkBlockIp()) {
             if($order == 1){
                 $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
@@ -761,7 +763,7 @@ class ApiController extends Controller
                         ->where('site_name',$domain)
                         ->where('tbl_category_manages.checked_ip',1)
                         ->select('tbl_category_manages.*');
-                })
+                    })
                     ->orderBy('id', 'desc')
                     ->paginate($limit);
             }elseif ($order ==2){
@@ -771,7 +773,7 @@ class ApiController extends Controller
                         ->where('site_name',$domain)
                         ->where('tbl_category_manages.checked_ip',1)
                         ->select('tbl_category_manages.*');
-                })
+                    })
                     ->orderBy('updated_at', 'desc')
                     ->paginate($limit);
             }elseif ($order ==3){
@@ -781,7 +783,7 @@ class ApiController extends Controller
                         ->where('site_name',$domain)
                         ->where('tbl_category_manages.checked_ip',1)
                         ->select('tbl_category_manages.*');
-                })
+                    })
                     ->orderBy('view_count', 'desc')
                     ->paginate($limit);
             }elseif ($order ==4){
@@ -791,7 +793,7 @@ class ApiController extends Controller
                         ->where('site_name',$domain)
                         ->where('tbl_category_manages.checked_ip',1)
                         ->select('tbl_category_manages.*');
-                })
+                    })
                     ->inRandomOrder()
                     ->paginate($limit);
             }else{
@@ -801,7 +803,7 @@ class ApiController extends Controller
                         ->where('site_name',$domain)
                         ->where('tbl_category_manages.checked_ip',1)
                         ->select('tbl_category_manages.*');
-                })
+                    })
                     ->orderBy('id', 'desc')
                     ->paginate($limit);
             }
@@ -813,7 +815,7 @@ class ApiController extends Controller
                         ->where('site_name',$domain)
                         ->where('tbl_category_manages.checked_ip',0)
                         ->select('tbl_category_manages.*');
-                })
+                    })
                     ->orderBy('id', 'desc')
                     ->paginate($limit);
             }elseif ($order ==2){
@@ -823,7 +825,7 @@ class ApiController extends Controller
                         ->where('site_name',$domain)
                         ->where('tbl_category_manages.checked_ip',0)
                         ->select('tbl_category_manages.*');
-                })
+                    })
                     ->orderBy('updated_at', 'desc')
                     ->paginate($limit);
             }elseif ($order ==3){
@@ -833,7 +835,7 @@ class ApiController extends Controller
                         ->where('site_name',$domain)
                         ->where('tbl_category_manages.checked_ip',0)
                         ->select('tbl_category_manages.*');
-                })
+                    })
                     ->orderBy('view_count', 'desc')
                     ->paginate($limit);
             }elseif ($order ==4){
@@ -843,7 +845,7 @@ class ApiController extends Controller
                         ->where('site_name',$domain)
                         ->where('tbl_category_manages.checked_ip',0)
                         ->select('tbl_category_manages.*');
-                })
+                    })
                     ->inRandomOrder()
                     ->paginate($limit);
             }else{
@@ -853,11 +855,12 @@ class ApiController extends Controller
                         ->where('site_name',$domain)
                         ->where('tbl_category_manages.checked_ip',0)
                         ->select('tbl_category_manages.*');
-                })
+                    })
                     ->orderBy('id', 'desc')
                     ->paginate($limit);
             }
         }
+
         $getResource= WallpaperResource_V1::collection($data);
         $count_total = $data->total();
         $count = count($data->items());
