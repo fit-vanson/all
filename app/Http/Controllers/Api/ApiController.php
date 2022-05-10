@@ -16,6 +16,7 @@ class ApiController extends Controller
 
     public $_content_type = "application/json";
     private $_code = 200;
+    public $_request = array();
     public function index(){
         dd(1);
         $api_key = 'UMvz0pkHexZ3ApdN4fpmVSJSiBXEEqLd8mZhgywEXVQvJ4LPTOWcYYSt0j4QO8Zm';
@@ -708,11 +709,8 @@ class ApiController extends Controller
 
     public function get_wallpapers() {
         if($this->get_request_method() != "GET") $this->response('',406);
-        $limit = isset($this->_request['count']) ? ((int)$this->_request['count']) : 10;
-        $page = isset($this->_request['page']) ? ((int)$this->_request['page']) : 1;
-
-
-
+        $limit = isset($_GET['count']) ? ((int)$_GET['count']) : 10;
+        $page = isset($_GET['page']) ? ((int)$_GET['page']) : 1;
         $wallpapers = Wallpapers::
             orderBy('like_count', 'desc')
 //            ->get()
