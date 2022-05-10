@@ -997,8 +997,6 @@ class ApiController extends Controller
             header( 'Content-Type: application/json; charset=utf-8' );
             echo json_encode(array('response' => "Failed"));
         }
-
-
     }
 
     public function update_download() {

@@ -53,7 +53,6 @@ Route::group([
     "prefix" => "v1"
 //    'middleware' => 'auth.apikey'
 ], function() {
-
     Route::get('/get_categories',[ApiController::class, 'get_categories']);
     Route::get('/get_wallpapers',[ApiController::class, 'get_wallpapers']);
     Route::get('/get_category_details',[ApiController::class, 'get_category_details']);
