@@ -9,7 +9,7 @@ class Wallpapers extends Model
 {
     use HasFactory;
     protected $fillable =[
-        'cate_id','name','origin_image','image','thumbnail_image','view_count','feature','like_count'
+        'cate_id','name','origin_image','image','thumbnail_image','view_count','feature','like_count','hash_file','image_extension'
     ];
 
 //    public function category()

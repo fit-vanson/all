@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
+use Jenssegers\ImageHash\ImageHash;
+use Jenssegers\ImageHash\Implementations\DifferenceHash;
 use Spatie\Permission\Models\Role;
 
 
@@ -167,6 +169,8 @@ class WallpapersController extends Controller
                 $constraint->aspectRatio();
             })->save($path_thumbnail.$fileNameToStore);
 
+
+
             $path_origin =  $monthYear.'/'.$fileNameToStore;
             $path_detail =  $monthYear.'/'.$fileNameToStore;
             $path_thumbnail =  $monthYear.'/'.$fileNameToStore;
@@ -177,6 +181,7 @@ class WallpapersController extends Controller
             $wallpaper->view_count = rand(500,1000);
             $wallpaper->like_count = rand(500,1000);
             $wallpaper->feature = 0;
+            $wallpaper->image_extension = $_FILES['file']['type'];
             $wallpaper->cate_id = $request->select_category;
             $wallpaper->save();
 //            $wallpaper->category()->attach($request->select_category);
@@ -377,59 +382,153 @@ class WallpapersController extends Controller
 
     }
 
-
-    public function compare(){
-
-        ini_set('memory_limit', '2000M');
-        ini_set('max_execution_time', 300);
-        $wallpapers = Wallpapers::all();
-        $hashImg = [];
-        $duplicate = [];
-        $compares = [];
-
-        foreach ($wallpapers as $wallpaper) {
-            $path = storage_path('app/public/wallpapers/thumbnail/'.$wallpaper->thumbnail_image);
-            $hashImg[$wallpaper->id] = hash_file('md5', $path);
-        }
-
-        foreach ($hashImg as $path1 => $item) {
-//            echo 'Compare ' . $path1 . PHP_EOL;
-            foreach ($hashImg as $path2 => $match) {
-                if ($path1 == $path2) {
-                    continue;
-                }
-
-                if ($item == $match) {
-                    if (!isset($duplicate[$item])) {
-                        $duplicate[$item] = [];
-                    }
-
-                    if (!in_array($path1, $duplicate[$item])) {
-                        $duplicate[$item][] = $path1;
-                    }
-
-                    if (!in_array($path2, $duplicate[$item])) {
-                        $duplicate[$item][] = $path2;
-                    }
-                }
-            }
-        }
-        if (!empty($duplicate)) {
-            foreach ($duplicate as $key =>$item) {
-                foreach ($item as $path) {
-                    $compares[] = Wallpapers::with('category')->where('id',$path)->first();
-                }
-            }
-        }
-        $pageConfigs = [
-            'pageClass' => 'ecommerce-application',
-        ];
-
-
-        return view('content.wallpaper.compare', [
-            'pageConfigs' => $pageConfigs,
-            'compares' => $compares
-        ]);
-    }
+//
+//    public function compare(){
+//
+//        ini_set('memory_limit', '2000M');
+//        ini_set('max_execution_time', 300);
+////        $wallpapersHash_null = Wallpapers::where('hash_file',null)->get();
+//        $wallpapers = Wallpapers::all()->toArray();
+//        $hashImg = [];
+//        $duplicate = [];
+//        $compares = [];
+////        $hasher = new ImageHash(new DifferenceHash());
+////        if(!$wallpapersHash_null->isEmpty()){
+////            $this->insertHash_file($wallpapersHash_null,$hasher);
+////        }
+//
+//
+//        foreach ($wallpapers as $wallpaper) {
+//            $path = storage_path('app/public/wallpapers/thumbnail/'.$wallpaper['thumbnail_image']);
+////            $hashImg[$wallpaper['id']] = hash_file('md5', $path);
+//            $hashImg[$wallpaper['id']] = $wallpaper['hash_file'];
+////            $hashImg[$wallpaper->id] = $hasher->hash($path)->toBits();
+////            Wallpapers::updateorCreate(
+////                ['id' => $wallpaper->id],
+////                ['hash_file' =>$hasher->hash($path)->toBits()  ]
+////            );
+////            $hashImg[] = [
+////                'id' => $wallpaper->id,
+////                'id' => $wallpaper->id,
+////                'hash_file' => $hasher->hash($path)->toBits()
+////            ];
+////            $hashImg['hash_file'][] = $hasher->hash($path)->toBits();
+//        }
+//
+////        dd($hashImg);
+////        Wallpapers::insert($hashImg);
+//
+//
+////        $distance = $hasher->distance($hash1, $hash2);
+//
+////        foreach ($wallpapers as $path1 => $item) {
+//////            echo 'Compare ' . $path1 . PHP_EOL;
+////            foreach ($wallpapers as $path2 => $match) {
+////                if ($path1 == $path2) {
+////                    continue;
+////                }
+////
+////                $distance = count(array_diff_assoc(str_split($item['hash_file']), str_split($match['hash_file'])));
+////
+//////                if ($item == $match) {
+////                if ($distance <= 0 ) {
+//////                    dd($item,$match,$path1);
+////                    if (!isset($duplicate[$item['id']])) {
+////                        $duplicate[$item['id']] = [];
+////                    }
+////
+////
+////                    if (!in_array($path1, $duplicate[$item['id']])) {
+////                        $duplicate[$item['id']][] = $path1;
+////                    }
+////
+////                    if (!in_array($path2, $duplicate[$item['id']])) {
+////                        $duplicate[$item['id']][] = $path2;
+////                    }
+////                }
+////            }
+////        }
+//
+////        dd($duplicate);
+//
+//
+//
+//        foreach ($hashImg as $path1 => $item) {
+////        foreach ($wallpapers as $path1 => $item) {
+//
+////            dd($wallpapers);
+//
+//
+////            echo 'Compare ' . $path1 . PHP_EOL;
+//            foreach ($hashImg as $path2 => $match) {
+////            foreach ($wallpapers as $path2 => $match) {
+//                if ($path1 == $path2) {
+////                if ($item['id'] == $match['id']) {
+//                    continue;
+//                }
+////                dd($item, $match);
+//                $distance = count(array_diff_assoc(str_split($item), str_split($match)));
+////                $distance = 1;
+////                dd($distance);
+//
+//
+////                if ($item == $match) {
+////                if ($item['hash_file'] == $match['hash_file']) {
+//                if ($distance <= 1 ) {
+//
+//                    if (!isset($duplicate[$item])) {
+//                        $duplicate[$item] = [];
+//                    }
+//
+//                    if (!in_array($path1, $duplicate[$item])) {
+////                    if (!in_array($item['id'], $duplicate[$item['hash_file']])) {
+//                        $duplicate[$item][] = $path1;
+////                        $duplicate[$item['hash_file']][] = $item['id'];
+//                    }
+//
+//                    if (!in_array($path2, $duplicate[$item])) {
+////                    if (!in_array($match['id'], $duplicate[$item['hash_file']])) {
+//                        $duplicate[$item][] = $path2;
+////                        $duplicate[$item['hash_file']][] = $match['id'];
+//                    }
+//                }
+//            }
+//        }
+//
+////        dd($duplicate);
+//        if (!empty($duplicate)) {
+//            foreach ($duplicate as $key =>$item) {
+//                foreach ($item as $path) {
+//                    $compares[] = Wallpapers::with('category')->where('id',$path)->first()->toArray();
+//                }
+//            }
+//        }
+//
+////        dd($compares,$duplicate);
+//
+//
+//        $pageConfigs = [
+//            'pageClass' => 'ecommerce-application',
+//        ];
+//
+//
+//        return view('content.wallpaper.compare', [
+//            'pageConfigs' => $pageConfigs,
+//            'compares' => $compares
+//        ]);
+//    }
+//
+//    public function insertData(){
+//        $wallpapers = Wallpapers::all();
+//        foreach ($wallpapers as $item){
+//            $path = storage_path('app/public/wallpapers/download/'.$item->thumbnail_image);
+//            dd($path);
+//            Wallpapers::updateorCreate(
+//                ['id' => $item->id],
+//                ['hash_file' =>$hasher->hash($path)->toBits()  ]
+//            );
+//        }
+//        return 1;
+//    }
 
 }
