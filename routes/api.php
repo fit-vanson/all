@@ -59,6 +59,8 @@ Route::group([
     Route::get('/get_category_details',[ApiController::class, 'get_category_details']);
     Route::get('/get_ads',[ApiController::class, 'get_ads']);
     Route::get('/get_settings',[ApiController::class, 'get_settings']);
+    Route::post('/update_view',[ApiController::class, 'update_view']);
+    Route::get('/update_download',[ApiController::class, 'update_download']);
 
     Route::get('/',[ApiController::class, 'index']);
     Route::get('/categories', [CategoryController::class, 'index']);
