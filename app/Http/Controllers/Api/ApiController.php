@@ -986,40 +986,34 @@ class ApiController extends Controller
     }
 
     public function update_view() {
-
-        include ("../../includes/config.php");
-
         $image_id = $_POST['image_id'];
-
-        $sql = "UPDATE tbl_gallery SET view_count = view_count + 1 WHERE id = '$image_id'";
-
-        if (mysqli_query($connect, $sql)) {
+        $wallpaper = Wallpapers::find($image_id);
+        if ($wallpaper) {
+            $wallpaper->view_count = $wallpaper->view_count + 1;
+            $wallpaper->save();
             header( 'Content-Type: application/json; charset=utf-8' );
             echo json_encode(array('response' => "View updated"));
         } else {
             header( 'Content-Type: application/json; charset=utf-8' );
             echo json_encode(array('response' => "Failed"));
         }
-        mysqli_close($connect);
+
 
     }
 
     public function update_download() {
-
-        include ("../../includes/config.php");
-
         $image_id = $_POST['image_id'];
 
-        $sql = "UPDATE tbl_gallery SET download_count = download_count + 1 WHERE id = '$image_id'";
-
-        if (mysqli_query($connect, $sql)) {
+        $wallpaper = Wallpapers::find($image_id);
+        if ($wallpaper) {
+            $wallpaper->like_count = $wallpaper->like_count + 1;
+            $wallpaper->save();
             header( 'Content-Type: application/json; charset=utf-8' );
-            echo json_encode(array('response' => "Download updated"));
+            echo json_encode(array('response' => "View updated"));
         } else {
             header( 'Content-Type: application/json; charset=utf-8' );
             echo json_encode(array('response' => "Failed"));
         }
-        mysqli_close($connect);
 
     }
 
