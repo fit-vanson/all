@@ -89,6 +89,9 @@
                 // url: '../'+ id + "/change-ads",
                 success: function (data) {
                     $(".site_adss").load(" .site_adss");
+                    $(".ads_manage").load(" .ads_manage");
+                    $(".input_admob").load(" .input_admob");
+
                     toastr['success']('', data.success, {
                         showMethod: 'fadeIn',
                         hideMethod: 'fadeOut',

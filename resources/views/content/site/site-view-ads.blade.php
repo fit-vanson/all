@@ -59,7 +59,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="{{asset('admin/site/view/'.$site->site_name.'/policy')}}">
+          <a class="nav-link" href="{{asset('admin/site/view/'.$site->site_name.'/policy')}}">
             <i data-feather="file-text" class="font-medium-3 me-50"></i><span class="fw-bold">Policy</span>
           </a>
         </li>
@@ -81,7 +81,7 @@
               </a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="{{asset('admin/site/view/'.$site->site_name.'/ads')}}">
+              <a class="nav-link active" href="{{asset('admin/site/view/'.$site->site_name.'/ads')}}">
                   <i data-feather="file-text" class="font-medium-3 me-50"></i><span class="fw-bold">Ads</span>
               </a>
           </li>
@@ -91,20 +91,60 @@
       <!-- Categories table -->
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Web Policy</h4>
+                <h4 class="card-title">MANAGE ADS</h4>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-12">
-                        <form class="row" id="PolicySiteForm">
+                        <form class="row" id="AdsSiteForm">
                             <div id="full-wrapper">
                                 <div id="full-container">
                                     <input type="hidden" name="id" id="id" value="{{$site->id}}">
-                                    <input name="policy" id="policy" type="hidden">
-                                    <div class="editor">
-                                         {!! $site->policy !!}
-                                    </div>
+                                    <div class="ads_manage">
+                                        <span class="fw-bolder me-25">ADs:</span>
+                                        @if($site->ad_switch ==1)
+                                            <a data-id="{{$site->id}}" class="badge bg-light-success changeAds">Active</a>
+                                        @else
+                                            <a data-id="{{$site->id}}" class="badge bg-light-danger changeAds">Deactivated</a>
+                                        @endif
 
+                                    </div>
+                                    <?php
+                                    $ads = json_decode($site->ads,true);
+                                    ?>
+                                    <div class="input_admob">
+                                        @if($site->ad_switch ==1)
+                                            <div class="mb-1">
+                                                <label class="form-label" for="basic-icon-default-uname">AdMob Publisher ID</label>
+                                                <input type="text" id="AdMob_Publisher_ID" class="form-control"  value="{{$ads['AdMob_Publisher_ID']}}" name="AdMob_Publisher_ID">
+                                            </div>
+
+                                            <div class="mb-1">
+                                                <label class="form-label" for="basic-icon-default-uname">AdMob App ID</label>
+                                                <input type="text" id="AdMob_App_ID" class="form-control"  value="{{$ads['AdMob_App_ID']}}" name="AdMob_App_ID">
+                                            </div>
+
+                                            <div class="mb-1">
+                                                <label class="form-label" for="basic-icon-default-uname">AdMob Banner Ad Unit ID</label>
+                                                <input type="text" id="AdMob_Banner_Ad_Unit_ID" class="form-control"  value="{{$ads['AdMob_Banner_Ad_Unit_ID']}}" name="AdMob_Banner_Ad_Unit_ID">
+                                            </div>
+
+                                            <div class="mb-1">
+                                                <label class="form-label" for="basic-icon-default-uname">AdMob Interstitial Ad Unit ID</label>
+                                                <input type="text" id="AdMob_Interstitial_Ad_Unit_ID" class="form-control"  value="{{$ads['AdMob_Interstitial_Ad_Unit_ID']}}" name="AdMob_Interstitial_Ad_Unit_ID">
+                                            </div>
+
+                                            <div class="mb-1">
+                                                <label class="form-label" for="basic-icon-default-uname">AdMob Native Ad Unit ID</label>
+                                                <input type="text" id="AdMob_Native_Ad_Unit_ID" class="form-control"  value="{{$ads['AdMob_Native_Ad_Unit_ID']}}" name="AdMob_Native_Ad_Unit_ID">
+                                            </div>
+                                            <div class="mb-1">
+                                                <label class="form-label" for="basic-icon-default-uname">AdMob App Open Ad Unit ID</label>
+                                                <input type="text" id="AdMob_App_Open_Ad_Unit_ID" class="form-control"  value="{{$ads['AdMob_App_Open_Ad_Unit_ID']}}" name="AdMob_App_Open_Ad_Unit_ID">
+                                            </div>
+                                        @endif
+
+                                    </div>
                                 </div>
                             </div>
                             <div class="mb-1">
@@ -147,12 +187,12 @@
           });
           ('use strict');
           var url = window.location.pathname;
-          var  PolicySiteForm = $('#PolicySiteForm');
-          PolicySiteForm.on('submit', function (e) {
+          var  AdsSiteForm = $('#AdsSiteForm');
+          AdsSiteForm.on('submit', function (e) {
               e.preventDefault();
-              var hvalue = $('.ql-editor').html();
-              var policy = $('#policy').val(hvalue);
-              var formData = new FormData($("#PolicySiteForm")[0]);
+              // var hvalue = $('.ql-editor').html();
+              // var policy = $('#policy').val(hvalue);
+              var formData = new FormData($("#AdsSiteForm")[0]);
               if($('#submitButton').val() == 'update'){
                   $.ajax({
                       url: url +"/update",
@@ -172,7 +212,8 @@
                               }
                           }
                           if (data.success) {
-                              $(".site_policy").load(" .site_policy");
+                              console.log(data)
+                              $(".input_admob").load(" .input_admob");
                               toastr['success']('', data.success, {
                                   showMethod: 'fadeIn',
                                   hideMethod: 'fadeOut',
@@ -184,6 +225,8 @@
               }
           });
       });
+
+
 
   </script>
 

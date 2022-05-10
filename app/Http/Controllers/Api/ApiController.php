@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\AdsResource_V1;
 use App\Http\Resources\CategoryResource;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource_V1;
@@ -1025,24 +1026,71 @@ class ApiController extends Controller
     public function get_ads() {
         if($this->get_request_method() != "GET") $this->response('',406);
 
-        $query = "SELECT * FROM tbl_ads";
-        $query_ad_status = "SELECT * FROM tbl_ads_status";
+        $domain=$_SERVER['SERVER_NAME'];
+        $data = SiteManage::where('site_name',$domain)
+            ->first()->toArray();
 
-        $result = $this->get_one_result($query);
-        $result2 = $this->get_one_result($query_ad_status);
+        $ads = json_decode($data['ads'], true);
+
+        $ads_arr = [
+            'id' => $data['id'],
+            'ad_status' => $data['ad_switch'] == 1 ? 'on' : 'off',
+            'ad_type' => 'admob',
+            'admob_publisher_id' => $ads['AdMob_Publisher_ID'],
+            'admob_app_id' => $ads['AdMob_App_ID'],
+            'admob_banner_unit_id' => $ads['AdMob_Banner_Ad_Unit_ID'],
+            'admob_interstitial_unit_id' => $ads['AdMob_Interstitial_Ad_Unit_ID'],
+            'admob_native_unit_id' => $ads['AdMob_Native_Ad_Unit_ID'],
+            'admob_app_open_ad_unit_id' => $ads['AdMob_App_Open_Ad_Unit_ID'],
+            'fan_banner_unit_id' => 0,
+            'fan_interstitial_unit_id' => 0,
+            'fan_native_unit_id' => 0,
+            'startapp_app_id' => 0,
+            'unity_game_id' => 0,
+            'unity_banner_placement_id' => 'banner',
+            'unity_interstitial_placement_id' => 'video',
+            'applovin_banner_ad_unit_id' => 0,
+            'applovin_interstitial_ad_unit_id' => 0,
+            'mopub_banner_ad_unit_id' => 0,
+            'mopub_interstitial_ad_unit_id' => 0,
+            'interstitial_ad_interval' => 0,
+            'native_ad_interval' => 0,
+            'native_ad_index' => 6,
+            'last_update_ads' => $data['updated_at'],
+        ];
+        $ads_status = [
+            'ads_status_id' => 1,
+            'banner_ad_on_home_page' => 1,
+            'banner_ad_on_search_page' => 1,
+            'banner_ad_on_wallpaper_detail' => 1,
+            'banner_ad_on_wallpaper_by_category' => 1,
+            'interstitial_ad_on_click_wallpaper' => 1,
+            'interstitial_ad_on_wallpaper_detail' => 1,
+            'native_ad_on_wallpaper_list' => 1,
+            'native_ad_on_exit_dialog' => 1,
+            'app_open_ad' => 1,
+            'last_update_ads_status' => $data['updated_at'],
+
+        ];
 
         $respon = array(
-            'status' => 'ok', 'ads' => $result, 'ads_status' => $result2
+            'status' => 'ok', 'ads' => $ads_arr, 'ads_status' => $ads_status
         );
         $this->response($this->json($respon), 200);
     }
 
     public function get_settings() {
+
         if($this->get_request_method() != "GET") $this->response('',406);
 
-        $query = "SELECT onesignal_app_id, privacy_policy FROM tbl_settings";
+        $domain=$_SERVER['SERVER_NAME'];
+        $data = SiteManage::where('site_name',$domain)
+            ->first()->toArray();
 
-        $settings = $this->get_one_result($query);
+        $settings = [
+            'onesignal_app_id' =>'d',
+            'privacy_policy' =>$data['policy'],
+        ];
 
         $respon = array(
             'status' => 'ok', 'settings' => $settings

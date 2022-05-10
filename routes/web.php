@@ -107,6 +107,7 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
         Route::get('/{id}/edit', [WallpapersController::class, 'edit'])->name('wallpaper.edit');
         Route::get('/{id}/delete', [WallpapersController::class, 'delete'])->name('wallpaper.delete');
         Route::post('/deleteSelect', [WallpapersController::class, 'deleteSelect'])->name('wallpaper.deleteSelect');
+        Route::get('/insertData', [WallpapersController::class, 'insertData'])->name('wallpaper.insertData');
     });
 
     Route::get('/compare', [WallpapersController::class, 'compare'])->name('wallpaper.compare');
@@ -157,6 +158,9 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
 
         Route::get('view/{id}/policy', [SiteController::class, 'site_Policy'])->name('site.policy');
         Route::post('view/{id}/policy/update', [SiteController::class, 'site_updatePolicy'])->name('site.site_updatePolicy');
+
+        Route::get('view/{id}/ads', [SiteController::class, 'site_Ads'])->name('site.ads');
+        Route::post('view/{id}/ads/update', [SiteController::class, 'site_updateAds'])->name('site.site_updateAds');
 
 
         Route::get('view/{id}/feature-images', [FeatureImagesController::class, 'index'])->name('site.FeatureImages');

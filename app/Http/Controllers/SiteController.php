@@ -657,6 +657,43 @@ class SiteController extends Controller
         return response()->json(['success'=>'Cập nhật thành công']);
     }
 
+    //===========================================================
+
+    public function site_Ads($id){
+        $site = SiteManage::where('site_name',$id)->first();
+        if($site){
+            $pageConfigs = [
+                'pageHeader' => false,
+            ];
+            $users = $this->user->all();
+            $roles = $this->role->all();
+            return view('content.site.site-view-ads', [
+                'pageConfigs' => $pageConfigs,
+                'users'=>$users,
+                'roles'=>$roles,
+                'site' =>$site,
+            ]);
+        }else{
+            return 'Site không tồn tại';
+        }
+    }
+    public function site_updateAds(Request $request){
+        $id = $request->id;
+        $site = SiteManage::find($id);
+        $ads = [
+            'AdMob_Publisher_ID'=> $request->AdMob_Publisher_ID ? $request->AdMob_Publisher_ID : '',
+            'AdMob_App_ID'=> $request->AdMob_App_ID ? $request->AdMob_App_ID : '',
+            'AdMob_Banner_Ad_Unit_ID'=> $request->AdMob_Banner_Ad_Unit_ID ? $request->AdMob_Banner_Ad_Unit_ID : 'ca-app-pub-3940256099942544/2934735716',
+            'AdMob_Interstitial_Ad_Unit_ID'=> $request->AdMob_Interstitial_Ad_Unit_ID ? $request->AdMob_Interstitial_Ad_Unit_ID : 'ca-app-pub-3940256099942544/4411468910',
+            'AdMob_Native_Ad_Unit_ID'=> $request->AdMob_Native_Ad_Unit_ID ? $request->AdMob_Native_Ad_Unit_ID : 'ca-app-pub-3940256099942544/3986624511',
+            'AdMob_App_Open_Ad_Unit_ID'=> $request->AdMob_App_Open_Ad_Unit_ID ? $request->AdMob_App_Open_Ad_Unit_ID : 'ca-app-pub-3940256099942544/5662855259',
+        ];
+        $ads = json_encode($ads);
+        $site->ads = $ads;
+        $site->save();
+        return response()->json(['success'=>'Cập nhật thành công','site'=>$site]);
+    }
+
     //==========================================================
 
     public function site_LoadFeature($id){

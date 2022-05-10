@@ -75,6 +75,11 @@
                             <span class="fw-bold">List IP</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{asset('admin/site/view/'.$site->site_name.'/ads')}}">
+                            <i data-feather="file-text" class="font-medium-3 me-50"></i><span class="fw-bold">Ads</span>
+                        </a>
+                    </li>
                 </ul>
                 <!--/ User Pills -->
 
