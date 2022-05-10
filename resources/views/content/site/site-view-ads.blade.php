@@ -116,31 +116,31 @@
                                         @if($site->ad_switch ==1)
                                             <div class="mb-1">
                                                 <label class="form-label" for="basic-icon-default-uname">AdMob Publisher ID</label>
-                                                <input type="text" id="AdMob_Publisher_ID" class="form-control"  value="{{$ads['AdMob_Publisher_ID']}}" name="AdMob_Publisher_ID">
+                                                <input type="text" id="AdMob_Publisher_ID" class="form-control"  value="{{@$ads['AdMob_Publisher_ID']}}" name="AdMob_Publisher_ID">
                                             </div>
 
                                             <div class="mb-1">
                                                 <label class="form-label" for="basic-icon-default-uname">AdMob App ID</label>
-                                                <input type="text" id="AdMob_App_ID" class="form-control"  value="{{$ads['AdMob_App_ID']}}" name="AdMob_App_ID">
+                                                <input type="text" id="AdMob_App_ID" class="form-control"  value="{{@$ads['AdMob_App_ID']}}" name="AdMob_App_ID">
                                             </div>
 
                                             <div class="mb-1">
                                                 <label class="form-label" for="basic-icon-default-uname">AdMob Banner Ad Unit ID</label>
-                                                <input type="text" id="AdMob_Banner_Ad_Unit_ID" class="form-control"  value="{{$ads['AdMob_Banner_Ad_Unit_ID']}}" name="AdMob_Banner_Ad_Unit_ID">
+                                                <input type="text" id="AdMob_Banner_Ad_Unit_ID" class="form-control"  value="{{@$ads['AdMob_Banner_Ad_Unit_ID']}}" name="AdMob_Banner_Ad_Unit_ID">
                                             </div>
 
                                             <div class="mb-1">
                                                 <label class="form-label" for="basic-icon-default-uname">AdMob Interstitial Ad Unit ID</label>
-                                                <input type="text" id="AdMob_Interstitial_Ad_Unit_ID" class="form-control"  value="{{$ads['AdMob_Interstitial_Ad_Unit_ID']}}" name="AdMob_Interstitial_Ad_Unit_ID">
+                                                <input type="text" id="AdMob_Interstitial_Ad_Unit_ID" class="form-control"  value="{{@$ads['AdMob_Interstitial_Ad_Unit_ID']}}" name="AdMob_Interstitial_Ad_Unit_ID">
                                             </div>
 
                                             <div class="mb-1">
                                                 <label class="form-label" for="basic-icon-default-uname">AdMob Native Ad Unit ID</label>
-                                                <input type="text" id="AdMob_Native_Ad_Unit_ID" class="form-control"  value="{{$ads['AdMob_Native_Ad_Unit_ID']}}" name="AdMob_Native_Ad_Unit_ID">
+                                                <input type="text" id="AdMob_Native_Ad_Unit_ID" class="form-control"  value="{{@$ads['AdMob_Native_Ad_Unit_ID']}}" name="AdMob_Native_Ad_Unit_ID">
                                             </div>
                                             <div class="mb-1">
                                                 <label class="form-label" for="basic-icon-default-uname">AdMob App Open Ad Unit ID</label>
-                                                <input type="text" id="AdMob_App_Open_Ad_Unit_ID" class="form-control"  value="{{$ads['AdMob_App_Open_Ad_Unit_ID']}}" name="AdMob_App_Open_Ad_Unit_ID">
+                                                <input type="text" id="AdMob_App_Open_Ad_Unit_ID" class="form-control"  value="{{@$ads['AdMob_App_Open_Ad_Unit_ID']}}" name="AdMob_App_Open_Ad_Unit_ID">
                                             </div>
                                         @endif
 
