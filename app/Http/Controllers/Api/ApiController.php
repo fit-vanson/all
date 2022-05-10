@@ -736,8 +736,6 @@ class ApiController extends Controller
         else
             $ipaddress = 'UNKNOWN';
 
-
-
         $site=SiteManage::where('site_name',$domain)->first();
         $listIp=ListIp::where('ip_address',$ipaddress)->where('id_site',$site->id)->whereDate('created_at', Carbon::today())->first();
         if(!$listIp){
