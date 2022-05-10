@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource_V1;
 use App\Http\Resources\WallpaperResource_V1;
 use App\Models\CategoryManage;
+use App\Models\Wallpapers;
 use Illuminate\Support\Facades\Log;
 
 
@@ -710,22 +711,37 @@ class ApiController extends Controller
         $limit = isset($this->_request['count']) ? ((int)$this->_request['count']) : 10;
         $page = isset($this->_request['page']) ? ((int)$this->_request['page']) : 1;
 
-        $order = $_GET['order'];
-        $filter = $_GET['filter'];
+
+
+        $wallpapers = Wallpapers::
+            orderBy('like_count', 'desc')
+//            ->get()
+            ->paginate($limit);
+//        ->toArray();
+//        dd($wallpapers->items());
+
+        $wallpapers_Array = WallpaperResource_V1::collection($wallpapers->items());
+        $count_total = $wallpapers->total();
+//        dd($count_total);
+
+        $count = count($wallpapers);
+
+//        dd($wallpapers);
 
 
 
 
-        $offset = ($page * $limit) - $limit;
-        $count_total = $this->get_count_result("SELECT COUNT(DISTINCT g.id) FROM tbl_gallery g WHERE $filter $order");
-
-        $query = "SELECT g.id AS 'image_id', g.image_name, g.image AS 'image_upload', g.image_url, g.type, g.image_resolution AS 'resolution', g.image_size AS 'size', g.image_extension AS 'mime', g.view_count AS 'views', g.download_count AS 'downloads', g.featured, g.tags, c.cid AS 'category_id', c.category_name, g.last_update FROM tbl_category c, tbl_gallery g WHERE c.cid = g.cat_id AND $filter $order LIMIT $limit OFFSET $offset";
-
-        $post = $this->get_list_result($query);
-        $count = count($post);
+//        $offset = ($page * $limit) - $limit;
+//        $count_total = $this->get_count_result("SELECT COUNT(DISTINCT g.id) FROM tbl_gallery g WHERE $filter $order");
+//
+//        $query = "SELECT g.id AS 'image_id', g.image_name, g.image AS 'image_upload', g.image_url, g.type, g.image_resolution AS 'resolution', g.image_size AS 'size', g.image_extension AS 'mime', g.view_count AS 'views', g.download_count AS 'downloads', g.featured, g.tags, c.cid AS 'category_id', c.category_name, g.last_update FROM tbl_category c, tbl_gallery g WHERE c.cid = g.cat_id AND $filter $order LIMIT $limit OFFSET $offset";
+//
+//        $post = $this->get_list_result($query);
+//        $count = count($post);
         $respon = array(
-            'status' => 'ok', 'count' => $count, 'count_total' => $count_total, 'pages' => $page, 'posts' => $post
+            'status' => 'ok', 'count' => $count, 'count_total' => $count_total, 'pages' => $page, 'posts' => $wallpapers_Array
         );
+//        dd($respon);
         $this->response($this->json($respon), 200);
 
     }
@@ -780,42 +796,19 @@ class ApiController extends Controller
 
     public function get_category_details() {
 
-
-
         if($this->get_request_method() != "GET") $this->response('',406);
         $limit = isset($this->_request['count']) ? ((int)$this->_request['count']) : 10;
         $page = isset($this->_request['page']) ? ((int)$this->_request['page']) : 1;
 
         $id = $_GET['id'];
         $domain=$_SERVER['SERVER_NAME'];
-//        try{
             $wallpapers = CategoryManage::findOrFail($id)
                 ->wallpaper()
                 ->orderBy('like_count', 'desc')
                 ->paginate($limit);
             CategoryManage::findOrFail($id)->increment('view_count');
-//        dd($wallpapers);
         $categories= WallpaperResource_V1::collection($wallpapers);
-
-//        dd($wallpapers);
-
-//        }catch (\Exception $e){
-//            return response()->json(['warning' => ['This Category is not exist']], 200);
-//        }
-
-
-//        $order = $_GET['order'];
-//        $filter = $_GET['filter'];
-//
-//        $offset = ($page * $limit) - $limit;
-//        $count_total = $this->get_count_result("SELECT COUNT(DISTINCT g.id) FROM tbl_gallery g WHERE g.cat_id = $id AND $filter $order");
-
-//        dd($wallpapers);
         $count_total = $wallpapers->total();
-
-//        $query = "SELECT g.id AS 'image_id', g.image_name, g.image AS 'image_upload', g.image_url, g.type, g.image_resolution AS 'resolution', g.image_size AS 'size', g.image_extension AS 'mime', g.view_count AS 'views', g.download_count AS 'downloads', g.featured, g.tags, c.cid AS 'category_id', c.category_name, g.last_update FROM tbl_category c, tbl_gallery g WHERE c.cid = $id AND c.cid = g.cat_id AND $filter $order LIMIT $limit OFFSET $offset";
-//
-//        $post = $this->get_list_result($query);
         $count = count($categories);
         $respon = array(
             'status' => 'ok', 'count' => $count, 'count_total' => $count_total, 'pages' => $page, 'posts' => $categories
