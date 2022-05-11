@@ -385,7 +385,7 @@
             });
             wallpaper.dropzone(
                 {
-                    maxFilesize: 2,
+                    maxFilesize: 20,
                     {{--headers: {--}}
                     {{--    'X-CSRF-TOKEN': "{{ csrf_token() }}"--}}
                     {{--},--}}
