@@ -14,10 +14,10 @@ class WallpaperResource_V1 extends JsonResource
      */
     public function toArray($request)
     {
-        $path = storage_path('app/public/wallpapers/download/'.@$this->image);
+        $path = storage_path('app/public/wallpapers/download/'.$this->image);
         $image = $size = '';
         if (file_exists($path)){
-            $image = getimagesize($path,$info);
+            $image = getimagesize($path);
             $size = $this->filesize_formatted($path);
         }
         $categories = (new CategoryResource_V1($this->category));
