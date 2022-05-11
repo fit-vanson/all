@@ -758,7 +758,7 @@ class ApiController extends Controller
 
         if (checkBlockIp()) {
             if($order == 1){
-                $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
+                $data = Wallpapers::where('image_extension','<>','image/gif')->whereHas('category', function ($q) use ($domain) {
                     $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                         ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                         ->where('site_name',$domain)
@@ -768,7 +768,7 @@ class ApiController extends Controller
                     ->orderBy('id', 'desc')
                     ->paginate($limit);
             }elseif ($order ==2){
-                $data = Wallpapers::where('feature', 1)->whereHas('category', function ($q) use ($domain) {
+                $data = Wallpapers::where('image_extension','<>','image/gif')->where('feature', 1)->whereHas('category', function ($q) use ($domain) {
                     $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                         ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                         ->where('site_name',$domain)
@@ -778,7 +778,7 @@ class ApiController extends Controller
                     ->orderBy('updated_at', 'desc')
                     ->paginate($limit);
             }elseif ($order ==3){
-                $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
+                $data = Wallpapers::where('image_extension','<>','image/gif')->whereHas('category', function ($q) use ($domain) {
                     $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                         ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                         ->where('site_name',$domain)
@@ -788,7 +788,7 @@ class ApiController extends Controller
                     ->orderBy('view_count', 'desc')
                     ->paginate($limit);
             }elseif ($order ==4){
-                $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
+                $data = Wallpapers::where('image_extension','<>','image/gif')->whereHas('category', function ($q) use ($domain) {
                     $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                         ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                         ->where('site_name',$domain)
@@ -810,7 +810,7 @@ class ApiController extends Controller
             }
         } else {
             if($order == 1){
-                $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
+                $data = Wallpapers::where('image_extension','<>','image/gif')->whereHas('category', function ($q) use ($domain) {
                     $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                         ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                         ->where('site_name',$domain)
@@ -820,7 +820,7 @@ class ApiController extends Controller
                     ->orderBy('id', 'desc')
                     ->paginate($limit);
             }elseif ($order ==2){
-                $data = Wallpapers::where('feature', 1)->whereHas('category', function ($q) use ($domain) {
+                $data = Wallpapers::where('feature', 1)->where('image_extension','<>','image/gif')->whereHas('category', function ($q) use ($domain) {
                     $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                         ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                         ->where('site_name',$domain)
@@ -830,7 +830,7 @@ class ApiController extends Controller
                     ->orderBy('updated_at', 'desc')
                     ->paginate($limit);
             }elseif ($order ==3){
-                $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
+                $data = Wallpapers::where('image_extension','<>','image/gif')->whereHas('category', function ($q) use ($domain) {
                     $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                         ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                         ->where('site_name',$domain)
@@ -840,7 +840,7 @@ class ApiController extends Controller
                     ->orderBy('view_count', 'desc')
                     ->paginate($limit);
             }elseif ($order ==4){
-                $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
+                $data = Wallpapers::where('image_extension','<>','image/gif')->whereHas('category', function ($q) use ($domain) {
                     $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                         ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                         ->where('site_name',$domain)

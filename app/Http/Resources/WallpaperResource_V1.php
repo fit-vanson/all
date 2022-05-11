@@ -14,7 +14,7 @@ class WallpaperResource_V1 extends JsonResource
      */
     public function toArray($request)
     {
-        $path = storage_path('app/public/wallpapers/download/'.$this->image);
+        $path = storage_path('app/public/wallpapers/download/'.@$this->image);
         $image = $size = '';
         if (file_exists($path)){
             $image = getimagesize($path,$info);
@@ -25,7 +25,7 @@ class WallpaperResource_V1 extends JsonResource
             'image_id' => $this->id,
             'image_name' => $this->name,
             'image_upload' => $this->image,
-            'image_url' => $this->image,
+            'image_url' => $this->image_url,
             'type' => 'upload',
             'resolution' =>$image ?  $image[0]. ' x '.$image[1]: 'n/a',
             'size' => $size ? $size : 'n/a',
