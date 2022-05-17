@@ -82,24 +82,4 @@ Route::group([
 //    'middleware' => 'auth.apikey'
 ], function() {
     Route::post('/',[ApiV2Controller::class, 'index']);
-    Route::get('/get_categories',[ApiV2Controller::class, 'get_categories']);
-    Route::get('/get_wallpapers',[ApiV2Controller::class, 'get_wallpapers']);
-    Route::get('/get_category_details',[ApiV2Controller::class, 'get_category_details']);
-    Route::get('/get_ads',[ApiV2Controller::class, 'get_ads']);
-    Route::get('/get_settings',[ApiV2Controller::class, 'get_settings']);
-    Route::post('/update_view',[ApiV2Controller::class, 'update_view']);
-    Route::post('/update_download',[ApiV2Controller::class, 'update_download']);
-
-    Route::get('/',[ApiV2Controller::class, 'index']);
-    Route::get('/categories', [ApiV2Controller::class, 'index']);
-    Route::get('/categories/{category_id}/wallpapers', [ApiV2Controller::class, 'getWallpapers']);
-
-    Route::get('/wallpaper-detail/{id}/{device_id}', [ApiV2Controller::class, 'show']);
-    Route::get('/wallpapers/featured', [ApiV2Controller::class, 'getFeatured']);
-    Route::get('/wallpapers/popular', [ApiV2Controller::class, 'getPopulared']);
-    Route::get('/wallpapers/newest', [ApiV2Controller::class, 'getNewest']);
-
-    Route::post('/wallpaper-favorite', [ApiV2Controller::class, 'likeWallpaper']);
-    Route::post('/wallpaper-favorite-unsaved', [ApiV2Controller::class, 'disLikeWallpaper']);
-    Route::get('/favorite/{device_id}', [ApiV2Controller::class, 'getSaved']);
 });
