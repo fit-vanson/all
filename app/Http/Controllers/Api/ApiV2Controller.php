@@ -24,10 +24,6 @@ class ApiV2Controller extends Controller
             $this->get_home($get_method);
         }
         else if ($get_method['method_name']=="get_latest") {
-//            echo "<pre>";
-//            print_r($get_method);
-//            echo "</pre>";
-//            die();
             $this->get_latest($get_method);
         }
         else if ($get_method['method_name']=="get_category")
