@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\WallpaperController;
+use App\Http\Controllers\Api\ApiV2Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
@@ -75,3 +76,10 @@ Route::group([
     Route::get('/favorite/{device_id}', [FavoriteController::class, 'getSaved']);
 });
 
+
+Route::group([
+    "prefix" => "v2"
+//    'middleware' => 'auth.apikey'
+], function() {
+    Route::post('/',[ApiV2Controller::class, 'index']);
+});
