@@ -82,7 +82,7 @@ Route::group([
 //    'middleware' => 'auth.apikey'
 ], function() {
     Route::post('/',[ApiV2Controller::class, 'index']);
-    Route::get('/',[ApiV2Controller::class, 'index']);
+//    Route::get('/',[ApiV2Controller::class, 'index']);
 //    Route::get('/get_categories',[ApiV2Controller::class, 'get_categories']);
 //    Route::get('/get_wallpapers',[ApiV2Controller::class, 'get_wallpapers']);
 //    Route::get('/get_category_details',[ApiV2Controller::class, 'get_category_details']);
