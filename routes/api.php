@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ApiController;
+use App\Http\Controllers\Api\ApiV3Controller;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\WallpaperController;
@@ -81,8 +82,20 @@ Route::group([
     "prefix" => "v2"
 //    'middleware' => 'auth.apikey'
 ], function() {
-    Route::post('/',[ApiV2Controller::class, 'index']);
-//    Route::get('/',[ApiV2Controller::class, 'index']);
+    Route::get('/',[ApiV2Controller::class, 'index']);
+    Route::post('/getData',[ApiV2Controller::class, 'getData']);
+});
+
+
+Route::group([
+    "prefix" => "v3"
+//    'middleware' => 'auth.apikey'
+], function() {
+    Route::get('version/check/{version}/{token_app}/{item_code}',[ApiV3Controller::class, 'checkCode']);
+    Route::get('/',[ApiV3Controller::class, 'index']);
+    Route::get('first/{token_app}/{item_code}',[ApiV3Controller::class, 'first']);
+    Route::get('category/all/{token_app}/{item_code}',[ApiV3Controller::class, 'categoryAll']);
+
 //    Route::get('/get_categories',[ApiV2Controller::class, 'get_categories']);
 //    Route::get('/get_wallpapers',[ApiV2Controller::class, 'get_wallpapers']);
 //    Route::get('/get_category_details',[ApiV2Controller::class, 'get_category_details']);

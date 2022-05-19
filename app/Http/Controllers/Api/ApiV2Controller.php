@@ -16,7 +16,12 @@ use Illuminate\Support\Facades\DB;
 
 class ApiV2Controller extends Controller
 {
-    public function index(){
+    public function index()
+    {
+
+    }
+
+    public function getData(){
         $get_method = $this->checkSignSalt($_POST['data']);
 //        $get_method = $this->checkSignSalt($_GET['data']);
         if($get_method['method_name']=="get_home")
@@ -29,7 +34,7 @@ class ApiV2Controller extends Controller
         else if ($get_method['method_name']=="get_category")
         {
             echo "<pre>";
-            print_r($get_method);
+            print_r($_REQUEST);
             echo "</pre>";
             die();
             $this->get_category($get_method);
@@ -267,12 +272,9 @@ class ApiV2Controller extends Controller
         {
             $this->checkSignSalt($_GET['data']);
         }
-
-
-
-
-
     }
+
+
     function checkSignSalt($data_info)
     {
 //        $key = "demo_v2";

@@ -118,25 +118,7 @@ class ApiController extends Controller
                 ->select('tbl_category_manages.*','tbl_category_has_site.image as site_image')
                 ->withCount('wallpaper')
                 ->get();
-
-//            $data = SiteManage::with('category')
-//                ->leftJoin('tbl_category_has_site', 'tbl_category_has_site.site_id', '=', 'tbl_site_manages.id')
-//                ->leftJoin('tbl_category_manages', 'tbl_category_manages.id', '=', 'tbl_category_has_site.category_id')
-//                ->where('site_name',$domain)
-//                ->where('tbl_category_manages.checked_ip',1)
-//                ->select('tbl_category_manages.*','tbl_category_has_site.image as site_image')
-//                ->get();
-//            return CategoryResource::collection($data);
-
         } else{
-//            $data = SiteManage::
-//                leftJoin('tbl_category_has_site', 'tbl_category_has_site.site_id', '=', 'tbl_site_manages.id')
-//                ->leftJoin('tbl_category_manages', 'tbl_category_manages.id', '=', 'tbl_category_has_site.category_id')
-//                ->where('site_name',$domain)
-//                ->where('tbl_category_manages.checked_ip',0)
-//                ->select('tbl_category_manages.*','tbl_category_has_site.image as site_image')
-//                ->get();
-
             $data = CategoryManage::
             leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                 ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
@@ -146,12 +128,6 @@ class ApiController extends Controller
                 ->select('tbl_category_manages.*','tbl_category_has_site.image as site_image')
                 ->withCount('wallpaper')
                 ->get();
-
-//            echo "<pre>";
-//            print_r($data);
-//            echo "</pre>";($data);
-//            dd(CategoryResourceV1::collection($data));
-//            return CategoryResourceV1::collection($data);
         }
         dd($data);
 
