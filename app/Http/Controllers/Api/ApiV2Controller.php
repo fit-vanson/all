@@ -238,18 +238,10 @@ class ApiV2Controller extends Controller
         }
         else if($get_method['method_name']=="favorite_post")
         {
-            echo "<pre>";
-            print_r($get_method);
-            echo "</pre>";
-            die();
             $this->favorite_post($get_method);
         }
         else if($get_method['method_name']=="get_favorite_post")
         {
-            echo "<pre>";
-            print_r($get_method);
-            echo "</pre>";
-            die();
             $this->get_favorite_post($get_method);
         }
         else
@@ -516,6 +508,66 @@ class ApiV2Controller extends Controller
 
     }
 
+    private function favorite_post($get_method){
+        $jsonObj= array();
+        $visitorFavorite = VisitorFavorite::where(
+            [
+            'wallpaper_id' => $get_method['post_id'],
+            'visitor_id' => Visitor::where('device_id', $get_method['android_id'])->value('id')
+            ])
+            ->first();
+        if ($visitorFavorite) {
+            VisitorFavorite::where([
+                'wallpaper_id' => $get_method['post_id'],
+                'visitor_id' => Visitor::where('device_id', $get_method['android_id'])->value('id')
+            ])->delete();
+            $wallpaper = Wallpapers::where('id', $get_method['android_id'])->first();
+            $wallpaper->decrement('like_count');
+            $info['success']="1";
+            $info['MSG']= 'favourite remove success';
+
+        } else {
+            VisitorFavorite::create([
+                'wallpaper_id' => $get_method['post_id'],
+                'visitor_id' => Visitor::where('device_id', $get_method['android_id'])->value('id')
+            ])->first();
+            $wallpaper = Wallpapers::where('id', $get_method['post_id'])->first();
+            $wallpaper->increment('like_count');
+
+            $info['success']="1";
+            $info['MSG']='favourite success';
+        }
+        array_push($jsonObj,$info);
+        $set['HD_WALLPAPER'] = $jsonObj;
+        header( 'Content-Type: application/json; charset=utf-8' );
+        echo $val= str_replace('\\/', '/', json_encode($set,JSON_UNESCAPED_UNICODE));
+        die();
+
+    }
+
+    private function get_favorite_post($get_method){
+
+        $page_limit = 12;
+        $limit=($get_method['page']-1) * $page_limit;
+        $type = trim($get_method['type']);
+        $visitor = Visitor::where('device_id', $get_method['android_id'])->first();
+
+        $wallpaper = Visitor::findOrFail($visitor->id)
+//            ->with('wallpapers')
+            ->wallpapers()
+            ->limit($page_limit)
+            ->offset($limit)
+            ->get()
+            ->toArray();
+        $row = $this->getWallpaper($wallpaper,$type,$get_method['android_id']);
+        $set['HD_WALLPAPER'] = $row;
+        header('Content-Type: application/json; charset=utf-8');
+        echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        die();
+
+
+    }
+
     private function get_wallpaper_most_viewed($get_method){
         $domain = $_SERVER['SERVER_NAME'];
         if ($get_method['type'] != '') {
@@ -621,11 +673,11 @@ class ApiV2Controller extends Controller
 
         $row['publisher_id'] = $ads['AdMob_Publisher_ID'] ?  $ads['AdMob_Publisher_ID'] : '';
 
-        $row['interstital_ad'] = $data['ad_switch'] ==1 ? 'true':'false' ;
+        $row['interstital_ad'] = $data['ad_switch'] != 0 ? 'true':'false' ;
         $row['interstital_ad_id'] = $ads['AdMob_Interstitial_Ad_Unit_ID'] ;
 
         $row['interstital_ad_click'] = '10';
-        $row['banner_ad'] = $data['ad_switch'] ==1 ? 'true':'false' ;
+        $row['banner_ad'] = $data['ad_switch'] != 0 ? 'true':'false' ;
         $row['banner_ad_id'] = $ads['AdMob_Banner_Ad_Unit_ID'];
 
 
@@ -638,7 +690,7 @@ class ApiV2Controller extends Controller
         $row['facebook_native_ad'] = 'false';
         $row['facebook_native_ad_id'] = '1393008281089270_1393009201089178';
         $row['facebook_native_ad_click'] = '12';
-        $row['admob_nathive_ad'] = $data['ad_switch'] ==1 ? 'true':'false' ;
+        $row['admob_nathive_ad'] = $data['ad_switch'] != 0 ? 'true':'false' ;
         $row['admob_native_ad_id'] = $ads['AdMob_Native_Ad_Unit_ID'];
         $row['admob_native_ad_click'] = 10;
 
@@ -702,7 +754,7 @@ class ApiV2Controller extends Controller
         }else{
             shuffle($data);
         }
-        $output = array_slice($data, 0, 10);
+        $output = array_slice($data, 0, 12);
 
         foreach ($output as $item){
             $data_arr['id'] = $item['id'];
@@ -747,9 +799,9 @@ class ApiV2Controller extends Controller
             $data_arr['wall_colors'] = 1;
 
             $data_arr['cid'] = $item['cate_id'];
-            $data_arr['category_name'] = $item['category']['category_name'];
-            $data_arr['category_image'] = asset('storage/categories/'.$item['category']['image']);
-            $data_arr['category_image_thumb'] = asset('storage/categories/'.$item['category']['image']);
+            $data_arr['category_name'] = isset($item['category']) ? $item['category']['category_name'] : '';
+            $data_arr['category_image'] = isset($item['category'])  ? asset('storage/categories/'.$item['category']['image']) : '';
+            $data_arr['category_image_thumb'] =  isset($item['category']) ? asset('storage/categories/'.$item['category']['image']): '';
             array_push($jsonObj,$data_arr);
         }
         return $jsonObj;
@@ -767,6 +819,12 @@ class ApiV2Controller extends Controller
         return $jsonObj;
     }
     private  function singleWallpaper($data, $android_id){
+        $path = storage_path('app/public/wallpapers/download/'.$data->origin_image);
+        $image = $size = '';
+        if (file_exists($path)){
+            $image = getimagesize($path);
+            $size = $this->filesize_formatted($path);
+        }
         $jsonObj = [];
             $data_arr['id'] = (string)$data->id;
             $data_arr['cat_id'] = (string)$data->cate_id;
@@ -785,8 +843,8 @@ class ApiV2Controller extends Controller
 
             $data_arr['wall_tags'] = 'Abstract,Portrait';
             $data_arr['wall_colors'] = "2";
-            $data_arr['resolution'] = "744X1392";
-            $data_arr['size'] = "115.01 KB";
+            $data_arr['resolution'] = $image ?  $image[0]. ' x '.$image[1]: 'n/a';
+            $data_arr['size'] = $size ? $size : 'n/a';
             array_push($jsonObj,$data_arr);
         return $jsonObj;
     }
@@ -804,6 +862,14 @@ class ApiV2Controller extends Controller
         } else {
             return false;
         }
+    }
+
+    function filesize_formatted($path)
+    {
+        $size = filesize($path);
+        $units = array( 'B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+        $power = $size > 0 ? floor(log($size, 1024)) : 0;
+        return number_format($size / pow(1024, $power), 2, '.', ',') . ' ' . $units[$power];
     }
 
 
