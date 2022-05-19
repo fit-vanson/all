@@ -9,6 +9,7 @@ use App\Models\CategoryManage;
 use App\Models\ListIp;
 use App\Models\SiteManage;
 use App\Models\Visitor;
+use App\Models\VisitorFavorite;
 use App\Models\Wallpapers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -23,7 +24,6 @@ class ApiV2Controller extends Controller
 
     public function getData(){
         $get_method = $this->checkSignSalt($_POST['data']);
-//        $get_method = $this->checkSignSalt($_GET['data']);
         if($get_method['method_name']=="get_home")
         {
             $this->get_home($get_method);
@@ -33,18 +33,10 @@ class ApiV2Controller extends Controller
         }
         else if ($get_method['method_name']=="get_category")
         {
-            echo "<pre>";
-            print_r($_REQUEST);
-            echo "</pre>";
-            die();
             $this->get_category($get_method);
         }
         else if ($get_method['method_name']=="get_wallpaper")
         {
-            echo "<pre>";
-            print_r($get_method);
-            echo "</pre>";
-            die();
             $this->get_wallpaper($get_method);
         }
         else if ($get_method['method_name']=="get_single_wallpaper")
@@ -53,19 +45,11 @@ class ApiV2Controller extends Controller
         }
         else if ($get_method['method_name']=="get_wallpaper_most_viewed")
         {
-            echo "<pre>";
-            print_r($get_method);
-            echo "</pre>";
-            die();
             $this->get_wallpaper_most_viewed($get_method);
 
         }
         else if ($get_method['method_name']=="get_wallpaper_most_rated")
         {
-            echo "<pre>";
-            print_r($get_method);
-            echo "</pre>";
-            die();
             $this->get_wallpaper_most_rated($get_method);
 
         }
@@ -301,59 +285,57 @@ class ApiV2Controller extends Controller
                     echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
                     exit();
                 }
+                if (isset($_SERVER['HTTP_CLIENT_IP']))
+                    $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+                else if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+                    $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+                else if (isset($_SERVER['HTTP_X_FORWARDED']))
+                    $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+                else if (isset($_SERVER['HTTP_FORWARDED_FOR']))
+                    $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+                else if (isset($_SERVER['HTTP_FORWARDED']))
+                    $ipaddress = $_SERVER['HTTP_FORWARDED'];
+                else if (isset($_SERVER['REMOTE_ADDR']))
+                    $ipaddress = $_SERVER['REMOTE_ADDR'];
+                else if (isset($_SERVER["HTTP_CF_CONNECTING_IP"]))
+                    $ipaddress = $_SERVER["HTTP_CF_CONNECTING_IP"];
+                else
+                    $ipaddress = 'UNKNOWN';
+
+                $domain = $_SERVER['SERVER_NAME'];
+
+                $site = SiteManage::where('site_name', $domain)->first();
+                $listIp = ListIp::where('ip_address', $ipaddress)->where('id_site', $site->id)->whereDate('created_at', Carbon::today())->first();
+                if (!$listIp) {
+                    ListIp::create([
+                        'ip_address' => $ipaddress,
+                        'id_site' => $site->id
+                    ]);
+                } else {
+                    $listIp = ListIp::where('ip_address', get_ip())->where('id_site', $site->id)->whereDate('created_at', Carbon::today())->first();
+                    if (!$listIp) {
+                        ListIp::create([
+                            'ip_address' => get_ip(),
+                            'id_site' => $site->id
+                        ]);
+                    }
+                }
 
                 if(isset($data_arr['android_id'])){
-
                     $visitor =$data_arr['android_id'];
-
                     Visitor::updateOrCreate([
                         'device_id' => $visitor
                     ]);
-
                 }
+
             }
         return $data_arr;
     }
 
-    private function get_home($get_method)
-    {
-
+    private function get_home($get_method){
+        $domain = $_SERVER['SERVER_NAME'];
         if ($get_method['type'] != '') {
             $type = trim($get_method['type']);
-            if (isset($_SERVER['HTTP_CLIENT_IP']))
-                $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
-            else if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
-                $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            else if (isset($_SERVER['HTTP_X_FORWARDED']))
-                $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
-            else if (isset($_SERVER['HTTP_FORWARDED_FOR']))
-                $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
-            else if (isset($_SERVER['HTTP_FORWARDED']))
-                $ipaddress = $_SERVER['HTTP_FORWARDED'];
-            else if (isset($_SERVER['REMOTE_ADDR']))
-                $ipaddress = $_SERVER['REMOTE_ADDR'];
-            else if (isset($_SERVER["HTTP_CF_CONNECTING_IP"]))
-                $ipaddress = $_SERVER["HTTP_CF_CONNECTING_IP"];
-            else
-                $ipaddress = 'UNKNOWN';
-            $domain = $_SERVER['SERVER_NAME'];
-            $site = SiteManage::where('site_name', $domain)->first();
-            $listIp = ListIp::where('ip_address', $ipaddress)->where('id_site', $site->id)->whereDate('created_at', Carbon::today())->first();
-            if (!$listIp) {
-                ListIp::create([
-                    'ip_address' => $ipaddress,
-                    'id_site' => $site->id
-                ]);
-            } else {
-                $listIp = ListIp::where('ip_address', get_ip())->where('id_site', $site->id)->whereDate('created_at', Carbon::today())->first();
-                if (!$listIp) {
-                    ListIp::create([
-                        'ip_address' => get_ip(),
-                        'id_site' => $site->id
-                    ]);
-                }
-            }
-
             if (checkBlockIp()) {
                 $wallpaper = Wallpapers::where('image_extension', '<>', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
                     $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
@@ -392,12 +374,12 @@ class ApiV2Controller extends Controller
                     ->withCount('wallpaper')
                     ->get();
             }
-            $row['featured_wallpaper'] =  $this->sortWallpaper($wallpaper,'',$type);
+            $row['featured_wallpaper'] =  $this->sortWallpaper($wallpaper,'',$type, $get_method['android_id']);
             $getCategoryResource = CategoryResource_V2::collection($category);
             $row['wallpaper_category'] = $getCategoryResource;
-            $row['latest_wallpaper'] = $this->sortWallpaper($wallpaper,'updated_at',$type);
-            $row['popular_wallpaper'] = $this->sortWallpaper($wallpaper,'view_count',$type);
-            $row['recent_wallpapers'] = $this->sortWallpaper($wallpaper,'like_count',$type);
+            $row['latest_wallpaper'] = $this->sortWallpaper($wallpaper,'updated_at',$type, $get_method['android_id']);
+            $row['popular_wallpaper'] = $this->sortWallpaper($wallpaper,'view_count',$type, $get_method['android_id']);
+            $row['recent_wallpapers'] = $this->sortWallpaper($wallpaper,'like_count',$type, $get_method['android_id']);
             $set['HD_WALLPAPER'] = $row;
             header('Content-Type: application/json; charset=utf-8');
             echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
@@ -407,43 +389,10 @@ class ApiV2Controller extends Controller
 
     private function get_latest($get_method)
     {
-
+        $domain = $_SERVER['SERVER_NAME'];
         if ($get_method['type'] != '') {
             $type = trim($get_method['type']);
-            if (isset($_SERVER['HTTP_CLIENT_IP']))
-                $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
-            else if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
-                $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            else if (isset($_SERVER['HTTP_X_FORWARDED']))
-                $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
-            else if (isset($_SERVER['HTTP_FORWARDED_FOR']))
-                $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
-            else if (isset($_SERVER['HTTP_FORWARDED']))
-                $ipaddress = $_SERVER['HTTP_FORWARDED'];
-            else if (isset($_SERVER['REMOTE_ADDR']))
-                $ipaddress = $_SERVER['REMOTE_ADDR'];
-            else if (isset($_SERVER["HTTP_CF_CONNECTING_IP"]))
-                $ipaddress = $_SERVER["HTTP_CF_CONNECTING_IP"];
-            else
-                $ipaddress = 'UNKNOWN';
-            $domain = $_SERVER['SERVER_NAME'];
-            $site = SiteManage::where('site_name', $domain)->first();
-            $listIp = ListIp::where('ip_address', $ipaddress)->where('id_site', $site->id)->whereDate('created_at', Carbon::today())->first();
-            if (!$listIp) {
-                ListIp::create([
-                    'ip_address' => $ipaddress,
-                    'id_site' => $site->id
-                ]);
-            } else {
-                $listIp = ListIp::where('ip_address', get_ip())->where('id_site', $site->id)->whereDate('created_at', Carbon::today())->first();
-                if (!$listIp) {
-                    ListIp::create([
-                        'ip_address' => get_ip(),
-                        'id_site' => $site->id
-                    ]);
-                }
-            }
-            $page_limit = 10;
+            $page_limit = 12;
             $limit=($get_method['page']-1) * $page_limit;
             if (checkBlockIp()) {
                 $wallpaper = Wallpapers::where('image_extension', '<>', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
@@ -471,8 +420,173 @@ class ApiV2Controller extends Controller
                     ->get()->toArray();
             }
 
-            $row = $this->getWallpaper($wallpaper,$type);
+            $row = $this->getWallpaper($wallpaper,$type,$get_method['android_id']);
 
+            $set['HD_WALLPAPER'] = $row;
+            header('Content-Type: application/json; charset=utf-8');
+            echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+            die();
+        }
+    }
+
+    private function get_category($get_method)
+    {
+        $domain = $_SERVER['SERVER_NAME'];
+        if ($get_method['type'] != '') {
+            $type = trim($get_method['type']);
+            if (checkBlockIp()) {
+                $category = CategoryManage
+                    ::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->has('wallpaper', '>', 0)
+                    ->where('site_name', $domain)
+                    ->where('tbl_category_manages.checked_ip', 1)
+                    ->withCount('wallpaper')
+                    ->get();
+            } else {
+                $category = CategoryManage
+                    ::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->has('wallpaper', '>', 0)
+                    ->where('site_name', $domain)
+                    ->where('tbl_category_manages.checked_ip', 0)
+                    ->withCount('wallpaper')
+                    ->get();
+            }
+            $row = $this->getCategory($category);
+
+            $set['HD_WALLPAPER'] = $row;
+            header('Content-Type: application/json; charset=utf-8');
+            echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+            die();
+        }
+    }
+
+    private function get_wallpaper($get_method)
+    {
+
+        $domain = $_SERVER['SERVER_NAME'];
+        if ($get_method['type'] != '') {
+            $type = trim($get_method['type']);
+            $page_limit = 12;
+            $limit=($get_method['page']-1) * $page_limit;
+            if (checkBlockIp()) {
+                $wallpaper = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
+                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                        ->where('site_name', $domain)
+                        ->where('tbl_category_manages.checked_ip', 1)
+                        ->select('tbl_category_manages.*');
+                    })
+                    ->orderBy('updated_at', 'desc')
+                    ->limit($page_limit)
+                    ->offset($limit)
+                    ->get()->toArray();
+            } else {
+                $wallpaper = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
+                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                        ->where('site_name', $domain)
+                        ->where('tbl_category_manages.checked_ip',0 )
+                        ->select('tbl_category_manages.*');
+                    })
+                    ->where('cate_id',$get_method['cat_id'])
+                    ->orderBy('updated_at', 'desc')
+                    ->limit($page_limit)
+                    ->offset($limit)
+                    ->get()->toArray();
+            }
+            $row = $this->getWallpaper($wallpaper,$type,$get_method['android_id']);
+            $set['HD_WALLPAPER'] = $row;
+            header('Content-Type: application/json; charset=utf-8');
+            echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+            die();
+        }
+    }
+
+    private function get_single_wallpaper($get_method){
+        $wallpaper = Wallpapers::find($get_method['wallpaper_id']);
+        $row = $this->singleWallpaper($wallpaper, $get_method['android_id']);
+        $wallpaper->view_count = $wallpaper->view_count + 1;
+        $wallpaper->save();
+        $set['HD_WALLPAPER'] = $row;
+        header('Content-Type: application/json; charset=utf-8');
+        echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        die();
+
+    }
+
+    private function get_wallpaper_most_viewed($get_method){
+        $domain = $_SERVER['SERVER_NAME'];
+        if ($get_method['type'] != '') {
+            $type = trim($get_method['type']);
+            $page_limit = 12;
+            $limit = ($get_method['page'] - 1) * $page_limit;
+            if (checkBlockIp()) {
+                $wallpaper = Wallpapers::where('image_extension', '<>', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
+                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                        ->where('site_name', $domain)
+                        ->where('tbl_category_manages.checked_ip', 1)
+                        ->select('tbl_category_manages.*');
+                })
+                    ->orderBy('view_count', 'desc')
+                    ->limit($page_limit)
+                    ->offset($limit)
+                    ->get()->toArray();
+            } else {
+                $wallpaper = Wallpapers::where('image_extension', '<>', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
+                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                        ->where('site_name', $domain)
+                        ->where('tbl_category_manages.checked_ip', 0)
+                        ->select('tbl_category_manages.*');
+                })
+                    ->orderBy('view_count', 'desc')
+                    ->limit($page_limit)
+                    ->offset($limit)
+                    ->get()->toArray();
+            }
+            $row = $this->getWallpaper($wallpaper, $type, $get_method['android_id']);
+            $set['HD_WALLPAPER'] = $row;
+            header('Content-Type: application/json; charset=utf-8');
+            echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+            die();
+        }
+    }
+
+    private function get_wallpaper_most_rated($get_method){
+        $domain = $_SERVER['SERVER_NAME'];
+        if ($get_method['type'] != '') {
+            $type = trim($get_method['type']);
+            $page_limit = 12;
+            $limit = ($get_method['page'] - 1) * $page_limit;
+            if (checkBlockIp()) {
+                $wallpaper = Wallpapers::where('image_extension', '<>', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
+                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                        ->where('site_name', $domain)
+                        ->where('tbl_category_manages.checked_ip', 1)
+                        ->select('tbl_category_manages.*');
+                })
+                    ->orderBy('like_count', 'desc')
+                    ->limit($page_limit)
+                    ->offset($limit)
+                    ->get()->toArray();
+            } else {
+                $wallpaper = Wallpapers::where('image_extension', '<>', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
+                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                        ->where('site_name', $domain)
+                        ->where('tbl_category_manages.checked_ip', 0)
+                        ->select('tbl_category_manages.*');
+                })
+                    ->orderBy('like_count', 'desc')
+                    ->limit($page_limit)
+                    ->offset($limit)
+                    ->get()->toArray();
+            }
+            $row = $this->getWallpaper($wallpaper, $type, $get_method['android_id']);
             $set['HD_WALLPAPER'] = $row;
             header('Content-Type: application/json; charset=utf-8');
             echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
@@ -570,63 +684,16 @@ class ApiV2Controller extends Controller
 //        die();
     }
 
-    private function get_single_wallpaper($get_method){
 
 
 
-            if (isset($_SERVER['HTTP_CLIENT_IP']))
-                $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
-            else if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
-                $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            else if (isset($_SERVER['HTTP_X_FORWARDED']))
-                $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
-            else if (isset($_SERVER['HTTP_FORWARDED_FOR']))
-                $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
-            else if (isset($_SERVER['HTTP_FORWARDED']))
-                $ipaddress = $_SERVER['HTTP_FORWARDED'];
-            else if (isset($_SERVER['REMOTE_ADDR']))
-                $ipaddress = $_SERVER['REMOTE_ADDR'];
-            else if (isset($_SERVER["HTTP_CF_CONNECTING_IP"]))
-                $ipaddress = $_SERVER["HTTP_CF_CONNECTING_IP"];
-            else
-                $ipaddress = 'UNKNOWN';
-            $domain = $_SERVER['SERVER_NAME'];
-            $site = SiteManage::where('site_name', $domain)->first();
-            $listIp = ListIp::where('ip_address', $ipaddress)->where('id_site', $site->id)->whereDate('created_at', Carbon::today())->first();
-            if (!$listIp) {
-                ListIp::create([
-                    'ip_address' => $ipaddress,
-                    'id_site' => $site->id
-                ]);
-            } else {
-                $listIp = ListIp::where('ip_address', get_ip())->where('id_site', $site->id)->whereDate('created_at', Carbon::today())->first();
-                if (!$listIp) {
-                    ListIp::create([
-                        'ip_address' => get_ip(),
-                        'id_site' => $site->id
-                    ]);
-                }
-            }
-            $wallpaper = Wallpapers::with('category')->where('id',$get_method['wallpaper_id'])->get()->toArray();
-            $row = $this->singleWallpaper($wallpaper);
-
-            $set['HD_WALLPAPER'] = $row;
-            header('Content-Type: application/json; charset=utf-8');
-            echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
-            die();
-
-
-
-    }
-
+    //==============================================================
 
     function cleanInput($inputText)
     {
         return htmlentities(addslashes(trim($inputText)));
     }
-
-
-    private  function sortWallpaper($data, $sort, $type){
+    private  function sortWallpaper($data, $sort, $type,$android_id){
         $jsonObj = [];
         if ($sort){
             usort($data, function($a, $b) use ($sort) {
@@ -646,7 +713,11 @@ class ApiV2Controller extends Controller
             $data_arr['total_views'] = $item['view_count'];
             $data_arr['total_rate'] = $item['like_count'];
             $data_arr['rate_avg'] = $item['like_count'];
-            $data_arr['is_favorite']= 'false';
+
+
+            $data_arr['is_favorite']= $this->is_favorite($item['id'], 'wallpaper', $android_id);
+
+
             $data_arr['wall_tags'] = 'Abstract,Portrait';
             $data_arr['wall_colors'] = 1;
             $data_arr['cid'] = $item['cate_id'];
@@ -657,12 +728,9 @@ class ApiV2Controller extends Controller
         }
         return $jsonObj;
     }
-
-    private  function getWallpaper($data,$type){
+    private  function getWallpaper($data,$type,$android_id){
         $jsonObj = [];
-
         foreach ($data as $item){
-
             $data_arr['num'] = 120;
             $data_arr['id'] = $item['id'];
             $data_arr['cat_id'] = $item['cate_id'];
@@ -673,7 +741,7 @@ class ApiV2Controller extends Controller
             $data_arr['total_rate'] = $item['like_count'];
             $data_arr['rate_avg'] = $item['like_count'];
 
-            $data_arr['is_favorite']= 'false';
+            $data_arr['is_favorite']= $this->is_favorite($item['id'], 'wallpaper', $android_id);
 
             $data_arr['wall_tags'] = 'Abstract,Portrait';
             $data_arr['wall_colors'] = 1;
@@ -686,34 +754,56 @@ class ApiV2Controller extends Controller
         }
         return $jsonObj;
     }
-
-    private  function singleWallpaper($data){
+    private  function getCategory($data){
         $jsonObj = [];
-
         foreach ($data as $item){
-            $data_arr['id'] = (string)$item['id'];
-            $data_arr['cat_id'] = (string)$item['cate_id'];
-            $data_arr['category_name'] = $item['category']['category_name'];
-            $data_arr['wallpaper_type'] = "Landscape" ;
-            $data_arr['wallpaper_image'] = asset('storage/wallpapers/download/' . $item['origin_image']);
-            $data_arr['wallpaper_image_thumb'] = asset('storage/wallpapers/download/' . $item['origin_image']);
+            $data_arr['cid'] = $item['id'];
+            $data_arr['category_name'] = $item['category_name'];
+            $data_arr['category_image'] = asset('storage/categories/' . $item['image']);
+            $data_arr['category_image_thumb'] = asset('storage/categories/' . $item['image']);
+            $data_arr['category_total_wall'] = $item['wallpaper_count'];
+            array_push($jsonObj,$data_arr);
+        }
+        return $jsonObj;
+    }
+    private  function singleWallpaper($data, $android_id){
+        $jsonObj = [];
+            $data_arr['id'] = (string)$data->id;
+            $data_arr['cat_id'] = (string)$data->cate_id;
+            $data_arr['category_name'] = $data->name;
+//            $data_arr['category_name'] = $item['category']['category_name'];
+            $data_arr['wallpaper_type'] = '' ;
+            $data_arr['wallpaper_image'] = asset('storage/wallpapers/download/' . $data['origin_image']);
+            $data_arr['wallpaper_image_thumb'] = asset('storage/wallpapers/thumbnail/' . $data['thumbnail_image']);
 
 
-            $data_arr['total_views'] = (string)$item['view_count'];
-            $data_arr['total_rate'] = (string)$item['like_count'];
-            $data_arr['rate_avg'] = (string)$item['like_count'];
-            $data_arr['is_favorite']= 'false';
-            $data_arr['total_download'] = (string)$item['like_count'];
+            $data_arr['total_views'] = (string)$data['view_count'];
+            $data_arr['total_rate'] = (string)$data['like_count'];
+            $data_arr['rate_avg'] = (string)$data['like_count'];
+            $data_arr['is_favorite']= $this->is_favorite($data['id'], 'wallpaper', $android_id);;
+            $data_arr['total_download'] = (string)$data['like_count'];
 
             $data_arr['wall_tags'] = 'Abstract,Portrait';
             $data_arr['wall_colors'] = "2";
             $data_arr['resolution'] = "744X1392";
             $data_arr['size'] = "115.01 KB";
-
-
             array_push($jsonObj,$data_arr);
-        }
         return $jsonObj;
+    }
+    function is_favorite($id,$type='wallpaper',$android_id='')
+    {
+        $visitorFavorite = VisitorFavorite::where
+            ([
+                'wallpaper_id' => $id,
+                'visitor_id' => Visitor::where('device_id', $android_id)->value('id')
+            ])
+            ->first();
+
+        if ($visitorFavorite) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
