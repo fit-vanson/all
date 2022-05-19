@@ -676,7 +676,7 @@ class ApiV2Controller extends Controller
         $row['interstital_ad'] = $data['ad_switch'] != 0 ? 'true':'false' ;
         $row['interstital_ad_id'] = $ads['AdMob_Interstitial_Ad_Unit_ID'] ;
 
-        $row['interstital_ad_click'] = '10';
+        $row['interstital_ad_click'] = '12';
         $row['banner_ad'] = $data['ad_switch'] != 0 ? 'true':'false' ;
         $row['banner_ad_id'] = $ads['AdMob_Banner_Ad_Unit_ID'];
 
@@ -692,7 +692,7 @@ class ApiV2Controller extends Controller
         $row['facebook_native_ad_click'] = '12';
         $row['admob_nathive_ad'] = $data['ad_switch'] != 0 ? 'true':'false' ;
         $row['admob_native_ad_id'] = $ads['AdMob_Native_Ad_Unit_ID'];
-        $row['admob_native_ad_click'] = 10;
+        $row['admob_native_ad_click'] = 12;
 
         $row['publisher_id_ios'] = 'pub-8356404931736973';
         $row['interstital_ad_ios'] = 'true';
@@ -770,7 +770,7 @@ class ApiV2Controller extends Controller
             $data_arr['is_favorite']= $this->is_favorite($item['id'], 'wallpaper', $android_id);
 
 
-            $data_arr['wall_tags'] = 'Abstract,Portrait';
+            $data_arr['wall_tags'] = isset($item['category']) ? $item['category']['category_name'] : ''.','. $item->name;
             $data_arr['wall_colors'] = 1;
             $data_arr['cid'] = $item['cate_id'];
             $data_arr['category_name'] = $item['category']['category_name'];
@@ -795,7 +795,7 @@ class ApiV2Controller extends Controller
 
             $data_arr['is_favorite']= $this->is_favorite($item['id'], 'wallpaper', $android_id);
 
-            $data_arr['wall_tags'] = 'Abstract,Portrait';
+            $data_arr['wall_tags'] = isset($item['category']) ? $item['category']['category_name'] : ''.','. $item->name;
             $data_arr['wall_colors'] = 1;
 
             $data_arr['cid'] = $item['cate_id'];
@@ -841,7 +841,7 @@ class ApiV2Controller extends Controller
             $data_arr['is_favorite']= $this->is_favorite($data['id'], 'wallpaper', $android_id);;
             $data_arr['total_download'] = (string)$data['like_count'];
 
-            $data_arr['wall_tags'] = 'Abstract,Portrait';
+            $data_arr['wall_tags'] = $data['category']['category_name'].','.$data->name ;
             $data_arr['wall_colors'] = "2";
             $data_arr['resolution'] = $image ?  $image[0]. ' x '.$image[1]: 'n/a';
             $data_arr['size'] = $size ? $size : 'n/a';
