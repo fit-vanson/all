@@ -254,7 +254,7 @@ class ApiV2Controller extends Controller
     function checkSignSalt($data_info)
     {
 //        $key = "demo_v2";
-        $key = "viaviweb";
+        $key = "zxcv@vietmmo";
         $data_json = $data_info;
         $data_arr = json_decode(urldecode(base64_decode($data_json)), true);
 
@@ -795,7 +795,7 @@ class ApiV2Controller extends Controller
 
             $data_arr['is_favorite']= $this->is_favorite($item['id'], 'wallpaper', $android_id);
 
-            $data_arr['wall_tags'] = isset($item['category']) ? $item['category']['category_name'] : ''.','. $item->name;
+            $data_arr['wall_tags'] = isset($item['category']) ? $item['category']['category_name'] : ''.','. $item['name'];
             $data_arr['wall_colors'] = 1;
 
             $data_arr['cid'] = $item['cate_id'];
