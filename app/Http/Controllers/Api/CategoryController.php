@@ -62,7 +62,7 @@ class CategoryController extends Controller
             $wallpapers = CategoryManage::findOrFail($id)
                 ->wallpaper()
                 ->orderBy('like_count', 'desc')
-                ->paginate(70);
+                ->paginate(10);
             CategoryManage::findOrFail($id)->increment('view_count');
             return WallpaperResource::collection($wallpapers);
         }catch (\Exception $e){

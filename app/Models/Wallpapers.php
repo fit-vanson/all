@@ -26,4 +26,8 @@ class Wallpapers extends Model
         return $this->belongsToMany(Visitor::class,'visitor_favorites');
     }
 
+
+
+
+
 }
