@@ -3,6 +3,7 @@
     <!-- Vendor css files -->
     <link rel="stylesheet" href="{{ asset(('vendors/css/extensions/toastr.min.css')) }}">
 @endsection
+@section('title', 'Wallpaper VietMMO')
 @section('page-style')
     <!-- Page css files -->
     <link rel="stylesheet" href="{{ asset(('css/base/pages/app-ecommerce.css')) }}">
