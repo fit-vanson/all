@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrap();
         Schema::defaultStringLength(191);
-//        URL::forceScheme('https');
+        URL::forceScheme('https');
         Builder::macro('whereLike', function($attributes, $searchTerm) {
             foreach(Arr::wrap($attributes) as $attribute) {
                 $this->orWhere($attribute, 'LIKE', "%{$searchTerm}%");
