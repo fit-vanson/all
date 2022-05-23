@@ -15,13 +15,13 @@
         @foreach($data as $item)
             <div class="card ecommerce-card">
                 <div class="item-img text-center">
-                    <a href="{{asset('storage/wallpapers/thumbnail/'.$item['thumbnail_image'])}}">
+                    <a href="{{asset('storage/wallpapers/download/'.$item['origin_image'])}}">
                         <img src="{{asset('storage/wallpapers/thumbnail/'.$item['thumbnail_image'])}}" class="img-fluid" alt="img-placeholder" />
                     </a>
                 </div>
                 <div class="card-body">
                     <div class="item-name">
-                        <a href="{{asset('storage/wallpapers/thumbnail/'.$item['thumbnail_image'])}}">{{$item['name']}}</a>
+                        <a href="{{asset('storage/wallpapers/download/'.$item['origin_image'])}}">{{$item['name']}}</a>
                     </div>
                     <p class="card-text item-description">
                         {{@$item['category']['category_name']}}
