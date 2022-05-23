@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CategoryResource;
 use App\Models\CategoryManage;
 use App\Models\FeatureImage;
 
@@ -34,6 +35,41 @@ class HomeController extends Controller
             return view('content.hp');
         }
     }
+
+    public function wallpapers(){
+        $domain=$_SERVER['SERVER_NAME'];
+        if(checkBlockIp()){
+            $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
+                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name',$domain)
+                    ->where('tbl_category_manages.checked_ip',1)
+                    ->select('tbl_category_manages.*');
+            })->inRandomOrder()->paginate(12);
+        } else{
+            $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
+                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name',$domain)
+                    ->where('tbl_category_manages.checked_ip',0)
+                    ->select('tbl_category_manages.*');
+            })->inRandomOrder()->paginate(12);
+        }
+        $pageConfigs = [
+            'pageClass' => 'ecommerce-application',
+        ];
+
+        return view('content.show', [
+            'pageConfigs' => $pageConfigs,
+            'data' => $data
+        ]);
+
+        return view('content.show',compact('data'));
+
+    }
+
+
+
     public function policy(){
         $domain=$_SERVER['SERVER_NAME'];
         $site = SiteManage::where('site_name',$domain)->first();

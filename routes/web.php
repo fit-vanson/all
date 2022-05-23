@@ -68,6 +68,7 @@ Route::get('/updateapp', function()
 
 
 Route::get('/', [HomeController::class, 'show'])->name('show');
+Route::get('/wallpapers', [HomeController::class, 'wallpapers'])->name('wallpapers');
 Route::get('/policy', [HomeController::class, 'policy'])->name('policy');
 Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
     Route::get('/', [HomeController::class, 'home'])->middleware(['auth'])->name('home');

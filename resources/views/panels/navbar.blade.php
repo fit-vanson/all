@@ -1,3 +1,4 @@
+@if (Auth::check())
 @if ($configData['mainLayoutType'] === 'horizontal' && isset($configData['mainLayoutType']))
   <nav
     class="header-navbar navbar-expand-lg navbar navbar-fixed align-items-center navbar-shadow navbar-brand-center {{ $configData['navbarColor'] }}"
@@ -121,4 +122,5 @@
   </ul>
 </div>
 </nav>
+  @endif
 <!-- END: Header-->

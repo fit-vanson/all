@@ -1,3 +1,4 @@
+@if (Auth::check())
 @php
 $configData = Helper::applClasses();
 @endphp
@@ -62,4 +63,5 @@ $configData = Helper::applClasses();
     </ul>
   </div>
 </div>
+@endif
 <!-- END: Main Menu-->
