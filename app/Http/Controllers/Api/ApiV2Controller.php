@@ -85,19 +85,11 @@ class ApiV2Controller extends Controller
         }
         else if ($get_method['method_name']=="get_gif_wallpaper_most_viewed")
         {
-            echo "<pre>";
-            print_r($get_method);
-            echo "</pre>";
-            die();
             $this->get_gif_wallpaper_most_viewed($get_method);
 
         }
         else if ($get_method['method_name']=="get_gif_wallpaper_most_rated")
         {
-            echo "<pre>";
-            print_r($get_method);
-            echo "</pre>";
-            die();
             $this->get_gif_wallpaper_most_rated($get_method);
 
         }
@@ -708,6 +700,95 @@ class ApiV2Controller extends Controller
 
     }
 
+    private function get_single_gif($get_method){
+        $wallpaper = Wallpapers::find($get_method['gif_id']);
+        $row = $this->singleWallpaperGif($wallpaper, $get_method['android_id']);
+        $wallpaper->view_count = $wallpaper->view_count + 1;
+        $wallpaper->save();
+        $set['HD_WALLPAPER'] = $row;
+        header('Content-Type: application/json; charset=utf-8');
+        echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        die();
+
+    }
+
+    private function get_gif_wallpaper_most_viewed($get_method){
+        $domain = $_SERVER['SERVER_NAME'];
+
+            $page_limit = 12;
+            $limit = ($get_method['page'] - 1) * $page_limit;
+            if (checkBlockIp()) {
+                $wallpaper = Wallpapers::where('image_extension', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
+                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                        ->where('site_name', $domain)
+                        ->where('tbl_category_manages.checked_ip', 1)
+                        ->select('tbl_category_manages.*');
+                })
+                    ->orderBy('view_count', 'desc')
+                    ->limit($page_limit)
+                    ->offset($limit)
+                    ->get()->toArray();
+            } else {
+                $wallpaper = Wallpapers::where('image_extension', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
+                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                        ->where('site_name', $domain)
+                        ->where('tbl_category_manages.checked_ip', 0)
+                        ->select('tbl_category_manages.*');
+                })
+                    ->orderBy('view_count', 'desc')
+                    ->limit($page_limit)
+                    ->offset($limit)
+                    ->get()->toArray();
+            }
+            $row = $this->getWallpaperGif($wallpaper, $get_method['android_id']);
+            $set['HD_WALLPAPER'] = $row;
+            header('Content-Type: application/json; charset=utf-8');
+            echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+            die();
+
+    }
+
+    private function get_gif_wallpaper_most_rated($get_method){
+        $domain = $_SERVER['SERVER_NAME'];
+
+
+            $page_limit = 12;
+            $limit = ($get_method['page'] - 1) * $page_limit;
+            if (checkBlockIp()) {
+                $wallpaper = Wallpapers::where('image_extension', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
+                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                        ->where('site_name', $domain)
+                        ->where('tbl_category_manages.checked_ip', 1)
+                        ->select('tbl_category_manages.*');
+                })
+                    ->orderBy('like_count', 'desc')
+                    ->limit($page_limit)
+                    ->offset($limit)
+                    ->get()->toArray();
+            } else {
+                $wallpaper = Wallpapers::where('image_extension', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
+                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                        ->where('site_name', $domain)
+                        ->where('tbl_category_manages.checked_ip', 0)
+                        ->select('tbl_category_manages.*');
+                })
+                    ->orderBy('like_count', 'desc')
+                    ->limit($page_limit)
+                    ->offset($limit)
+                    ->get()->toArray();
+            }
+            $row = $this->getWallpaperGif($wallpaper, $get_method['android_id']);
+            $set['HD_WALLPAPER'] = $row;
+            header('Content-Type: application/json; charset=utf-8');
+            echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+            die();
+
+    }
+
     private function get_app_details($get_method){
         $jsonObj= array();
         $domain = $_SERVER['SERVER_NAME'];
@@ -842,6 +923,7 @@ class ApiV2Controller extends Controller
         }
         return $jsonObj;
     }
+
     private  function getWallpaper($data,$type,$android_id){
         $jsonObj = [];
         foreach ($data as $item){
@@ -864,6 +946,21 @@ class ApiV2Controller extends Controller
             $data_arr['category_name'] = isset($item['category']) ? $item['category']['category_name'] : '';
             $data_arr['category_image'] = isset($item['category'])  ? asset('storage/categories/'.$item['category']['image']) : '';
             $data_arr['category_image_thumb'] =  isset($item['category']) ? asset('storage/categories/'.$item['category']['image']): '';
+            array_push($jsonObj,$data_arr);
+        }
+        return $jsonObj;
+    }
+    private  function getWallpaperGif($data,$android_id){
+        $jsonObj = [];
+        foreach ($data as $item){
+            $data_arr['num'] = count($data);
+            $data_arr['id'] = $item['id'];
+            $data_arr['gif_image'] = asset('storage/wallpapers/download/' . $item['origin_image']);
+            $data_arr['gif_tags'] = isset($item['category']) ? $item['category']['category_name'] : ''.','. $item['name'];
+            $data_arr['total_views'] = $item['view_count'];
+            $data_arr['total_rate'] = $item['like_count'];
+            $data_arr['rate_avg'] = $item['like_count'];
+            $data_arr['is_favorite']= $this->is_favorite($item['id'], 'wallpaper', $android_id);
             array_push($jsonObj,$data_arr);
         }
         return $jsonObj;
@@ -908,6 +1005,29 @@ class ApiV2Controller extends Controller
             $data_arr['resolution'] = $image ?  $image[0]. ' x '.$image[1]: 'n/a';
             $data_arr['size'] = $size ? $size : 'n/a';
             array_push($jsonObj,$data_arr);
+        return $jsonObj;
+    }
+    private  function singleWallpaperGif($data, $android_id){
+        $path = storage_path('app/public/wallpapers/download/'.$data->origin_image);
+        $image = $size = '';
+        if (file_exists($path)){
+            $image = getimagesize($path);
+            $size = $this->filesize_formatted($path);
+        }
+        $jsonObj = [];
+
+        $data_arr['id'] = (string)$data->id;
+        $data_arr['gif_image'] = asset('storage/wallpapers/download/' . $data['origin_image']);
+        $data_arr['gif_tags'] = isset($data['category']) ? $data['category']['category_name'] : ''.','. $data['name'];
+        $data_arr['total_views'] = $data['view_count'];
+        $data_arr['total_rate'] = $data['like_count'];
+        $data_arr['rate_avg'] = $data['like_count'];
+        $data_arr['is_favorite']= $this->is_favorite($data['id'], 'wallpaper', $android_id);
+        $data_arr['total_download'] = $data['total_download'];
+        $data_arr['resolution'] = $image ?  $image[0]. ' x '.$image[1]: 'n/a';
+        $data_arr['size'] = $size ? $size : 'n/a';
+
+        array_push($jsonObj,$data_arr);
         return $jsonObj;
     }
     private  function getlatestgif($data,$android_id){
