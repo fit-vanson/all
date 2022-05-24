@@ -526,20 +526,45 @@ class ApiV2Controller extends Controller
     }
 
     private function get_favorite_post($get_method){
+        $fav_type=$get_method['fav_type'];
+        dd($fav_type);
 
         $page_limit = 12;
         $limit=($get_method['page']-1) * $page_limit;
         $type = trim($get_method['type']);
         $visitor = Visitor::where('device_id', $get_method['android_id'])->first();
 
-        $wallpaper = Visitor::findOrFail($visitor->id)
-//            ->with('wallpapers')
-            ->wallpapers()
-            ->limit($page_limit)
-            ->offset($limit)
-            ->get()
-            ->toArray();
-        $row = $this->getWallpaper($wallpaper,$type,$get_method['android_id']);
+
+        switch ($fav_type) {
+            case 'wallpaper':
+            {
+                $wallpaper = Visitor::findOrFail($visitor->id)
+                ->where('image_extension','<>', 'image/gif')
+                ->wallpapers()
+                ->limit($page_limit)
+                ->offset($limit)
+                ->get()
+                ->toArray();
+                $row = $this->getWallpaper($wallpaper,$type,$get_method['android_id']);
+            }
+            break;
+            case 'gif':
+            {
+                $wallpaper = Visitor::findOrFail($visitor->id)
+                    ->where('image_extension', 'image/gif')
+                    ->wallpapers()
+                    ->limit($page_limit)
+                    ->offset($limit)
+                    ->get()
+                    ->toArray();
+                $row = $this->getWallpaper($wallpaper,$type,$get_method['android_id']);
+            }
+            default:
+                {
+                }
+                break;
+        }
+
         $set['HD_WALLPAPER'] = $row;
         header('Content-Type: application/json; charset=utf-8');
         echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
