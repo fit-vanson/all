@@ -91,18 +91,10 @@ class ApiV2Controller extends Controller
         }
         else if ($get_method['method_name']=="search_wallpaper")
         {
-            echo "<pre>";
-            print_r($get_method);
-            echo "</pre>";
-            die();
             $this->search_wallpaper($get_method);
         }
         else if ($get_method['method_name']=="search_gif")
         {
-            echo "<pre>";
-            print_r($get_method);
-            echo "</pre>";
-            die();
             $this->search_gif($get_method);
 
         }
@@ -769,6 +761,88 @@ class ApiV2Controller extends Controller
         echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         die();
 
+    }
+    private function search_wallpaper($get_method){
+        $domain = $_SERVER['SERVER_NAME'];
+        if ($get_method['type'] != '') {
+            $type = trim($get_method['type']);
+            $page_limit = 12;
+//            $limit = ($get_method['page'] - 1) * $page_limit;
+            if (checkBlockIp()) {
+                $wallpaper = Wallpapers::where('image_extension', '<>', 'image/gif')
+                    ->with('category')
+                    ->where('name', 'like', '%' . $get_method['search_text'] . '%')
+                    ->whereHas('category', function ($q) use ($domain) {
+                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                        ->where('site_name', $domain)
+                        ->where('tbl_category_manages.checked_ip', 1)
+                        ->select('tbl_category_manages.*');
+                    })
+                    ->orderBy('like_count', 'desc')
+//                    ->limit($page_limit)
+//                    ->offset($limit)
+                    ->get()->toArray();
+            } else {
+                $wallpaper = Wallpapers::where('image_extension', '<>', 'image/gif')
+                    ->with('category')
+                    ->where('name', 'like', '%' . $get_method['search_text'] . '%')
+                    ->whereHas('category', function ($q) use ($domain) {
+                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                        ->where('site_name', $domain)
+                        ->where('tbl_category_manages.checked_ip', 0)
+                        ->select('tbl_category_manages.*');
+                    })
+                    ->orderBy('like_count', 'desc')
+//                    ->limit($page_limit)
+//                    ->offset($limit)
+                    ->get()->toArray();
+            }
+            $row = $this->getWallpaper($wallpaper, $type, $get_method['android_id']);
+            $set['HD_WALLPAPER'] = $row;
+            header('Content-Type: application/json; charset=utf-8');
+            echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+            die();
+        }
+
+    }
+
+    private function search_gif($get_method){
+
+        $domain = $_SERVER['SERVER_NAME'];
+        if (checkBlockIp()) {
+            $wallpaper = Wallpapers::where('image_extension', 'image/gif')
+                ->with('category')
+                ->where('name', 'like', '%' . $get_method['gif_search_text'] . '%')
+                ->whereHas('category', function ($q) use ($domain) {
+                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name', $domain)
+                    ->where('tbl_category_manages.checked_ip', 1)
+                    ->select('tbl_category_manages.*');
+                })
+                ->orderBy('like_count', 'desc')
+                ->get()->toArray();
+        } else {
+            $wallpaper = Wallpapers::where('image_extension', 'image/gif')
+                ->with('category')
+                ->where('name', 'like', '%' . $get_method['gif_search_text'] . '%')
+                ->whereHas('category', function ($q) use ($domain) {
+                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name', $domain)
+                    ->where('tbl_category_manages.checked_ip', 0)
+                    ->select('tbl_category_manages.*');
+                })
+                ->orderBy('like_count', 'desc')
+                ->get()->toArray();
+        }
+        $row = $this->getWallpaperGif($wallpaper, $get_method['android_id']);
+        $set['HD_WALLPAPER'] = $row;
+        header('Content-Type: application/json; charset=utf-8');
+        echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        die();
     }
 
     private function get_gif_wallpaper_most_viewed($get_method){
