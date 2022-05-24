@@ -108,7 +108,7 @@ class WallpaperController extends Controller
                     ->select('tbl_category_manages.*')
                     ->has('wallpaper')
                     ->with(['wallpaper'=>function ($q) {
-                        $q->latest();
+                        $q->where('image_extension', '<>', 'image/gif')->latest();
                     }])
                     ->inRandomOrder()
                     ->get();
@@ -121,7 +121,7 @@ class WallpaperController extends Controller
                     ->select('tbl_category_manages.*')
                     ->has('wallpaper')
                     ->with(['wallpaper'=>function ($q) {
-                        $q->latest();
+                        $q->where('image_extension', '<>', 'image/gif')->latest();
                     }])
                     ->orderBy('order', 'desc')->get();
                 $getResource= FeatureWallpaperResource::collection($data);
@@ -134,12 +134,12 @@ class WallpaperController extends Controller
                     ->select('tbl_category_manages.*')
                     ->has('wallpaper')
                     ->with(['wallpaper'=>function ($q) {
-                        $q->latest();
+                        $q->where('image_extension', '<>', 'image/gif')->latest();
                     }])
                     ->orderBy('view_count', 'desc')->get();
                 $getResource= FeatureWallpaperResource::collection($data);
             }elseif($load_feature == 3){
-                $data = Wallpapers::where('feature', 1)->whereHas('category', function ($q) use ($domain) {
+                $data = Wallpapers::where('feature', 1)->where('image_extension', '<>', 'image/gif')->whereHas('category', function ($q) use ($domain) {
                     $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                         ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                         ->where('site_name',$domain)
@@ -157,7 +157,7 @@ class WallpaperController extends Controller
                     ->select('tbl_category_manages.*')
                     ->has('wallpaper')
                     ->with(['wallpaper'=>function ($q) {
-                        $q->latest();
+                        $q->where('image_extension', '<>', 'image/gif')->latest();
                     }])
                     ->inRandomOrder()->get();
                 $getResource= FeatureWallpaperResource::collection($data);
@@ -169,7 +169,7 @@ class WallpaperController extends Controller
                     ->select('tbl_category_manages.*')
                     ->has('wallpaper')
                     ->with(['wallpaper'=>function ($q) {
-                        $q->latest();
+                        $q->where('image_extension', '<>', 'image/gif')->latest();
                     }])
                     ->orderBy('order', 'desc')->get();
                 $getResource= FeatureWallpaperResource::collection($data);
@@ -181,12 +181,12 @@ class WallpaperController extends Controller
                     ->select('tbl_category_manages.*')
                     ->has('wallpaper')
                     ->with(['wallpaper'=>function ($q) {
-                        $q->latest();
+                        $q->where('image_extension', '<>', 'image/gif')->latest();
                     }])
                     ->orderBy('view_count', 'desc')->get();
                 $getResource= FeatureWallpaperResource::collection($data);
             }elseif($load_feature ==3){
-                $data = Wallpapers::where('feature', 0)->whereHas('category', function ($q) use ($domain) {
+                $data = Wallpapers::where('feature', 0)->where('image_extension', '<>', 'image/gif')->whereHas('category', function ($q) use ($domain) {
                     $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                         ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                         ->where('site_name',$domain)
@@ -206,7 +206,7 @@ class WallpaperController extends Controller
     {
         $domain=$_SERVER['SERVER_NAME'];
         if (checkBlockIp()){
-            $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
+            $data = Wallpapers::where('image_extension', '<>', 'image/gif')->whereHas('category', function ($q) use ($domain) {
                 $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                     ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                     ->where('site_name',$domain)
@@ -214,7 +214,7 @@ class WallpaperController extends Controller
                     ->select('tbl_category_manages.*');
             })->orderBy('like_count','desc')->paginate(10);
         }else{
-            $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
+            $data = Wallpapers::where('image_extension', '<>', 'image/gif')->whereHas('category', function ($q) use ($domain) {
                 $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                     ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                     ->where('site_name',$domain)
@@ -228,7 +228,7 @@ class WallpaperController extends Controller
     {
         $domain=$_SERVER['SERVER_NAME'];
         if (checkBlockIp()){
-            $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
+            $data = Wallpapers::where('image_extension', '<>', 'image/gif')->whereHas('category', function ($q) use ($domain) {
                 $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                     ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                     ->where('site_name',$domain)
@@ -237,38 +237,16 @@ class WallpaperController extends Controller
             })->orderBy('created_at','desc')->paginate(10);
 
 
-//            $data = Wallpapers::orderBy('created_at','desc')
-//                ->where('like_count','>=',1)
-//                ->orderBy('like_count','desc')
-//                ->whereHas('category', function ($q) use ($domain) {
-//                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
-//                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
-//                        ->where('site_name',$domain)
-//                        ->where('checked_ip','=', 1);
-//                })
-//                ->paginate(70);
 
 
-//            $data = Wallpapers::orderBy('created_at','desc')
-//                ->whereHas('category', function ($q)
-//                {
-//                    $q->where('checked_ip','=', 1);
-//                })
-//                ->paginate(70);
         }else {
-            $data = Wallpapers::whereHas('category', function ($q) use ($domain) {
+            $data = Wallpapers::where('image_extension', '<>', 'image/gif')->whereHas('category', function ($q) use ($domain) {
                 $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                     ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                     ->where('site_name',$domain)
                     ->where('tbl_category_manages.checked_ip',0)
                     ->select('tbl_category_manages.*');
             })->orderBy('created_at','desc')->paginate(10);
-//            $data = Wallpapers::orderBy('created_at','desc')
-//                ->whereHas('category', function ($q)
-//                {
-//                    $q->where('checked_ip','=', 0);
-//                })
-//                ->paginate(70);
         }
         return WallpaperResource::collection($data);
     }
