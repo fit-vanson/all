@@ -535,20 +535,20 @@ class ApiV2Controller extends Controller
             case 'wallpaper':
             {
                 $wallpaper = Visitor::findOrFail($visitor->id)
-                ->where('image_extension','<>', 'image/gif')
-                ->wallpapers()
-                ->limit($page_limit)
-                ->offset($limit)
-                ->get()
-                ->toArray();
+                    ->wallpapers()
+                    ->where('image_extension','<>', 'image/gif')
+                    ->limit($page_limit)
+                    ->offset($limit)
+                    ->get()
+                    ->toArray();
                 $row = $this->getWallpaper($wallpaper,$type,$get_method['android_id']);
             }
             break;
             case 'gif':
             {
                 $wallpaper = Visitor::findOrFail($visitor->id)
-                    ->where('image_extension', 'image/gif')
                     ->wallpapers()
+                    ->where('image_extension', 'image/gif')
                     ->limit($page_limit)
                     ->offset($limit)
                     ->get()
