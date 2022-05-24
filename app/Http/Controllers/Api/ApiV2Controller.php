@@ -55,10 +55,6 @@ class ApiV2Controller extends Controller
         }
         else if ($get_method['method_name']=="get_latest_gif")
         {
-            echo "<pre>";
-            print_r($get_method);
-            echo "</pre>";
-            die();
             $this->get_latest_gif($get_method);
         }
         else if($get_method['method_name']=="get_check_favorite")
@@ -646,6 +642,44 @@ class ApiV2Controller extends Controller
         }
     }
 
+    private function get_latest_gif($get_method){
+        $domain = $_SERVER['SERVER_NAME'];
+
+            $page_limit = 12;
+            $limit = ($get_method['page'] - 1) * $page_limit;
+            if (checkBlockIp()) {
+                $wallpaper = Wallpapers::where('image_extension', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
+                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                        ->where('site_name', $domain)
+                        ->where('tbl_category_manages.checked_ip', 1)
+                        ->select('tbl_category_manages.*');
+                })
+                    ->orderBy('like_count', 'desc')
+                    ->limit($page_limit)
+                    ->offset($limit)
+                    ->get()->toArray();
+            } else {
+                $wallpaper = Wallpapers::where('image_extension', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
+                    $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                        ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                        ->where('site_name', $domain)
+                        ->where('tbl_category_manages.checked_ip', 0)
+                        ->select('tbl_category_manages.*');
+                })
+                    ->orderBy('like_count', 'desc')
+                    ->limit($page_limit)
+                    ->offset($limit)
+                    ->get()->toArray();
+            }
+            $row = $this->getlatestgif($wallpaper, $get_method['android_id']);
+            $set['HD_WALLPAPER'] = $row;
+            header('Content-Type: application/json; charset=utf-8');
+            echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+            die();
+
+    }
+
     private function get_app_details($get_method){
         $jsonObj= array();
         $domain = $_SERVER['SERVER_NAME'];
@@ -783,7 +817,7 @@ class ApiV2Controller extends Controller
     private  function getWallpaper($data,$type,$android_id){
         $jsonObj = [];
         foreach ($data as $item){
-            $data_arr['num'] = 120;
+            $data_arr['num'] = count($data);
             $data_arr['id'] = $item['id'];
             $data_arr['cat_id'] = $item['cate_id'];
             $data_arr['wallpaper_type'] = $type ;
@@ -848,6 +882,22 @@ class ApiV2Controller extends Controller
             array_push($jsonObj,$data_arr);
         return $jsonObj;
     }
+    private  function getlatestgif($data,$android_id){
+        $jsonObj = [];
+        foreach ($data as $item){
+            $data_arr['num'] = count($data);
+            $data_arr['id'] = $item['id'];
+            $data_arr['gif_image'] = asset('storage/wallpapers/download/' . $item['origin_image']);
+            $data_arr['gif_tags'] = isset($item['category']) ? $item['category']['category_name'] : ''.','. $item['name'];
+            $data_arr['total_views'] = $item['view_count'];
+            $data_arr['total_rate'] = $item['like_count'];
+            $data_arr['rate_avg'] = $item['like_count'];
+            $data_arr['is_favorite']= $this->is_favorite($item['id'], 'wallpaper', $android_id);
+          array_push($jsonObj,$data_arr);
+        }
+        return $jsonObj;
+    }
+
     function is_favorite($id,$type='wallpaper',$android_id='')
     {
         $visitorFavorite = VisitorFavorite::where
