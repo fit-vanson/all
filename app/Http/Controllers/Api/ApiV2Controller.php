@@ -463,7 +463,7 @@ class ApiV2Controller extends Controller
             $page_limit = 12;
             $limit=($get_method['page']-1) * $page_limit;
             if (checkBlockIp()) {
-                $wallpaper = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
+                $wallpaper = Wallpapers::with('category')->where('image_extension', '<>', 'image/gif')->whereHas('category', function ($q) use ($domain) {
                     $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                         ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                         ->where('site_name', $domain)
@@ -475,7 +475,7 @@ class ApiV2Controller extends Controller
                     ->offset($limit)
                     ->get()->toArray();
             } else {
-                $wallpaper = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
+                $wallpaper = Wallpapers::with('category')->where('image_extension', '<>', 'image/gif')->whereHas('category', function ($q) use ($domain) {
                     $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                         ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                         ->where('site_name', $domain)
@@ -733,7 +733,7 @@ class ApiV2Controller extends Controller
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo $val= str_replace('\\/', '/', json_encode($set,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
-//        die();
+        die();
     }
 
 
