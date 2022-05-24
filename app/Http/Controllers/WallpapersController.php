@@ -153,24 +153,25 @@ class WallpapersController extends Controller
             if (!file_exists($path_thumbnail)) {
                 mkdir($path_thumbnail, 0777, true);
             }
-
             if (!file_exists($path_origin)) {
                 mkdir($path_origin, 0777, true);
             }
 
             $img = Image::make($file);
-            $origin_image = $img->save($path_origin.$fileNameToStore);
+            if($img->mime() == "image/gif"){
+                copy($file->getRealPath(), $path_origin.$fileNameToStore);
+                copy($file->getRealPath(), $path_detail.$fileNameToStore);
+                copy($file->getRealPath(), $path_thumbnail.$fileNameToStore);
+            }else{
+                $origin_image = $img->save($path_origin.$fileNameToStore);
+                $detail_image = $img->resize(720, 1280,function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($path_detail.$fileNameToStore);
 
-            $detail_image = $img->resize(720, 1280,function ($constraint) {
-                $constraint->aspectRatio();
-            })->save($path_detail.$fileNameToStore);
-
-            $thumbnail_image = $img->resize(360, 640,function ($constraint) {
-                $constraint->aspectRatio();
-            })->save($path_thumbnail.$fileNameToStore);
-
-
-
+                $thumbnail_image = $img->resize(360, 640,function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($path_thumbnail.$fileNameToStore);
+            }
             $path_origin =  $monthYear.'/'.$fileNameToStore;
             $path_detail =  $monthYear.'/'.$fileNameToStore;
             $path_thumbnail =  $monthYear.'/'.$fileNameToStore;
