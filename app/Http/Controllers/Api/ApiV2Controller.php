@@ -527,14 +527,10 @@ class ApiV2Controller extends Controller
 
     private function get_favorite_post($get_method){
         $fav_type=$get_method['fav_type'];
-        dd($fav_type);
-
         $page_limit = 12;
         $limit=($get_method['page']-1) * $page_limit;
         $type = trim($get_method['type']);
         $visitor = Visitor::where('device_id', $get_method['android_id'])->first();
-
-
         switch ($fav_type) {
             case 'wallpaper':
             {
