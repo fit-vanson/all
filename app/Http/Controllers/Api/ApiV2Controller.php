@@ -553,7 +553,7 @@ class ApiV2Controller extends Controller
                     ->offset($limit)
                     ->get()
                     ->toArray();
-                $row = $this->getWallpaper($wallpaper,$type,$get_method['android_id']);
+                $row = $this->getWallpaperGif($wallpaper,$get_method['android_id']);
             }
             default:
                 {
