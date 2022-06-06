@@ -69,7 +69,7 @@ class WallpapersController extends Controller
 //            ->leftJoin('tbl_category_has_wallpaper', 'tbl_category_has_wallpaper.wallpaper_id', '=', 'wallpapers.id')
             ->leftJoin('tbl_category_manages', 'tbl_category_manages.id', '=', 'wallpapers.cate_id')
             ->where('name', 'like', '%' . $searchValue . '%')
-            ->orWhere('tbl_category_manages.category_name', 'like', '%' . $searchValue . '%')
+            ->orWhere('tbl_category_manages.category_name',  $searchValue )
             ->count();
 
 
@@ -80,7 +80,7 @@ class WallpapersController extends Controller
 //            ->leftJoin('tbl_category_has_wallpaper', 'tbl_category_has_wallpaper.wallpaper_id', '=', 'wallpapers.id')
             ->leftJoin('tbl_category_manages', 'tbl_category_manages.id', '=', 'wallpapers.cate_id')
             ->where('name', 'like', '%' . $searchValue . '%')
-            ->orWhere('tbl_category_manages.category_name', 'like', '%' . $searchValue . '%')
+            ->orWhere('tbl_category_manages.category_name',  $searchValue )
             ->select('wallpapers.*','tbl_category_manages.category_name')
             ->skip($start)
             ->take($rowperpage)
