@@ -214,11 +214,7 @@ class WallpaperController extends Controller
                     ->where('site_name',$domain)
                     ->where('tbl_category_manages.checked_ip',1)
                     ->select('tbl_category_manages.*');
-            })->orderBy('like_count','desc')
-                ->limit($page_limit)
-                ->offset($limit)
-                ->get()->toArray();
-//                ->paginate(10);
+            })->orderBy('like_count','desc')->paginate(10);
         }else{
             $data = Wallpapers::where('image_extension', '<>', 'image/gif')->whereHas('category', function ($q) use ($domain) {
                 $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
@@ -226,12 +222,7 @@ class WallpaperController extends Controller
                     ->where('site_name',$domain)
                     ->where('tbl_category_manages.checked_ip',0)
                     ->select('tbl_category_manages.*');
-            })->orderBy('like_count','desc')
-
-                ->limit($page_limit)
-                ->offset($limit)
-                ->get()->toArray();
-//                ->paginate(10);
+            })->orderBy('like_count','desc')->paginate(10);
         }
         return WallpaperResource::collection($data);
     }
