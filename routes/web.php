@@ -68,6 +68,8 @@ Route::get('/updateapp', function()
 
 
 Route::get('/', [HomeController::class, 'show'])->name('show');
+Route::get('/directlink', [HomeController::class, 'directlink'])->name('directlink');
+
 Route::get('/wallpapers', [HomeController::class, 'wallpapers'])->name('wallpapers');
 Route::get('/policy', [HomeController::class, 'policy'])->name('policy');
 Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
@@ -122,6 +124,7 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
         Route::get('/{id}/delete', [ApiKeyController::class, 'delete'])->name('api_keys.delete');
         Route::get('/{id}/change-status', [ApiKeyController::class, 'changeStatus'])->name('api_keys.changeStatus');
     });
+
     Route::group([ "prefix" => "block-ips", "middleware" => ["auth"]], function() {
         Route::get('/', [BlockIPController::class, 'index'])->name('block_ips.index');
         Route::post('/getIndex', [BlockIPController::class, 'getIndex'])->name('block_ips.getIndex');
@@ -178,6 +181,9 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
         Route::post('view/{id}/list-ip/get', [SiteController::class, 'getSite_listIP'])->name('site.listIP');
         Route::get('view/{id}/list-ip/{id_ip}/delete', [SiteController::class, 'site_deleteIP'])->name('site.deleteIP');
         Route::post('view/{id}/list-ip/deleteMorethan', [SiteController::class, 'deleteMorethan'])->name('site.deleteMorethan');
+
+        Route::get('view/{id}/directlink', [SiteController::class, 'site_Directlink'])->name('site.directlink');
+        Route::post('view/{id}/directlink/update', [SiteController::class, 'site_updateDirectlink'])->name('site.site_updateDirectlink');
     });
 });
 

@@ -34,53 +34,7 @@
             <!-- User Content -->
             <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
                 <!-- User Pills -->
-                <ul class="nav nav-pills mb-2">
-                    <li class="nav-item">
-                        <a class="nav-link " href="{{asset('admin/site/view/'.$site->site_name)}}">
-                            <i data-feather="folder" class="font-medium-3 me-50"></i>
-                            <span class="fw-bold">Categories</span></a
-                        >
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{asset('admin/site/view/'.$site->site_name.'/block-ips')}}">
-                            <i data-feather="lock" class="font-medium-3 me-50"></i>
-                            <span class="fw-bold">Block Ips</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{asset('admin/site/view/'.$site->site_name.'/home')}}">
-                            <i data-feather="home" class="font-medium-3 me-50"></i>
-                            <span class="fw-bold">Web Home</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{asset('admin/site/view/'.$site->site_name.'/policy')}}">
-                            <i data-feather="file-text" class="font-medium-3 me-50"></i><span class="fw-bold">Policy</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{{asset('admin/site/view/'.$site->site_name.'/feature-images')}}">
-                            <i data-feather="image" class="font-medium-3 me-50"></i><span class="fw-bold">Feature Images</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link"  href="{{asset('admin/site/view/'.$site->site_name.'/load-feature')}}">
-                            <i data-feather="loader" class="font-medium-3 me-50"></i>
-                            <span class="fw-bold">Load Feature</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link"  href="{{asset('admin/site/view/'.$site->site_name.'/list-ip')}}">
-                            <i data-feather="list" class="font-medium-3 me-50"></i>
-                            <span class="fw-bold">List IP</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{asset('admin/site/view/'.$site->site_name.'/ads')}}">
-                            <i data-feather="file-text" class="font-medium-3 me-50"></i><span class="fw-bold">Ads</span>
-                        </a>
-                    </li>
-                </ul>
+                @include('content.site.url')
                 <!--/ User Pills -->
 
                 <!-- Categories table -->

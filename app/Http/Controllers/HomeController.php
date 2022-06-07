@@ -36,6 +36,25 @@ class HomeController extends Controller
         }
     }
 
+
+    public function directlink(){
+        $domain=$_SERVER['SERVER_NAME'];
+        $site = SiteManage::where('site_name',$domain)->first();
+        if($site){
+            $directlink = $site->directlink;
+            if ($directlink){
+                $site->view_page = $site->view_page+1;
+                $site->save();
+                return redirect($directlink);
+            }else{
+                return redirect('/');
+            }
+        }
+        else{
+            return view('content.hp');
+        }
+    }
+
     public function wallpapers(){
         $domain=$_SERVER['SERVER_NAME'];
         if(checkBlockIp()){

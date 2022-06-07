@@ -1,6 +1,6 @@
 @extends('layouts/contentLayoutMaster')
 
-@section('title', 'Site View - Home')
+@section('title', 'Site View - Directlink ')
 
 @section('vendor-style')
   {{-- Page Css files --}}
@@ -42,33 +42,12 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <form class="row" id="HomeSiteForm">
+                        <form class="row" id="directlinkSiteForm">
                             <input type="hidden" name="id" id="id" value="{{$site->id}}">
                             <input  id="header_image" type="file" name="header_image" class="form-control" hidden accept="image/*" onchange="changeImg(this)">
-                            <img id="logo_header_image" class="thumbnail" style="width: 200px" src="@if($site->header_image) {{asset('storage/sites/'.$site->header_image)}} @else {{asset('images/avatars/1.png')}} @endif">
                             <div class="mb-1">
-                                <label class="form-label" for="basic-icon-default-uname">Header Title</label>
-                                <input type="text" id="header_title" class="form-control" placeholder="Header Title" value="{{$site->header_title}}" name="header_title">
-                            </div>
-                            <div class="mb-1">
-                                <label class="form-label">Header Content</label>
-                                <textarea class="form-control" id="header_content" name="header_content" rows="8" placeholder="Header Content">{{$site->header_content}}</textarea>
-                            </div>
-                            <div class="mb-1">
-                                <label class="form-label" for="basic-icon-default-uname">Body Title</label>
-                                <input type="text" id="body_title" class="form-control" placeholder="Body Title" value="{{$site->body_title}}" name="body_title">
-                            </div>
-                            <div class="mb-1">
-                                <label class="form-label">Body Content</label>
-                                <textarea class="form-control" id="body_content" name="body_content" rows="8" placeholder="Body Content">{{$site->body_content}}</textarea>
-                            </div>
-                            <div class="mb-1">
-                                <label class="form-label" for="basic-icon-default-uname">Footer Title</label>
-                                <input type="text" id="footer_title" class="form-control" placeholder="Footer Title" value="{{$site->footer_title}}" name="footer_title">
-                            </div>
-                            <div class="mb-1">
-                                <label class="form-label">Footer Content</label>
-                                <textarea class="form-control" id="footer_content" name="footer_content" rows="8" placeholder="Footer Content">{{$site->footer_content}}</textarea>
+                                <label class="form-label" for="basic-icon-default-uname">Direct Link</label>
+                                <input type="text" id="directlink" class="form-control" placeholder="Header Title" value="{{$site->directlink}}" name="directlink">
                             </div>
                             <div class="mb-1">
                                 <button type="submit" class="btn btn-success" id="submitButton" value="update">Update</button>
@@ -98,20 +77,7 @@
 @section('page-script')
   {{-- Page js files --}}
   <script>
-      $(document).ready(function() {
-          $('#logo_header_image').click(function(){
-              $('#header_image').click();
-          });
-      });
-      function changeImg(input){
-          if(input.files && input.files[0]){
-              var reader = new FileReader();
-              reader.onload = function(e){
-                  $('#logo_header_image').attr('src',e.target.result);
-              }
-              reader.readAsDataURL(input.files[0]);
-          }
-      }
+
 
       $(function () {
           $.ajaxSetup({
@@ -121,35 +87,21 @@
           });
           ('use strict');
           var url = window.location.pathname;
-          var  HomeSiteForm = $('#HomeSiteForm');
-          if (HomeSiteForm.length) {
-              HomeSiteForm.validate({
+          var  directlinkSiteForm = $('#directlinkSiteForm');
+          if (directlinkSiteForm.length) {
+              directlinkSiteForm.validate({
                   errorClass: 'error',
                   rules: {
-                      'header_title': {
-                          required: true
-                      },
-                      'header_content': {
-                          required: true
-                      },
-                      'body_title': {
-                          required: true
-                      },
-                      'body_content': {
-                          required: true
-                      },
-                      'footer_title': {
-                          required: true
-                      },
-                      'footer_content': {
+                      'directlink': {
                           required: true
                       }
+
                   }
               });
-              HomeSiteForm.on('submit', function (e) {
-                  var isValid = HomeSiteForm.valid();
+              directlinkSiteForm.on('submit', function (e) {
+                  var isValid = directlinkSiteForm.valid();
                   e.preventDefault();
-                  var formData = new FormData($("#HomeSiteForm")[0]);
+                  var formData = new FormData($("#directlinkSiteForm")[0]);
                   if(isValid){
                       if($('#submitButton').val() == 'update'){
                           $.ajax({

@@ -813,4 +813,36 @@ class SiteController extends Controller
         }
     }
 
+
+    //==========================================================
+
+    public function site_Directlink($id){
+        $site = SiteManage::where('site_name',$id)->first();
+        if($site){
+            $pageConfigs = [
+                'pageHeader' => false,
+            ];
+            $users = $this->user->all();
+            $roles = $this->role->all();
+            return view('content.site.site-view-directlink', [
+                'pageConfigs' => $pageConfigs,
+                'users'=>$users,
+                'roles'=>$roles,
+                'site' =>$site,
+
+            ]);
+        }else{
+            return 'Site không tồn tại';
+        }
+    }
+    public function site_updateDirectlink (Request $request){
+        $id = $request->id;
+        $site = SiteManage::find($id);
+        $site->directlink = $request->directlink;
+        $site->save();
+        return response()->json(['success'=>'Cập nhật thành công']);
+    }
+
+    //===========================================================
+
 }
