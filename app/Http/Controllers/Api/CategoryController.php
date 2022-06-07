@@ -40,13 +40,18 @@ class CategoryController extends Controller
     public function getWallpapers($id)
     {
         $domain=$_SERVER['SERVER_NAME'];
+        $page_limit = 12;
+        $limit=($_GET['page']-1) * $page_limit;
         try{
             $wallpapers = CategoryManage::findOrFail($id)
                 ->wallpaper()
                 ->where('image_extension', '<>', 'image/gif')
                 ->orderBy('like_count', 'desc')
-//                ->get();
-                ->paginate(10);
+                ->skip($limit)
+                ->take($page_limit)
+                ->get();
+
+//                ->paginate(10);
             CategoryManage::findOrFail($id)->increment('view_count');
             return WallpaperResource::collection($wallpapers);
         }catch (\Exception $e){
