@@ -218,7 +218,6 @@ class ApiV2Controller extends Controller
         }
     }
 
-
     function checkSignSalt($data_info)
     {
 //        $key = "demo_v2";
@@ -762,6 +761,7 @@ class ApiV2Controller extends Controller
         die();
 
     }
+
     private function search_wallpaper($get_method){
         $domain = $_SERVER['SERVER_NAME'];
         if ($get_method['type'] != '') {
