@@ -16,10 +16,15 @@
                       <label class="form-label" for="basic-icon-default-uname">Ip Address</label>
                       <input type="text" id="ip_address" class="form-control" placeholder="Ip Address" name="ip_address">
                   </div>
-
-                  <button type="submit" class="btn btn-primary" id="submitButton" value="create">Create</button>
-                  <button type="reset" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Cancel</button>
-              </div>
+                  <div class=" mb-1 form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" id="status" name="status" checked="">
+                      <label class="form-check-label" for="status">Kích hoạt</label>
+                  </div>
+                  <div>
+                      <button type="submit" class="btn btn-primary" id="submitButton" value="create">Create</button>
+                      <button type="reset" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Cancel</button>
+                  </div>
+                 </div>
           </form>
       </div>
     </div>

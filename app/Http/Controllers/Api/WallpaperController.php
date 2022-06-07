@@ -146,7 +146,7 @@ class WallpaperController extends Controller
                         ->where('tbl_category_manages.checked_ip',1)
                         ->select('tbl_category_manages.*');
                 })->inRandomOrder()
-//                    ->take(12)
+                    ->take(12)
                     ->get();
                 $getResource = WallpaperResource::collection($data);
             }
@@ -195,7 +195,7 @@ class WallpaperController extends Controller
                         ->where('tbl_category_manages.checked_ip',0)
                         ->select('tbl_category_manages.*');
                 })->inRandomOrder()
-//                    ->take(12)
+                    ->take(12)
                     ->get();
                 $getResource = WallpaperResource::collection($data);
             }
@@ -219,8 +219,8 @@ class WallpaperController extends Controller
                     ->where('tbl_category_manages.checked_ip',1)
                     ->select('tbl_category_manages.*');
             })->orderBy('like_count','desc')
-                ->get();
-//                ->paginate(10);
+//                ->get();
+                ->paginate(10);
         }else{
             $data = Wallpapers::where('image_extension', '<>', 'image/gif')->whereHas('category', function ($q) use ($domain) {
                 $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
@@ -229,8 +229,8 @@ class WallpaperController extends Controller
                     ->where('tbl_category_manages.checked_ip',0)
                     ->select('tbl_category_manages.*');
             })->orderBy('like_count','desc')
-                ->get();
-//                ->paginate(10);
+//                ->get();
+                ->paginate(10);
         }
         return WallpaperResource::collection($data);
     }
@@ -245,8 +245,8 @@ class WallpaperController extends Controller
                     ->where('tbl_category_manages.checked_ip',1)
                     ->select('tbl_category_manages.*');
             })->orderBy('created_at','desc')
-                ->get();
-//                ->paginate(10);
+//                ->get();
+                ->paginate(10);
 
         }else {
             $data = Wallpapers::where('image_extension', '<>', 'image/gif')->whereHas('category', function ($q) use ($domain) {
@@ -256,8 +256,8 @@ class WallpaperController extends Controller
                     ->where('tbl_category_manages.checked_ip',0)
                     ->select('tbl_category_manages.*');
             })->orderBy('created_at','desc')
-                ->get();
-//                ->paginate(10);
+//                ->get();
+                ->paginate(10);
         }
         return WallpaperResource::collection($data);
     }

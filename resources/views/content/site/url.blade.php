@@ -5,12 +5,12 @@
             <span class="fw-bold">Categories</span></a
         >
     </li>
-    <li class="nav-item">
-        <a class="nav-link {{Route::currentRouteName() == 'site.BlockIps' ? 'active' :'' }}" href="{{asset('admin/site/view/'.$site->site_name.'/block-ips')}}">
-            <i data-feather="lock" class="font-medium-3 me-50"></i>
-            <span class="fw-bold">Block Ips</span>
-        </a>
-    </li>
+{{--    <li class="nav-item">--}}
+{{--        <a class="nav-link {{Route::currentRouteName() == 'site.BlockIps' ? 'active' :'' }}" href="{{asset('admin/site/view/'.$site->site_name.'/block-ips')}}">--}}
+{{--            <i data-feather="lock" class="font-medium-3 me-50"></i>--}}
+{{--            <span class="fw-bold">Block Ips</span>--}}
+{{--        </a>--}}
+{{--    </li>--}}
     <li class="nav-item">
         <a class="nav-link {{Route::currentRouteName() == 'site.home' ? 'active' :'' }}" href="{{asset('admin/site/view/'.$site->site_name.'/home')}}">
             <i data-feather="home" class="font-medium-3 me-50"></i>

@@ -151,11 +151,11 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
         Route::get('view/{id}/category/{id1}/edit', [SiteController::class, 'site_editCategory'])->name('site.editCategory');
         Route::get('view/{id}/category/edit', [SiteController::class, 'site_editAddCategory'])->name('site.editAddCategory');
 
-        Route::get('view/{id}/block-ips', [SiteController::class, 'site_BlockIps'])->name('site.BlockIps');
-        Route::post('view/{id}/block-ips/get', [SiteController::class, 'site_getBlockIps'])->name('site.getBlockIps');
-        Route::post('view/{id}/block-ips/update-block-ips', [SiteController::class, 'site_updateBlockIp'])->name('site.site_updateBlockIp');
-        Route::get('view/{id}/block-ips/edit', [SiteController::class, 'site_editBlockIp'])->name('site.editBlockIp');
-        Route::get('view/{id}/block-ips/{id1}/delete', [SiteController::class, 'site_deleteBlockIp'])->name('site.deleteBlockIp');
+//        Route::get('view/{id}/block-ips', [SiteController::class, 'site_BlockIps'])->name('site.BlockIps');
+//        Route::post('view/{id}/block-ips/get', [SiteController::class, 'site_getBlockIps'])->name('site.getBlockIps');
+//        Route::post('view/{id}/block-ips/update-block-ips', [SiteController::class, 'site_updateBlockIp'])->name('site.site_updateBlockIp');
+//        Route::get('view/{id}/block-ips/edit', [SiteController::class, 'site_editBlockIp'])->name('site.editBlockIp');
+//        Route::get('view/{id}/block-ips/{id1}/delete', [SiteController::class, 'site_deleteBlockIp'])->name('site.deleteBlockIp');
 
         Route::get('view/{id}/home', [SiteController::class, 'site_Home'])->name('site.home');
         Route::post('view/{id}/home/update', [SiteController::class, 'site_updateHome'])->name('site.site_updateHome');

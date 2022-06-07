@@ -43,7 +43,6 @@
                   <tr>
                       <th>Ip Address </th>
                       <th>Created at</th>
-                      <th>Action</th>
                   </tr>
                   </thead>
               </table>
@@ -106,7 +105,7 @@
                   // columns according to JSON
                   { data: 'ip_address' },
                   { data: 'created_at' },
-                  { data: 'action' }
+
               ],
               columnDefs: [
                   {
@@ -124,20 +123,8 @@
                           }
                           return moment(data).format("DD-MM-YYYY HH:mm:ss");
                       }
-                  },
-                  {
-                      // Actions
-                      targets: -1,
-                      title: 'Actions',
-                      orderable: false,
-                      render: function (data, type, full, meta) {
-                          return (
-                              '<a data-id="'+full.id+'" class="btn btn-sm btn-icon deleteSiteBlockIp">' +
-                              feather.icons['trash'].toSvg({ class: 'font-medium-2 text-danger' }) +
-                              '</a>'
-                          );
-                      }
                   }
+
               ],
               order: [0, 'asc'],
               dom:

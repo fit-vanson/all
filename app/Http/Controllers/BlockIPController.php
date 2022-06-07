@@ -69,6 +69,7 @@ class BlockIPController extends Controller
         foreach ($records as $key => $record) {
             $data_arr[] = array(
                 "id" => $record->id,
+                "status" => $record->status != 1 ? '<span  class="badge rounded-pill badge-light-danger">Deactivated</span>' : '<span  class="badge rounded-pill badge-light-success">Activated</span>',
                 "ip_address" => $record->ip_address,
                 "created_at" => $record->created_at,
             );
@@ -84,7 +85,6 @@ class BlockIPController extends Controller
     }
     public function create(Request $request)
     {
-//        dd($request->all());
         $rules = [
             'ip_address' => 'unique:block_i_p_s,ip_address',
         ];
@@ -99,6 +99,7 @@ class BlockIPController extends Controller
         }
         $data = new BlockIP();
         $data['ip_address'] = $request->ip_address;
+        $data['status'] = $request->status ? 1 : 0;
         $data->save();
         $allBlockIps = BlockIP::latest()->get();
         return response()->json([
@@ -122,6 +123,7 @@ class BlockIPController extends Controller
         }
         $data = BlockIP::find($id);
         $data->ip_address = $request->ip_address;
+        $data->status = $request->status ? 1 : 0;
         $data->save();
         return response()->json(['success'=>'Cập nhật thành công']);
     }

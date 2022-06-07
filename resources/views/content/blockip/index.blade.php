@@ -35,6 +35,7 @@
         <thead class="table-light">
           <tr>
               <th>Ip Address</th>
+              <th>Status</th>
               <th>Created at</th>
               <th>Actions</th>
           </tr>
@@ -101,6 +102,7 @@
               columns: [
                   // columns according to JSON
                   { data: 'ip_address' },
+                  { data: 'status' },
                   { data: 'created_at' },
                   { data: 'action' }
               ],
@@ -113,7 +115,7 @@
                       }
                   },
                   {
-                      targets: 1,
+                      targets: 2,
                       render: function(data, type, row){
                           if(type === "sort" || type === "type"){
                               return data;
@@ -170,12 +172,11 @@
 
           });
           $('.add-new').on('click',function (){
-              $('#categoryForm').trigger("reset");
+              $('#blockIpForm').trigger("reset");
               $('.blockIpModalLabel').html("Add IP Address");
               $('#submitButton').prop('class','btn btn-primary ');
               $('#submitButton').text('Create');
               $('#submitButton').val('create');
-
           });
 
           if (BlockIpForm.length) {
@@ -305,6 +306,12 @@
                       $('#submitButton').val('update');
                       $('#id').val(data.id);
                       $('#ip_address').val(data.ip_address);
+
+                      if(data.status != 1){
+                          $('#status').prop('checked',false);
+                      }else {
+                          $('#status').prop('checked',true);
+                      }
                   },
                   error: function (data) {
                   }

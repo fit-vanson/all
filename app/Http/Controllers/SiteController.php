@@ -497,6 +497,7 @@ class SiteController extends Controller
     public function site_getBlockIps(Request $request,$id){
         $site = SiteManage::with('blockIps')->where("site_name",$id)->first();
 
+
         $draw = $request->get('draw');
         $start = $request->get("start");
         $rowperpage = $request->get("length"); // total number of rows per page
@@ -511,25 +512,17 @@ class SiteController extends Controller
         $columnName = $columnName_arr[$columnIndex]['data']; // Column name
         $columnSortOrder = $order_arr[0]['dir']; // asc or desc
         $searchValue = $search_arr['value']; // Search value
-        $totalRecords = count($site->blockIps);
+
+        $totalRecords = BlockIP::select('count(*) as allcount')->where('status',1)->count();
 
 
 
 
-        $totalRecordswithFilter = SiteManage::with('blockIps')->select('count(*) as allcount')
-            ->leftJoin('tbl_site_has_block_ip', 'tbl_site_has_block_ip.sites_id', '=', 'tbl_site_manages.id')
-            ->leftJoin('block_i_p_s', 'block_i_p_s.id', '=', 'tbl_site_has_block_ip.blockIps_id')
-            ->where('ip_address', 'like', '%' . $searchValue . '%')
-            ->where('tbl_site_has_block_ip.sites_id',$site->id)
-            ->count();
+        $totalRecordswithFilter = BlockIP::where('ip_address', 'like', '%' . $searchValue . '%')->where('status',1)->count();
 
         // Get records, also we have included search filter as well
-        $records = SiteManage::with('blockIps')
-            ->leftJoin('tbl_site_has_block_ip', 'tbl_site_has_block_ip.sites_id', '=', 'tbl_site_manages.id')
-            ->leftJoin('block_i_p_s', 'block_i_p_s.id', '=', 'tbl_site_has_block_ip.blockIps_id')
-            ->where('ip_address', 'like', '%' . $searchValue . '%')
-            ->where('tbl_site_has_block_ip.sites_id',$site->id)
-            ->select('block_i_p_s.*')
+        $records = BlockIP::where('ip_address', 'like', '%' . $searchValue . '%')
+            ->where('status',1)
             ->skip($start)
             ->take($rowperpage)
             ->get();

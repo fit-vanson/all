@@ -16,7 +16,6 @@ class CategoryController extends Controller
     {
         $domain=$_SERVER['SERVER_NAME'];
         if(checkBlockIp()){
-
             $data = CategoryManage::
             leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                 ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
@@ -46,8 +45,8 @@ class CategoryController extends Controller
                 ->wallpaper()
                 ->where('image_extension', '<>', 'image/gif')
                 ->orderBy('like_count', 'desc')
-                ->get();
-//                ->paginate(10);
+//                ->get();
+                ->paginate(10);
             CategoryManage::findOrFail($id)->increment('view_count');
             return WallpaperResource::collection($wallpapers);
         }catch (\Exception $e){
