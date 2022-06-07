@@ -47,7 +47,7 @@
                             <input  id="header_image" type="file" name="header_image" class="form-control" hidden accept="image/*" onchange="changeImg(this)">
                             <div class="mb-1">
                                 <label class="form-label" for="basic-icon-default-uname">Direct Link</label>
-                                <input type="text" id="directlink" class="form-control" placeholder="Header Title" value="{{$site->directlink}}" name="directlink">
+                                <input type="text" id="directlink" class="form-control" placeholder="Direct Link" value="{{$site->directlink}}" name="directlink">
                             </div>
                             <div class="mb-1">
                                 <button type="submit" class="btn btn-success" id="submitButton" value="update">Update</button>
