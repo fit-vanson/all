@@ -46,7 +46,8 @@ class CategoryController extends Controller
                 ->wallpaper()
                 ->where('image_extension', '<>', 'image/gif')
                 ->orderBy('like_count', 'desc')
-                ->paginate(10);
+                ->get();
+//                ->paginate(10);
             CategoryManage::findOrFail($id)->increment('view_count');
             return WallpaperResource::collection($wallpapers);
         }catch (\Exception $e){
