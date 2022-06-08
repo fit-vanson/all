@@ -913,8 +913,11 @@ class ApiController extends Controller
                 ->get();
 //                ->paginate($limit);
             CategoryManage::findOrFail($id)->increment('view_count');
+
         $categories= WallpaperResource_V1::collection($wallpapers);
-        $count_total = $wallpapers->total();
+        $count_total = CategoryManage::findOrFail($id)
+            ->wallpaper()
+            ->count();
         $count = count($categories);
         $respon = array(
             'status' => 'ok', 'count' => $count, 'count_total' => $count_total, 'pages' => $page, 'posts' => $categories
