@@ -908,7 +908,10 @@ class ApiController extends Controller
             $wallpapers = CategoryManage::findOrFail($id)
                 ->wallpaper()
                 ->orderBy('like_count', 'desc')
-                ->paginate($limit);
+                ->skip($limit)
+                ->take($page)
+                ->get();
+//                ->paginate($limit);
             CategoryManage::findOrFail($id)->increment('view_count');
         $categories= WallpaperResource_V1::collection($wallpapers);
         $count_total = $wallpapers->total();
