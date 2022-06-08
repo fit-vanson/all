@@ -900,15 +900,19 @@ class ApiController extends Controller
     public function get_category_details() {
 
         if($this->get_request_method() != "GET") $this->response('',406);
-        $limit = isset($this->_request['count']) ? ((int)$this->_request['count']) : 10;
-        $page = isset($this->_request['page']) ? ((int)$this->_request['page']) : 1;
+//        dd($_GET['page']);
+        $limit = isset($_GET['count']) ? ((int)$_GET['count']) : 10;
+        $page = isset($_GET['page']) ? ((int)$_GET['page']) : 1;
+
+        $order = $_GET['order'];
+        $offset = ($page * $limit) - $limit;
 
         $id = $_GET['id'];
         $domain=$_SERVER['SERVER_NAME'];
             $wallpapers = CategoryManage::findOrFail($id)
                 ->wallpaper()
                 ->orderBy('like_count', 'desc')
-                ->skip($page)
+                ->skip($offset)
                 ->take($limit)
                 ->get();
 //                ->paginate($limit);
