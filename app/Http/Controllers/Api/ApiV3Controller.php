@@ -190,7 +190,7 @@ class ApiV3Controller extends Controller
 
 
         $data_arr['categories'] = $this->categoriesArray($category);
-        $data_arr['slides'] = $this->slidesArray($wallpaper);
+        $data_arr['slides'] = $this->slidesArray($category);
         $data_arr['packs'] = $this->packsArray($category);
         $data_arr['wallpapers'] = $this->getWallpaper($wallpaper);
 
@@ -334,13 +334,14 @@ class ApiV3Controller extends Controller
     public function slidesArray($data){
 
         $jsonObj= [];
-        foreach ($data['data'] as $item){
-//            dd($item);
+        foreach ($data as $item){
 //        for ($i = 1; $i < 6; $i++){
             $data_arr['id'] = $item['id'];
-            $data_arr['title'] = 'TGl2ZSBBbmltYWxzIFdhbGxwYXBlcnM=';
+            $data_arr['title'] = base64_encode($item['category_name']);
             $data_arr['type'] = "1";
-            $data_arr['image'] = asset('storage/wallpapers/thumbnail/'.$item['thumbnail_image']);
+            $data_arr['image'] = asset('storage/categories/'.$item['image']);
+
+
 
 //            foreach ($item->wallpaper->take(1) as $value){
 //                $data_arr['category']['id'] = $value->id ;
@@ -348,11 +349,11 @@ class ApiV3Controller extends Controller
 //                $data_arr['category']['image'] = asset('storage/wallpapers/thumbnail/'.$value->thumbnail_image);
 //            }
 
-            $data_arr['category'] = [
-                'id' => $item['category']['id'],
-                'title' => $item['category']['category_name'],
-                'image' => asset('storage/categories/'.$item['image'])
-            ];
+//            $data_arr['category'] = [
+//                'id' => $item['category']['id'],
+//                'title' => $item['category']['category_name'],
+//                'image' => asset('storage/categories/'.$item['image'])
+//            ];
 //            dd($data_arr);
             array_push($jsonObj,$data_arr);
         }
