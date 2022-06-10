@@ -44,6 +44,7 @@
                             <th>Name</th>
                             <th>View Count</th>
                             <th>Like Count</th>
+                            <th>Định dạng</th>
                             <th>Category</th>
                             <th>Actions</th>
                         </tr>
@@ -158,6 +159,7 @@
                     {data: 'name'},
                     {data: 'view_count'},
                     {data: 'like_count'},
+                    {data: 'image_extension'},
                     {data: 'category_name'},
                     {data: 'Actions'}
                 ],
@@ -199,7 +201,7 @@
                         }
                     },
                     {
-                        targets: 5,
+                        targets: 6,
                         // orderable: false,
                         render: function (data, type, full, meta) {
                             var categories = data,
@@ -326,6 +328,7 @@
                         $('#wallpaper_name').val(data.name);
                         $('#wallpaper_viewCount').val(data.view_count);
                         $('#wallpaper_likeCount').val(data.like_count);
+                        $('#select_wallpaper_image_extension').val(data.image_extension);
 
                         if (data.feature == 1) {
                             $('#feature').prop('checked', true);

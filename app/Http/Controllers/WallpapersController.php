@@ -99,6 +99,7 @@ class WallpapersController extends Controller
                 "thumbnail_image" => $record->thumbnail_image,
                 "view_count" => $record->view_count,
                 "like_count" => $record->like_count,
+                "image_extension" => $record->image_extension,
 //                "tbl_category_manages.category_name" => $cate_name,
                 "category_name" => $record->category_name,
             );
@@ -193,7 +194,7 @@ class WallpapersController extends Controller
     public function update(Request $request){
         $id = $request->id;
         $rules = [
-            'wallpaper_name' =>'required|unique:wallpapers,name,'.$id.',id',
+//            'wallpaper_name' =>'required|unique:wallpapers,name,'.$id.',id',
             'image_thumbnail' => 'mimes:jpg',
             'image_detail' => 'mimes:jpg',
             'image_download' => 'mimes:jpg'
@@ -304,6 +305,7 @@ class WallpapersController extends Controller
             $path_origin =  $monthYear.'/'.$fileNameToStore;
             $data->origin_image = $path_origin;
         }
+        $data->image_extension = $request->wallpaper_image_extension;
         $data->cate_id = $request->select_category;
 //        $data->category()->sync($request->select_category);
         $data->save();

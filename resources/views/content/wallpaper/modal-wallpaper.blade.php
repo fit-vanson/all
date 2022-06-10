@@ -79,13 +79,21 @@
                             <input type="text" class="form-control" id="wallpaper_likeCount"  name="wallpaper_likeCount" />
                         </div>
                     </div>
-                    <div class="col-12">
+                    <div class="col-6">
                         <label class="form-label">Category</label>
                         <select class="form-select" id="select_category_edit" name="select_category" required >
                             @foreach($categories as $category)
                                 <option value="{{$category->id}}">{{$category->category_name}}</option>
                             @endforeach
                         </select>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Định dạng</label>
+                        <select class="form-select" id="select_wallpaper_image_extension" name="wallpaper_image_extension" required >
+                                <option value="image/jpeg">image/jpeg</option>
+                                <option value="image/gif">image/gif</option>
+                        </select>
+
                     </div>
 
                     <div class="col-xl-4 col-md-6 col-12">
