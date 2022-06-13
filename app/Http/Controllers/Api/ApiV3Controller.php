@@ -494,7 +494,8 @@ class ApiV3Controller extends Controller
             $data_arr['title'] = $item['name'];
             $data_arr['description'] = $item['name'];
             $data_arr['category'] = $item['category']['category_name'];
-            $data_arr['color'] =  substr(md5(rand()), 0, 6);;
+            $data_arr['color'] =  '000000';
+//            $data_arr['color'] =  substr(md5(rand()), 0, 6);
 
             $data_arr['downloads'] = rand(500,1000);
 
@@ -516,31 +517,31 @@ class ApiV3Controller extends Controller
         return $jsonObj;
     }
 
-    public function packsArray($data){
-        $jsonObj= [];
-//        for ($i = 1; $i < 6; $i++){
+//    public function packsArray($data){
 //        $jsonObj= [];
-        foreach ($data as $item){
-            $data_arr['id'] = $item->id;
-            $data_arr['title'] = $item->category_name;
-            foreach ($item->wallpaper->take(5) as $value){
-                $data_arr['images'][] = asset('storage/wallpapers/thumbnail/'.$value->thumbnail_image);
-            }
-            array_push($jsonObj,$data_arr);
-        }
-        return $jsonObj;
-    }
-
-    public function slidesArray($data){
-
-        $jsonObj= [];
-        foreach ($data as $item){
-            $data_arr['id'] = $item['id'];
-            $data_arr['title'] = base64_encode($item['category_name']);
-            $data_arr['type'] = "1";
-            $data_arr['image'] = asset('storage/categories/'.$item['image']);
-            array_push($jsonObj,$data_arr);
-        }
-        return $jsonObj;
-    }
+////        for ($i = 1; $i < 6; $i++){
+////        $jsonObj= [];
+//        foreach ($data as $item){
+//            $data_arr['id'] = $item->id;
+//            $data_arr['title'] = $item->category_name;
+//            foreach ($item->wallpaper->take(5) as $value){
+//                $data_arr['images'][] = asset('storage/wallpapers/thumbnail/'.$value->thumbnail_image);
+//            }
+//            array_push($jsonObj,$data_arr);
+//        }
+//        return $jsonObj;
+//    }
+//
+//    public function slidesArray($data){
+//
+//        $jsonObj= [];
+//        foreach ($data as $item){
+//            $data_arr['id'] = $item['id'];
+//            $data_arr['title'] = base64_encode($item['category_name']);
+//            $data_arr['type'] = "1";
+//            $data_arr['image'] = asset('storage/categories/'.$item['image']);
+//            array_push($jsonObj,$data_arr);
+//        }
+//        return $jsonObj;
+//    }
 }
