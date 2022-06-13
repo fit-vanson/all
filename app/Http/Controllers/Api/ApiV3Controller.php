@@ -431,7 +431,7 @@ class ApiV3Controller extends Controller
         foreach ($data['data'] as $item){
 
             $data_arr['id'] = $item['id'];
-            $data_arr['kind'] = 'image';
+            $data_arr['kind'] = $item['image_extension'] != 'image/gif' ? 'image' : 'gif';
             $data_arr['title'] = $item['name'];
             $data_arr['description'] = $item['name'];
             $data_arr['category'] = $item['category']['category_name'];
