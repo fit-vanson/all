@@ -100,7 +100,7 @@ Route::group([
     Route::get('wallpaper/category/{page}/{category}',[ApiV3Controller::class, 'wallpapersByCategory']);
     Route::get('wallpaper/query/{page}/{query}',[ApiV3Controller::class, 'wallpapersBysearch']);
     Route::get('wallpaper/add/set/{id}',[ApiV3Controller::class, 'api_add_set']);
-    Route::post('wallpaper/add/view',[ApiV3Controller::class, 'api_add_view']);
-    Route::post('wallpaper/add/download',[ApiV3Controller::class, 'api_add_download']);
+    Route::get('wallpaper/add/view/{id}',[ApiV3Controller::class, 'api_add_view']);
+    Route::get('wallpaper/add/download/{id}',[ApiV3Controller::class, 'api_add_download']);
 
 });
