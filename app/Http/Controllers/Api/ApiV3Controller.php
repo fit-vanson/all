@@ -494,8 +494,8 @@ class ApiV3Controller extends Controller
             $data_arr['title'] = $item['name'];
             $data_arr['description'] = $item['name'];
             $data_arr['category'] = $item['category']['category_name'];
-            $data_arr['color'] =  '000000';
-//            $data_arr['color'] =  substr(md5(rand()), 0, 6);
+//            $data_arr['color'] =  '000000';
+            $data_arr['color'] =  substr(md5(rand()), 0, 6);
 
             $data_arr['downloads'] = rand(500,1000);
 
