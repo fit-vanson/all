@@ -426,8 +426,7 @@ class ApiV3Controller extends Controller
         return $jsonObj;
     }
 
-    public function api_add_set(Request $request){
-        $id = $request->id;
+    public function api_add_set($id){
         $wallpaper = Wallpapers::find($id);
         $wallpaper->view_count =  $wallpaper->view_count + 1;
         $wallpaper->save();
