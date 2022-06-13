@@ -99,5 +99,8 @@ Route::group([
     Route::get('wallpaper/random/{page}',[ApiV3Controller::class, 'wallpapersRandom']);
     Route::get('wallpaper/category/{page}/{category}',[ApiV3Controller::class, 'wallpapersByCategory']);
     Route::get('wallpaper/query/{page}/{query}',[ApiV3Controller::class, 'wallpapersBysearch']);
+    Route::post('wallpaper/add/set',[ApiV3Controller::class, 'api_add_set']);
+    Route::post('wallpaper/add/view',[ApiV3Controller::class, 'api_add_view']);
+    Route::post('wallpaper/add/download',[ApiV3Controller::class, 'api_add_download']);
 
 });

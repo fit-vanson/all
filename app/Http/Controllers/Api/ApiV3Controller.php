@@ -426,6 +426,29 @@ class ApiV3Controller extends Controller
         return $jsonObj;
     }
 
+    public function api_add_set(Request $request){
+        $id = $request->id;
+        $wallpaper = Wallpapers::find($id);
+        $wallpaper->view_count =  $wallpaper->view_count + 1;
+        $wallpaper->save();
+        return json_encode($wallpaper->view_count,JSON_UNESCAPED_UNICODE);
+
+    }
+    public function api_add_view(Request $request){
+        $id = $request->id;
+        $wallpaper = Wallpapers::find($id);
+        $wallpaper->view_count =  $wallpaper->view_count + 1;
+        $wallpaper->save();
+        return json_encode($wallpaper->view_count,JSON_UNESCAPED_UNICODE);
+    }
+    public function api_add_download(Request $request){
+        $id = $request->id;
+        $wallpaper = Wallpapers::find($id);
+        $wallpaper->view_count =  $wallpaper->view_count + 1;
+        $wallpaper->save();
+        return json_encode($wallpaper->view_count,JSON_UNESCAPED_UNICODE);
+    }
+
     private  function getWallpaper($data){
         $jsonObj = [];
         foreach ($data['data'] as $item){
