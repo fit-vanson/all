@@ -88,12 +88,13 @@ Route::group([
 
 
 Route::group([
-    "prefix" => "v3"
+    "prefix" => "v3",
 //    'middleware' => 'auth.apikey'
 ], function() {
     Route::get('version/check/{version}/{token_app}/{item_code}',[ApiV3Controller::class, 'checkCode']);
     Route::get('/',[ApiV3Controller::class, 'index']);
-    Route::get('first/{token_app}/{item_code}',[ApiV3Controller::class, 'first']);
-    Route::get('category/all/{token_app}/{item_code}',[ApiV3Controller::class, 'categoryAll']);
+    Route::get('first',[ApiV3Controller::class, 'first']);
+    Route::get('category/all',[ApiV3Controller::class, 'categoryAll']);
+    Route::get('wallpaper/all/{order}/{page}',[ApiV3Controller::class, 'wallpapersAll']);
 
 });
