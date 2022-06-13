@@ -432,7 +432,6 @@ class ApiV3Controller extends Controller
         $wallpaper->view_count =  $wallpaper->view_count + 1;
         $wallpaper->save();
         return json_encode($wallpaper->view_count,JSON_UNESCAPED_UNICODE);
-
     }
     public function api_add_view(Request $request){
         $id = $request->id;
