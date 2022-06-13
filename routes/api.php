@@ -96,5 +96,7 @@ Route::group([
     Route::get('first',[ApiV3Controller::class, 'first']);
     Route::get('category/all',[ApiV3Controller::class, 'categoryAll']);
     Route::get('wallpaper/all/{order}/{page}',[ApiV3Controller::class, 'wallpapersAll']);
+    Route::get('wallpaper/random/{page}',[ApiV3Controller::class, 'wallpapersRandom']);
+    Route::get('wallpaper/category/{page}/{category}',[ApiV3Controller::class, 'wallpapersByCategory']);
 
 });

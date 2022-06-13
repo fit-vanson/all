@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FeatureImagesController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InsertDbController;
 use App\Http\Controllers\KpopWallpapersController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
@@ -185,6 +186,13 @@ Route::group([ "prefix" => "admin", "middleware" => ["auth"]], function() {
         Route::get('view/{id}/directlink', [SiteController::class, 'site_Directlink'])->name('site.directlink');
         Route::post('view/{id}/directlink/update', [SiteController::class, 'site_updateDirectlink'])->name('site.site_updateDirectlink');
     });
+
+    Route::group([ "prefix" => "insert-db", "middleware" => ["auth"]], function() {
+        Route::get('/', [InsertDbController::class, 'index'])->name('insert_db.index');
+        Route::get('/apk-process', [InsertDbController::class, 'apk_process'])->name('insert_db.apk_process');
+
+    });
+
 });
 
 
