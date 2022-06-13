@@ -432,6 +432,45 @@ class ApiV3Controller extends Controller
 
     }
 
+    public function wallpapersBysearch($page,$query){
+        $page_limit = 10;
+        $limit= 0 * $page_limit;
+
+        $domain=$_SERVER['SERVER_NAME'];
+        if (checkBlockIp()) {
+
+
+            $wallpaper = Wallpapers::where('image_extension', '<>', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
+                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name', $domain)
+                    ->where('tbl_category_manages.checked_ip', 1)
+                    ->select('tbl_category_manages.*');
+            })
+                ->where('name', 'like', '%' . $query . '%')
+                ->inRandomOrder()
+                ->paginate($page_limit)
+                ->toArray();
+
+        } else {
+            $wallpaper = Wallpapers::where('image_extension', '<>', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
+                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name', $domain)
+                    ->where('tbl_category_manages.checked_ip', 0)
+                    ->select('tbl_category_manages.*');
+            })
+                ->where('name', 'like', '%' . $query . '%')
+                ->inRandomOrder()
+                ->paginate($page_limit)
+                ->toArray();
+
+        }
+        $data_arr = $this->getWallpaper($wallpaper);
+        return json_encode($data_arr,JSON_UNESCAPED_UNICODE);
+
+    }
+
     public function getCategories($data){
         $jsonObj= [];
         foreach ($data as $item){
