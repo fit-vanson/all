@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Api\ApiV3Controller;
+use App\Http\Controllers\Api\ApiV4Controller;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\WallpaperController;
@@ -104,3 +105,27 @@ Route::group([
     Route::get('wallpaper/add/download/{id}',[ApiV3Controller::class, 'api_add_download']);
 
 });
+
+Route::group([
+    "prefix" => "v4",
+//    'middleware' => 'auth.apikey'
+], function() {
+
+
+    Route::get('photos/random',[ApiV4Controller::class, 'randomWallpaper']);
+
+
+//    Route::get('version/check/{version}/{token_app}/{item_code}',[ApiV3Controller::class, 'checkCode']);
+//    Route::get('/',[ApiV3Controller::class, 'index']);
+//    Route::get('first',[ApiV3Controller::class, 'first']);
+//    Route::get('category/all',[ApiV3Controller::class, 'categoryAll']);
+//    Route::get('wallpaper/all/{order}/{page}',[ApiV3Controller::class, 'wallpapersAll']);
+//    Route::get('wallpaper/random/{page}',[ApiV3Controller::class, 'wallpapersRandom']);
+//    Route::get('wallpaper/category/{page}/{category}',[ApiV3Controller::class, 'wallpapersByCategory']);
+//    Route::get('wallpaper/query/{page}/{query}',[ApiV3Controller::class, 'wallpapersBysearch']);
+//    Route::get('wallpaper/add/set/{id}',[ApiV3Controller::class, 'api_add_set']);
+//    Route::get('wallpaper/add/view/{id}',[ApiV3Controller::class, 'api_add_view']);
+//    Route::get('wallpaper/add/download/{id}',[ApiV3Controller::class, 'api_add_download']);
+
+});
+
