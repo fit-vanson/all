@@ -147,6 +147,8 @@ class ApiV4Controller extends Controller
         $data_arr['downloads'] =  rand(300,1000);
 
         $data_arr['user'] =  $dataA[0]['user'];
+        $data_arr['exif'] =  $dataA[0]['exif'];
+        $data_arr['location'] =  $dataA[0]['location'];
 
 
 
