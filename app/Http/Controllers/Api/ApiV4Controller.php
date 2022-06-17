@@ -50,12 +50,13 @@ class ApiV4Controller extends Controller
             array_push($jsonObj,$data_arr);
         }
 
-        $endpoint = "https://api.unsplash.com/photos/random?client_id=g7pCnQVE4Y2DxlMqvwt2AAal-HzvbZdMsZRNqd8c9hU&count=5";
-        $response = Http::get( $endpoint);
-        $data_arr = $response->json();
+//        $endpoint = "https://api.unsplash.com/photos/random?client_id=g7pCnQVE4Y2DxlMqvwt2AAal-HzvbZdMsZRNqd8c9hU&count=5";
+//        $response = Http::get( $endpoint);
+//        $data_arr = $response->json();
+//        dd($data_arr);
 
 
-        return $data_arr;
+        return $jsonObj;
 
     }
     public  function Wallpaper($id){
@@ -116,32 +117,36 @@ class ApiV4Controller extends Controller
                 $index = '#'.$r.$g.$b;
             }
 
+        $endpoint = "https://api.unsplash.com/photos/random?client_id=g7pCnQVE4Y2DxlMqvwt2AAal-HzvbZdMsZRNqd8c9hU&count=5";
+        $response = Http::get( $endpoint);
+        $dataA = $response->json();
 
-            $data_arr['id'] = $data['id'];
-            $data_arr['created_at'] = $data['created_at']->toDateString();
-            $data_arr['width'] = $width;
-            $data_arr['height'] = $height ;
-            $data_arr['color'] = $index ;
-            $data_arr['blur_hash'] = $blurhash ;
-            $data_arr['description'] = null;
 
-            $data_arr['urls']['raw'] = asset('storage/wallpapers/download/' . $data['origin_image']);
-            $data_arr['urls']['full'] = asset('storage/wallpapers/download/' . $data['origin_image']);
-            $data_arr['urls']['regular'] = asset('storage/wallpapers/detail/' . $data['image']);
-            $data_arr['urls']['small'] = asset('storage/wallpapers/thumbnail/' . $data['thumbnail_image']);
-            $data_arr['urls']['thumb'] = asset('storage/wallpapers/thumbnail/' . $data['thumbnail_image']);
-            $data_arr['urls']['small_s3'] = asset('storage/wallpapers/thumbnail/' . $data['thumbnail_image']);
+        $data_arr['id'] = $data['id'];
+        $data_arr['created_at'] = $data['created_at']->toDateString();
+        $data_arr['width'] = $width;
+        $data_arr['height'] = $height ;
+        $data_arr['color'] = $index ;
+        $data_arr['blur_hash'] = $blurhash ;
+        $data_arr['description'] = null;
 
-            $data_arr['links']['self'] = route('v4.wallpaper',['id'=>$data['id']]);
-            $data_arr['links']['html'] = asset('storage/wallpapers/download/' . $data['origin_image']);
-            $data_arr['links']['download'] = asset('storage/wallpapers/download/' . $data['origin_image']);
-            $data_arr['links']['download_location'] =  route('v4.wallpaper',['id'=>$data['id']]);
+        $data_arr['urls']['raw'] = asset('storage/wallpapers/download/' . $data['origin_image']);
+        $data_arr['urls']['full'] = asset('storage/wallpapers/download/' . $data['origin_image']);
+        $data_arr['urls']['regular'] = asset('storage/wallpapers/detail/' . $data['image']);
+        $data_arr['urls']['small'] = asset('storage/wallpapers/thumbnail/' . $data['thumbnail_image']);
+        $data_arr['urls']['thumb'] = asset('storage/wallpapers/thumbnail/' . $data['thumbnail_image']);
+        $data_arr['urls']['small_s3'] = asset('storage/wallpapers/thumbnail/' . $data['thumbnail_image']);
 
-            $data_arr['likes'] =  $data['like_count'];
-            $data_arr['views'] =  $data['view_count'];
-            $data_arr['downloads'] =  rand(300,1000);
+        $data_arr['links']['self'] = route('v4.wallpaper',['id'=>$data['id']]);
+        $data_arr['links']['html'] = asset('storage/wallpapers/download/' . $data['origin_image']);
+        $data_arr['links']['download'] = asset('storage/wallpapers/download/' . $data['origin_image']);
+        $data_arr['links']['download_location'] =  route('v4.wallpaper',['id'=>$data['id']]);
 
-            $data_arr['user'] =  [];
+        $data_arr['likes'] =  $data['like_count'];
+        $data_arr['views'] =  $data['view_count'];
+        $data_arr['downloads'] =  rand(300,1000);
+
+        $data_arr['user'] =  $dataA[0]['user'];
 
 
 
