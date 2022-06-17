@@ -7,6 +7,8 @@ use App\Models\Wallpapers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use kornrunner\Blurhash\Blurhash;
+use League\ColorExtractor\Palette;
 
 class ApiV4Controller extends Controller
 {
@@ -26,7 +28,7 @@ class ApiV4Controller extends Controller
                     ->select('tbl_category_manages.*');
             })
                 ->inRandomOrder()
-                ->limit(10)
+                ->limit($_GET['count'])
                 ->get();
 
         } else {
@@ -38,7 +40,7 @@ class ApiV4Controller extends Controller
                     ->select('tbl_category_manages.*');
             })
                 ->inRandomOrder()
-                ->limit(10)
+                ->limit($_GET['count'])
                 ->get();
 
         }
@@ -66,17 +68,36 @@ class ApiV4Controller extends Controller
     private  function getWallpaper($data){
 
             $path = storage_path('app/public/wallpapers/download/'.$data['origin_image']);
-            $image = $size = '';
             if (file_exists($path)){
-                $image = getimagesize($path);
-//                $size = $this->filesize_formatted($path);
+                $image = imagecreatefromstring(file_get_contents($path));
+                $width = imagesx($image);
+                $height = imagesy($image);
+
+                $pixels = [];
+                for ($y = 0; $y < $height; ++$y) {
+                    $row = [];
+                    for ($x = 0; $x < $width; ++$x) {
+                        $index = imagecolorat($image, $x, $y);
+                        $colors = imagecolorsforindex($image, $index);
+
+                        $row[] = [$colors['red'], $colors['green'], $colors['blue']];
+                    }
+                    $pixels[] = $row;
+                }
+
+                $components_x = 4;
+                $components_y = 3;
+                $blurhash = Blurhash::encode($pixels, $components_x, $components_y);
             }
 
 
             $data_arr['id'] = $data['id'];
             $data_arr['created_at'] = $data['created_at']->toDateString();
-            $data_arr['width'] = $image ?  $image[0] : '';
-            $data_arr['height'] = $image ?  $image[1] : '';
+            $data_arr['width'] = $width ?  $width : '';
+            $data_arr['height'] = $height ?  $height: '';
+            $data_arr['color'] = $index ?  '#'.$index: '#fffff';
+            $data_arr['blur_hash'] = $blurhash ?  $blurhash : '';
+            $data_arr['$blurhash'] = '';
 
             $data_arr['urls']['raw'] = asset('storage/wallpapers/download/' . $data['origin_image']);
             $data_arr['urls']['full'] = asset('storage/wallpapers/download/' . $data['origin_image']);
@@ -94,8 +115,12 @@ class ApiV4Controller extends Controller
             $data_arr['views'] =  $data['view_count'];
             $data_arr['downloads'] =  rand(300,1000);
 
+
+
         return $data_arr;
     }
+
+
 
 
 }
