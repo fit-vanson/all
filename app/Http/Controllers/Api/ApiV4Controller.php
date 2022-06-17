@@ -77,7 +77,7 @@ class ApiV4Controller extends Controller
                 $pixels = [];
                 for ($y = 0; $y < $height; ++$y) {
                     $row = [];
-                    for ($x = 0; $x < $width; ++$x) {
+                    for ($x = 0; $x < 100; ++$x) {
                         $index = imagecolorat($image, $x, $y);
                         $colors = imagecolorsforindex($image, $index);
 
@@ -86,9 +86,11 @@ class ApiV4Controller extends Controller
                     $pixels[] = $row;
                 }
 
+//                dd($pixels);
                 $components_x = 4;
                 $components_y = 3;
                 $blurhash = Blurhash::encode($pixels, $components_x, $components_y);
+                dd($blurhash);
             }
 
 
@@ -96,7 +98,7 @@ class ApiV4Controller extends Controller
             $data_arr['created_at'] = $data['created_at']->toDateString();
             $data_arr['width'] = $width;
             $data_arr['height'] = $height ;
-            $data_arr['color'] = $index ;
+            $data_arr['color'] = '#'.$index ;
             $data_arr['blur_hash'] = $blurhash ;
             $data_arr['description'] = null;
 
