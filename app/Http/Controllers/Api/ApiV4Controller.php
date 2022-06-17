@@ -80,7 +80,7 @@ class ApiV4Controller extends Controller
                 $pixels = [];
                 for ($y = 0; $y < $height; ++$y) {
                     $row = [];
-                    for ($x = 0; $x < $width; ++$x) {
+                    for ($x = 0; $x < 100; ++$x) {
 
                         $rgb = imagecolorat($image, $x, $y);
                         $r += $rgb >> 16;
