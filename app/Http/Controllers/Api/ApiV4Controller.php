@@ -90,7 +90,7 @@ class ApiV4Controller extends Controller
                 $components_x = 4;
                 $components_y = 3;
                 $blurhash = Blurhash::encode($pixels, $components_x, $components_y);
-                dd($blurhash);
+
             }
 
 
