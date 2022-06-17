@@ -120,7 +120,7 @@ class ApiV4Controller extends Controller
         $endpoint = "https://api.unsplash.com/photos/muX4vR4pEyc?client_id=g7pCnQVE4Y2DxlMqvwt2AAal-HzvbZdMsZRNqd8c9hU";
         $response = Http::get( $endpoint);
         $dataA = $response->json();
-        return $dataA;
+//        return $dataA;
 //        dd($dataA);
 
 
@@ -148,9 +148,11 @@ class ApiV4Controller extends Controller
         $data_arr['views'] =  $data['view_count'];
         $data_arr['downloads'] =  rand(300,1000);
 
-        $data_arr['user'] =  $dataA[0]['user'];
-        $data_arr['exif'] =  $dataA[0]['exif'];
-        $data_arr['location'] =  $dataA[0]['location'];
+        $data_arr['user'] =  $dataA['user'];
+        $data_arr['exif'] =  $dataA['exif'];
+        $data_arr['location'] =  $dataA['location'];
+        $data_arr['meta'] =  $dataA['meta'];
+        $data_arr['related_collections'] =  $dataA['related_collections'];
 
 
 
