@@ -50,13 +50,12 @@ class ApiV4Controller extends Controller
             array_push($jsonObj,$data_arr);
         }
 
-//        $endpoint = "https://api.unsplash.com/photos/random?client_id=g7pCnQVE4Y2DxlMqvwt2AAal-HzvbZdMsZRNqd8c9hU&count=5";
-//        $response = Http::get( $endpoint);
-//        dd($response->json(),$jsonObj);
-//        $data_arr = $response->json();
+        $endpoint = "https://api.unsplash.com/photos/random?client_id=g7pCnQVE4Y2DxlMqvwt2AAal-HzvbZdMsZRNqd8c9hU&count=5";
+        $response = Http::get( $endpoint);
+        $data_arr = $response->json();
 
 
-        return $jsonObj;
+        return $data_arr;
 
     }
     public  function Wallpaper($id){
