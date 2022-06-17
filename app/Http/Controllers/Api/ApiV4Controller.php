@@ -69,15 +69,25 @@ class ApiV4Controller extends Controller
         $width = $height = $blurhash = $index = null;
 
             $path = storage_path('app/public/wallpapers/download/'.$data['origin_image']);
+
             if (file_exists($path)){
                 $image = imagecreatefromstring(file_get_contents($path));
                 $width = imagesx($image);
                 $height = imagesy($image);
 
+                $r = $g = $b = 0;
+
                 $pixels = [];
                 for ($y = 0; $y < $height; ++$y) {
                     $row = [];
-                    for ($x = 0; $x < 100; ++$x) {
+                    for ($x = 0; $x < $width; ++$x) {
+
+                        $rgb = imagecolorat($image, $x, $y);
+                        $r += $rgb >> 16;
+                        $g += $rgb >> 8 & 255;
+                        $b += $rgb & 255;
+
+
                         $index = imagecolorat($image, $x, $y);
                         $colors = imagecolorsforindex($image, $index);
 
@@ -86,11 +96,25 @@ class ApiV4Controller extends Controller
                     $pixels[] = $row;
                 }
 
-//                dd($pixels);
+                $pxls = $width * $height;
+                $r = dechex(round($r / $pxls));
+                $g = dechex(round($g / $pxls));
+                $b = dechex(round($b / $pxls));
+                if(strlen($r) < 2) {
+                    $r = 0 . $r;
+                }
+                if(strlen($g) < 2) {
+                    $g = 0 . $g;
+                }
+                if(strlen($b) < 2) {
+                    $b = 0 . $b;
+                }
+
                 $components_x = 4;
                 $components_y = 3;
                 $blurhash = Blurhash::encode($pixels, $components_x, $components_y);
 
+                $index = '#'.$r.$g.$b;
             }
 
 
@@ -98,7 +122,7 @@ class ApiV4Controller extends Controller
             $data_arr['created_at'] = $data['created_at']->toDateString();
             $data_arr['width'] = $width;
             $data_arr['height'] = $height ;
-            $data_arr['color'] = '#'.$index ;
+            $data_arr['color'] = $index ;
             $data_arr['blur_hash'] = $blurhash ;
             $data_arr['description'] = null;
 
@@ -117,6 +141,11 @@ class ApiV4Controller extends Controller
             $data_arr['likes'] =  $data['like_count'];
             $data_arr['views'] =  $data['view_count'];
             $data_arr['downloads'] =  rand(300,1000);
+
+            $data_arr['user'] =  [];
+
+
+
 
 
 
