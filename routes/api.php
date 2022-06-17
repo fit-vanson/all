@@ -113,6 +113,7 @@ Route::group([
 
 
     Route::get('photos/random',[ApiV4Controller::class, 'randomWallpaper']);
+    Route::get('photos/{id}',[ApiV4Controller::class, 'Wallpaper'])->name('v4.wallpaper');
 
 
 //    Route::get('version/check/{version}/{token_app}/{item_code}',[ApiV3Controller::class, 'checkCode']);

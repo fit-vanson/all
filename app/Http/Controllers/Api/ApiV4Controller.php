@@ -18,7 +18,7 @@ class ApiV4Controller extends Controller
     {
         $domain = $_SERVER['SERVER_NAME'];
         if (checkBlockIp()) {
-            $wallpaper = Wallpapers::whereHas('category', function ($q) use ($domain) {
+            $wallpapers = Wallpapers::whereHas('category', function ($q) use ($domain) {
                 $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                     ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                     ->where('site_name', $domain)
@@ -30,7 +30,7 @@ class ApiV4Controller extends Controller
                 ->get();
 
         } else {
-            $wallpaper = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
+            $wallpapers = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
                 $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                     ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
                     ->where('site_name', $domain)
@@ -42,52 +42,60 @@ class ApiV4Controller extends Controller
                 ->get();
 
         }
+        $jsonObj = [];
+        foreach ($wallpapers as $wallpaper){
+            $data_arr = $this->getWallpaper($wallpaper);
+            array_push($jsonObj,$data_arr);
+        }
+
+//        $endpoint = "https://api.unsplash.com/photos/random?client_id=g7pCnQVE4Y2DxlMqvwt2AAal-HzvbZdMsZRNqd8c9hU&count=5";
+//        $response = Http::get( $endpoint);
+//        dd($response->json(),$jsonObj);
+//        $data_arr = $response->json();
+
+
+        return $jsonObj;
+
+    }
+    public  function Wallpaper($id){
+        $wallpaper = Wallpapers::find($id);
         $data_arr = $this->getWallpaper($wallpaper);
-
-
-
-        $endpoint = "https://api.unsplash.com/photos/random?client_id=g7pCnQVE4Y2DxlMqvwt2AAal-HzvbZdMsZRNqd8c9hU&count=5";
-        $response = Http::get( $endpoint);
-//        dd($response->json(),1);
-//        dd($data_arr);
-
-        $data_arr = $response->json();
-
         return $data_arr;
-
     }
 
     private  function getWallpaper($data){
 
-        $jsonObj = [];
-        foreach ($data as $item){
-
-            $data_arr['id'] = $item['id'];
-            $data_arr['kind'] = $item['image_extension'] != 'image/gif' ? 'image' : 'gif';
-            $data_arr['title'] = $item['name'];
-            $data_arr['description'] = $item['name'];
-            $data_arr['category'] = $item['category']['category_name'];
-//            $data_arr['color'] =  '000000';
-            $data_arr['color'] =  substr(md5(rand()), 0, 6);
-
-            $data_arr['downloads'] = rand(500,1000);
-
-            $data_arr['views'] = $item['view_count'];
-            $data_arr['shares'] = rand(500,1000);
-            $data_arr['sets'] = rand(500,1000);
-
-            $data_arr['type'] = $item['image_extension'];
-            $data_arr['extension'] = $item['image_extension'];
-
-            $data_arr['thumbnail'] = asset('storage/wallpapers/thumbnail/'.$item['thumbnail_image']);
-            $data_arr['image'] = asset('storage/wallpapers/detail/'.$item['image']);
-            $data_arr['original'] = asset('storage/wallpapers/download/'.$item['origin_image']);
-            $data_arr['created'] = Carbon::parse($item['created_at'])->format('Y-m-d') ;
-            $data_arr['tags'] = null;
-            array_push($jsonObj,$data_arr);
-        }
+            $path = storage_path('app/public/wallpapers/download/'.$data['origin_image']);
+            $image = $size = '';
+            if (file_exists($path)){
+                $image = getimagesize($path);
+//                $size = $this->filesize_formatted($path);
+            }
 
 
-        return $jsonObj;
+            $data_arr['id'] = $data['id'];
+            $data_arr['created_at'] = $data['created_at']->toDateString();
+            $data_arr['width'] = $image ?  $image[0] : '';
+            $data_arr['height'] = $image ?  $image[1] : '';
+
+            $data_arr['urls']['raw'] = asset('storage/wallpapers/download/' . $data['origin_image']);
+            $data_arr['urls']['full'] = asset('storage/wallpapers/download/' . $data['origin_image']);
+            $data_arr['urls']['regular'] = asset('storage/wallpapers/detail/' . $data['image']);
+            $data_arr['urls']['small'] = asset('storage/wallpapers/thumbnail/' . $data['thumbnail_image']);
+            $data_arr['urls']['thumb'] = asset('storage/wallpapers/thumbnail/' . $data['thumbnail_image']);
+            $data_arr['urls']['small_s3'] = asset('storage/wallpapers/thumbnail/' . $data['thumbnail_image']);
+
+            $data_arr['links']['self'] = route('v4.wallpaper',['id'=>$data['id']]);
+            $data_arr['links']['html'] = asset('storage/wallpapers/download/' . $data['origin_image']);
+            $data_arr['links']['download'] = asset('storage/wallpapers/download/' . $data['origin_image']);
+            $data_arr['links']['download_location'] =  route('v4.wallpaper',['id'=>$data['id']]);
+
+            $data_arr['likes'] =  $data['like_count'];
+            $data_arr['views'] =  $data['view_count'];
+            $data_arr['downloads'] =  rand(300,1000);
+
+        return $data_arr;
     }
+
+
 }
