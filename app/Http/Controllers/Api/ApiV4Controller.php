@@ -117,9 +117,11 @@ class ApiV4Controller extends Controller
                 $index = '#'.$r.$g.$b;
             }
 
-        $endpoint = "https://api.unsplash.com/photos/random?client_id=g7pCnQVE4Y2DxlMqvwt2AAal-HzvbZdMsZRNqd8c9hU&count=5";
+        $endpoint = "https://api.unsplash.com/photos/muX4vR4pEyc?client_id=g7pCnQVE4Y2DxlMqvwt2AAal-HzvbZdMsZRNqd8c9hU";
         $response = Http::get( $endpoint);
         $dataA = $response->json();
+        return $dataA;
+//        dd($dataA);
 
 
         $data_arr['id'] = $data['id'];
