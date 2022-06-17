@@ -66,6 +66,7 @@ class ApiV4Controller extends Controller
     }
 
     private  function getWallpaper($data){
+        $width = $height = $blurhash = $index = null;
 
             $path = storage_path('app/public/wallpapers/download/'.$data['origin_image']);
             if (file_exists($path)){
@@ -93,11 +94,11 @@ class ApiV4Controller extends Controller
 
             $data_arr['id'] = $data['id'];
             $data_arr['created_at'] = $data['created_at']->toDateString();
-            $data_arr['width'] = $width ?  $width : '';
-            $data_arr['height'] = $height ?  $height: '';
-            $data_arr['color'] = $index ?  '#'.$index: '#fffff';
-            $data_arr['blur_hash'] = $blurhash ?  $blurhash : '';
-            $data_arr['$blurhash'] = '';
+            $data_arr['width'] = $width;
+            $data_arr['height'] = $height ;
+            $data_arr['color'] = $index ;
+            $data_arr['blur_hash'] = $blurhash ;
+            $data_arr['description'] = null;
 
             $data_arr['urls']['raw'] = asset('storage/wallpapers/download/' . $data['origin_image']);
             $data_arr['urls']['full'] = asset('storage/wallpapers/download/' . $data['origin_image']);
