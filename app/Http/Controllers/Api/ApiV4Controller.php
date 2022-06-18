@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\CategoryResourceV5;
 use App\Models\CategoryManage;
 use App\Models\SiteManage;
 use App\Models\Wallpapers;
