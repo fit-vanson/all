@@ -113,6 +113,10 @@ Route::group([
 
     Route::get('admob',[ApiV4Controller::class, 'admob']);
     Route::get('settings',[ApiV4Controller::class, 'settings']);
+    Route::get('home',[ApiV4Controller::class, 'home']);
+
+
+
     Route::get('photos/{id}',[ApiV4Controller::class, 'Wallpaper'])->name('v4.wallpaper');
 
 

@@ -489,7 +489,7 @@ class ApiV3Controller extends Controller
 //            foreach ($item->wallpaper->take(5) as $value){
 //                $data_arr['images'][] = asset('storage/wallpapers/thumbnail/'.$value->thumbnail_image);
 //            }
-//            array_push($jsonObj,$data_arr);
+//
 //        }
 //        return $jsonObj;
 //    }
