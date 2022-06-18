@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use kornrunner\Blurhash\Blurhash;
 use League\ColorExtractor\Palette;
+use function GuzzleHttp\Promise\all;
 
 class ApiV4Controller extends Controller
 {
@@ -189,27 +190,36 @@ class ApiV4Controller extends Controller
             ->where('image_extension', $gif, 'image/gif')
             ->orderByDesc($order)
             ->limit(20)->get();
-        $result = $this->Wallpaper($result);
 
-        return $result;
+        $jsonObj =[];
+        foreach ($result as $item){
+            $data_arr = $this->Wallpaper($item);
+
+            array_push($jsonObj,json_decode(json_encode($data_arr), FALSE));
+
+        }
+        return $jsonObj;
     }
 
-    private function Wallpaper($data){
-        $jsonObj =[];
-        foreach ($data as $item){
-            $data_arr = [
-                'id' =>$item->id,
-                'cid' =>$item->cate_id,
-                'image' => asset('storage/wallpapers/download/'.$item->origin_image),
-                'type' =>$item->image_extension == 'image/jpeg' ? 'IMAGE' : 'GIF'  ,
-                'premium' => 0,
-                'tags' =>$item->name,
-                'view' =>$item->view_count,
-                'download' =>$item->like_count,
-            ];
-            array_push($jsonObj,json_decode(json_encode($data_arr), FALSE));
-        }
-        return collect($jsonObj);
+    public function getOneWallpaper(Request $request){
+        $model = Wallpapers::find($request['id']);
+        $model->view_count = $model->view_count + 1;
+        $model->save();
+        return  $this->Wallpaper($model);
+    }
+
+    private function Wallpaper($item){
+        $data_arr = [
+            'id' =>$item->id,
+            'cid' =>$item->cate_id,
+            'image' => asset('storage/wallpapers/download/'.$item->origin_image),
+            'type' =>$item->image_extension == 'image/jpeg' ? 'IMAGE' : 'GIF'  ,
+            'premium' => 0,
+            'tags' =>$item->name,
+            'view' =>$item->view_count,
+            'download' =>$item->like_count,
+        ];
+        return collect($data_arr);
 
     }
 

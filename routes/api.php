@@ -115,6 +115,8 @@ Route::group([
     Route::get('settings',[ApiV4Controller::class, 'settings']);
     Route::get('home',[ApiV4Controller::class, 'home']);
 
+    Route::get('add/show/wallpaper',[ApiV4Controller::class, 'getOneWallpaper']);
+
 
 
     Route::get('photos/{id}',[ApiV4Controller::class, 'Wallpaper'])->name('v4.wallpaper');
