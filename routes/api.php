@@ -123,6 +123,9 @@ Route::group([
     Route::get('wallpaper/cid',[ApiV4Controller::class, 'cid']);
     Route::get('wallpaper/live',[ApiV4Controller::class, 'live']);
 
+    Route::get('wallpaper/hashtag',[ApiV4Controller::class, 'hashtag']);
+
+
 
     Route::get('add/show/wallpaper',[ApiV4Controller::class, 'viewWallpaper']);
 

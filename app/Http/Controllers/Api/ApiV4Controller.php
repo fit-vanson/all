@@ -416,4 +416,22 @@ class ApiV4Controller extends Controller
 
     }
 
+    public function hashtag(Request $request){
+        $wallpapers = Wallpapers::orderByDesc('id')
+            ->where('name', 'like', '%'.$request['query'].'%')
+            ->paginate(21);
+        $jsonObj =[];
+        foreach ($wallpapers as $wallpaper){
+            $data_arr = $this->jsonWallpaper($wallpaper);
+            array_push($jsonObj,json_decode(json_encode($data_arr), FALSE));
+        }
+
+        $data['current_page'] = $wallpapers->currentPage();
+        $data['last_page'] = $wallpapers->lastPage();
+        $data['total'] = $wallpapers->total();
+        $data['data'] = $jsonObj;
+        return $data;
+
+    }
+
 }
