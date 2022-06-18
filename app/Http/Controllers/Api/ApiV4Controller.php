@@ -390,7 +390,7 @@ class ApiV4Controller extends Controller
         $result['current_page'] = $category->currentPage();
         $result['last_page'] = $category->lastPage();
         $result['total'] = $category->total();
-        $result['data'] = CategoryResource::collection($category);
+        $result['data'] = CategoryResourceV5::collection($category);
         return $result;
     }
 
