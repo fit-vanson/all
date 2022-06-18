@@ -111,8 +111,8 @@ Route::group([
 //    'middleware' => 'auth.apikey'
 ], function() {
 
-
-    Route::get('photos/random',[ApiV4Controller::class, 'randomWallpaper']);
+    Route::get('admob',[ApiV4Controller::class, 'admob']);
+    Route::get('settings',[ApiV4Controller::class, 'settings']);
     Route::get('photos/{id}',[ApiV4Controller::class, 'Wallpaper'])->name('v4.wallpaper');
 
 

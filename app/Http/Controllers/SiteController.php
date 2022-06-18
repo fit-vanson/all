@@ -674,12 +674,25 @@ class SiteController extends Controller
         $id = $request->id;
         $site = SiteManage::find($id);
         $ads = [
+
+            'ads_provider'=> $request->ads_provider,
+
             'AdMob_Publisher_ID'=> $request->AdMob_Publisher_ID ? $request->AdMob_Publisher_ID : '',
             'AdMob_App_ID'=> $request->AdMob_App_ID ? $request->AdMob_App_ID : '',
+
             'AdMob_Banner_Ad_Unit_ID'=> $request->AdMob_Banner_Ad_Unit_ID ? $request->AdMob_Banner_Ad_Unit_ID : 'ca-app-pub-3940256099942544/2934735716',
             'AdMob_Interstitial_Ad_Unit_ID'=> $request->AdMob_Interstitial_Ad_Unit_ID ? $request->AdMob_Interstitial_Ad_Unit_ID : 'ca-app-pub-3940256099942544/4411468910',
             'AdMob_Native_Ad_Unit_ID'=> $request->AdMob_Native_Ad_Unit_ID ? $request->AdMob_Native_Ad_Unit_ID : 'ca-app-pub-3940256099942544/3986624511',
             'AdMob_App_Open_Ad_Unit_ID'=> $request->AdMob_App_Open_Ad_Unit_ID ? $request->AdMob_App_Open_Ad_Unit_ID : 'ca-app-pub-3940256099942544/5662855259',
+            'AdMob_App_Reward_Ad_Unit_ID'=> $request->AdMob_App_Reward_Ad_Unit_ID ? $request->AdMob_App_Reward_Ad_Unit_ID : 'ca-app-pub-3940256099942544/5224354917',
+
+            'applovin_banner'=> $request->applovin_banner ? $request->applovin_banner : 'applovin_banner',
+            'applovin_interstitial'=> $request->applovin_interstitial ? $request->applovin_banner : 'applovin_interstitial',
+            'applovin_reward'=> $request->applovin_reward ? $request->applovin_reward : 'applovin_reward',
+
+            'ironsource_id'=> $request->ironsource_id ? $request->ironsource_id : 'ironsource_id',
+            'startapp_id'=> $request->startapp_id ? $request->startapp_id : 'startapp_id',
+
         ];
         $ads = json_encode($ads);
         $site->ads = $ads;

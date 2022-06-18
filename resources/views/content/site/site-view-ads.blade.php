@@ -1,6 +1,6 @@
 @extends('layouts/contentLayoutMaster')
 
-@section('title', 'Site View - Policy')
+@section('title', 'Site View - Ads')
 
 @section('vendor-style')
   {{-- Page Css files --}}
@@ -68,36 +68,99 @@
                                     ?>
                                     <div class="input_admob">
                                         @if($site->ad_switch ==1)
-                                            <div class="mb-1">
+                                        <div class="mb-1">
+                                            <label class="form-label" for="basic-icon-default-uname">Ads Provider</label>
+                                            <select class="form-select" id="ads_provider" name="ads_provider" >
+                                                <option value="ADMOB">ADMOB</option>
+                                                <option value="FACEBOOKBIDDING">FACEBOOKBIDDING</option>
+                                                <option value="APPLOVIN">APPLOVIN</option>
+                                                <option value="IRONSOURCE">IRONSOURCE</option>
+                                                <option value="STARTAPP">STARTAPP</option>
+                                            </select>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <h3>ADMOB</h3>
+                                            <div class="col-6">
                                                 <label class="form-label" for="basic-icon-default-uname">AdMob Publisher ID</label>
                                                 <input type="text" id="AdMob_Publisher_ID" class="form-control"  value="{{@$ads['AdMob_Publisher_ID']}}" name="AdMob_Publisher_ID">
                                             </div>
 
-                                            <div class="mb-1">
+                                            <div class="col-6">
                                                 <label class="form-label" for="basic-icon-default-uname">AdMob App ID</label>
                                                 <input type="text" id="AdMob_App_ID" class="form-control"  value="{{@$ads['AdMob_App_ID']}}" name="AdMob_App_ID">
                                             </div>
 
-                                            <div class="mb-1">
+                                            <div class="col-6">
                                                 <label class="form-label" for="basic-icon-default-uname">AdMob Banner Ad Unit ID</label>
                                                 <input type="text" id="AdMob_Banner_Ad_Unit_ID" class="form-control"  value="{{@$ads['AdMob_Banner_Ad_Unit_ID']}}" name="AdMob_Banner_Ad_Unit_ID">
                                             </div>
 
-                                            <div class="mb-1">
+                                            <div class="col-6">
                                                 <label class="form-label" for="basic-icon-default-uname">AdMob Interstitial Ad Unit ID</label>
                                                 <input type="text" id="AdMob_Interstitial_Ad_Unit_ID" class="form-control"  value="{{@$ads['AdMob_Interstitial_Ad_Unit_ID']}}" name="AdMob_Interstitial_Ad_Unit_ID">
                                             </div>
 
-                                            <div class="mb-1">
+                                            <div class="col-6">
+                                                <label class="form-label" for="basic-icon-default-uname">AdMob Reward Ad Unit ID</label>
+                                                <input type="text" id="AdMob_App_Reward_Ad_Unit_ID" class="form-control"  value="{{@$ads['AdMob_App_Reward_Ad_Unit_ID']}}" name="AdMob_App_Reward_Ad_Unit_ID">
+                                            </div>
+
+                                            <div class="col-6">
                                                 <label class="form-label" for="basic-icon-default-uname">AdMob Native Ad Unit ID</label>
                                                 <input type="text" id="AdMob_Native_Ad_Unit_ID" class="form-control"  value="{{@$ads['AdMob_Native_Ad_Unit_ID']}}" name="AdMob_Native_Ad_Unit_ID">
                                             </div>
-                                            <div class="mb-1">
+
+                                            <div class="col-6">
                                                 <label class="form-label" for="basic-icon-default-uname">AdMob App Open Ad Unit ID</label>
                                                 <input type="text" id="AdMob_App_Open_Ad_Unit_ID" class="form-control"  value="{{@$ads['AdMob_App_Open_Ad_Unit_ID']}}" name="AdMob_App_Open_Ad_Unit_ID">
                                             </div>
-                                        @endif
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <h3><h3>APPLOVIN</h3></h3>
+                                            <div class="col-md-6">
+                                                <div class="mb-1">
+                                                    <label for="applovin_banner">Applovin Banner</label>
+                                                    <input class="form-control" placeholder="Tags" name="applovin_banner" type="text" value="applovin_banner" id="applovin_banner">
+                                                </div>
+                                            </div>
 
+                                            <div class="col-md-6">
+                                                <div class="mb-1">
+                                                    <label for="applovin_interstitial">Applovin Interstitial</label>
+                                                    <input class="form-control" placeholder="Tags" name="applovin_interstitial" type="text" value="applovin_interstitial" id="applovin_interstitial">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="mb-1">
+                                                    <label for="applovin_reward">Applovin Reward</label>
+                                                    <input class="form-control" placeholder="Tags" name="applovin_reward" type="text" value="applovin_reward" id="applovin_reward">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <h3><h3>IRONSOURCE</h3></h3>
+                                            <div class="col-md-12">
+                                                <div class="mb-1">
+                                                    <label for="ironsource_id">Ironsource Id</label>
+                                                    <input class="form-control" placeholder="Tags" name="ironsource_id" type="text" value="ironsource_id" id="ironsource_id">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <h3><h3>STARTAPP</h3></h3>
+                                            <div class="col-md-12">
+                                                <div class="mb-1">
+                                                    <label for="startapp_id">Startapp Id</label>
+                                                    <input class="form-control" placeholder="Tags" name="startapp_id" type="text" value="startapp_id" id="startapp_id">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -105,6 +168,9 @@
                                 <button type="submit" class="btn btn-success" id="submitButton" style="margin-top: 10px;" value="update">Update</button>
                             </div>
                         </form>
+
+
+
 
                     </div>
                 </div>
