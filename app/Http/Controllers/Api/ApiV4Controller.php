@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
+use App\Models\CategoryManage;
 use App\Models\SiteManage;
 use App\Models\Wallpapers;
 use Carbon\Carbon;
@@ -360,6 +362,31 @@ class ApiV4Controller extends Controller
         $data['total'] = $result->total();
         $data['data'] = $jsonObj;
         return $data;
+    }
+
+    public function categories(){
+
+        $domain=$_SERVER['SERVER_NAME'];
+        if(checkBlockIp()){
+            $category = CategoryManage
+                ::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                ->has('wallpaper', '>', 0)
+                ->where('site_name', $domain)
+                ->where('tbl_category_manages.checked_ip', 1)
+                ->withCount('wallpaper')
+                ->get();
+        } else{
+            $category = CategoryManage
+                ::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                ->has('wallpaper', '>', 0)
+                ->where('site_name', $domain)
+                ->where('tbl_category_manages.checked_ip', 0)
+                ->withCount('wallpaper')
+                ->get();
+        }
+        return CategoryResource::collection($category);
     }
 
 }

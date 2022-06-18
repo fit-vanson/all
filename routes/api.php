@@ -108,11 +108,13 @@ Route::group([
 
 Route::group([
     "prefix" => "v4",
-    'middleware' => 'auth.apikey'
+//    'middleware' => 'auth.apikey'
 ], function() {
     Route::get('admob',[ApiV4Controller::class, 'admob']);
     Route::get('settings',[ApiV4Controller::class, 'settings']);
     Route::get('home',[ApiV4Controller::class, 'home']);
+
+    Route::get('categories',[ApiV4Controller::class, 'categories']);
 
     Route::get('wallpaper',[ApiV4Controller::class, 'wallpaper']);
     Route::get('wallpaper/popular',[ApiV4Controller::class, 'popular']);
