@@ -115,11 +115,18 @@ Route::group([
     Route::get('settings',[ApiV4Controller::class, 'settings']);
     Route::get('home',[ApiV4Controller::class, 'home']);
 
-    Route::get('add/show/wallpaper',[ApiV4Controller::class, 'getOneWallpaper']);
+    Route::get('wallpaper',[ApiV4Controller::class, 'wallpaper']);
+    Route::get('wallpaper/popular',[ApiV4Controller::class, 'popular']);
+    Route::get('wallpaper/download',[ApiV4Controller::class, 'download']);
+    Route::get('wallpaper/cid',[ApiV4Controller::class, 'cid']);
+    Route::get('wallpaper/live',[ApiV4Controller::class, 'live']);
+
+
+    Route::get('add/show/wallpaper',[ApiV4Controller::class, 'viewWallpaper']);
 
 
 
-    Route::get('photos/{id}',[ApiV4Controller::class, 'Wallpaper'])->name('v4.wallpaper');
+//    Route::get('photos/{id}',[ApiV4Controller::class, 'Wallpaper'])->name('v4.wallpaper');
 
 
 //    Route::get('version/check/{version}/{token_app}/{item_code}',[ApiV3Controller::class, 'checkCode']);

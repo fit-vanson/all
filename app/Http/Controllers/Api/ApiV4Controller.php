@@ -50,8 +50,6 @@ class ApiV4Controller extends Controller
         return $result;
 
     }
-
-
     public function settings(){
 
         $settings = [
@@ -82,104 +80,50 @@ class ApiV4Controller extends Controller
         return json_encode($settings);
 
     }
-
     public function home(){
-
         $domain = $_SERVER['SERVER_NAME'];
         $data = array();
         if (checkBlockIp()) {
             array_push($data, [
-                'name' => 'latest', 'data' => $this->getWallpaper('id',$domain,1,'<>')
+                'name' => 'latest', 'data' => $this->getWallpaper('id',$domain,1,'<>',20)
             ]);
             array_push($data, [
-                'name' => 'popular', 'data' => $this->getWallpaper('view_count',$domain,1,'<>')
+                'name' => 'popular', 'data' => $this->getWallpaper('view_count',$domain,1,'<>',20)
             ]);
             array_push($data, [
-                'name' => 'random', 'data' => $this->getWallpaper('name',$domain,1,'<>')
+                'name' => 'random', 'data' => $this->getWallpaper('name',$domain,1,'<>',20)
             ]);
             array_push($data, [
-                'name' => 'downloaded', 'data' => $this->getWallpaper('like_count',$domain,1,'<>')
+                'name' => 'downloaded', 'data' => $this->getWallpaper('like_count',$domain,1,'<>',20)
             ]);
             array_push($data, [
-                'name' => 'live', 'data' => $this->getWallpaper('id',$domain,1,'=')
+                'name' => 'live', 'data' => $this->getWallpaper('id',$domain,1,'=',20)
             ]);
 
         } else {
             array_push($data, [
-                'name' => 'latest', 'data' => $this->getWallpaper('id',$domain,0,'<>')
+                'name' => 'latest', 'data' => $this->getWallpaper('id',$domain,0,'<>',20)
             ]);
             array_push($data, [
-                'name' => 'popular', 'data' => $this->getWallpaper('view_count',$domain,0,'<>')
+                'name' => 'popular', 'data' => $this->getWallpaper('view_count',$domain,0,'<>',20)
             ]);
             array_push($data, [
-                'name' => 'random', 'data' => $this->getWallpaper('name',$domain,0,'<>')
+                'name' => 'random', 'data' => $this->getWallpaper('name',$domain,0,'<>',20)
             ]);
             array_push($data, [
-                'name' => 'downloaded', 'data' => $this->getWallpaper('like_count',$domain,0,'<>')
+                'name' => 'downloaded', 'data' => $this->getWallpaper('like_count',$domain,0,'<>',20)
             ]);
             array_push($data, [
-                'name' => 'live', 'data' => $this->getWallpaper('id',$domain,0,'=')
+                'name' => 'live', 'data' => $this->getWallpaper('id',$domain,0,'=',20)
             ]);
-
-
         }
-
         return $data;
 
     }
 
 
 
-    public function randomWallpaper()
-    {
-        $domain = $_SERVER['SERVER_NAME'];
-        if (checkBlockIp()) {
-            $wallpapers = Wallpapers::whereHas('category', function ($q) use ($domain) {
-                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
-                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
-                    ->where('site_name', $domain)
-                    ->where('tbl_category_manages.checked_ip', 1)
-                    ->select('tbl_category_manages.*');
-            })
-                ->inRandomOrder()
-                ->limit($_GET['count'])
-                ->get();
-
-        } else {
-            $wallpapers = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
-                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
-                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
-                    ->where('site_name', $domain)
-                    ->where('tbl_category_manages.checked_ip', 0)
-                    ->select('tbl_category_manages.*');
-            })
-                ->inRandomOrder()
-                ->limit($_GET['count'])
-                ->get();
-
-        }
-        $jsonObj = [];
-        foreach ($wallpapers as $wallpaper){
-            $data_arr = $this->getWallpaper($wallpaper);
-            array_push($jsonObj,$data_arr);
-        }
-
-//        $endpoint = "https://api.unsplash.com/photos/random?client_id=g7pCnQVE4Y2DxlMqvwt2AAal-HzvbZdMsZRNqd8c9hU&count=5";
-//        $response = Http::get( $endpoint);
-//        $data_arr = $response->json();
-//        dd($data_arr);
-
-
-        return $jsonObj;
-
-    }
-//    public  function Wallpaper($id){
-//        $wallpaper = Wallpapers::find($id);
-//        $data_arr = $this->getWallpaper($wallpaper);
-//        return $data_arr;
-//    }
-
-    private  function getWallpaper($order, $domain, $checkBlock, $gif){
+    private  function getWallpaper($order, $domain, $checkBlock, $gif, $limit){
         $result = Wallpapers::with('category')->whereHas('category', function ($q) use ($checkBlock, $domain) {
             $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                 ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
@@ -189,11 +133,11 @@ class ApiV4Controller extends Controller
             })
             ->where('image_extension', $gif, 'image/gif')
             ->orderByDesc($order)
-            ->limit(20)->get();
+            ->limit($limit)->get();
 
         $jsonObj =[];
         foreach ($result as $item){
-            $data_arr = $this->Wallpaper($item);
+            $data_arr = $this->jsonWallpaper($item);
 
             array_push($jsonObj,json_decode(json_encode($data_arr), FALSE));
 
@@ -201,14 +145,14 @@ class ApiV4Controller extends Controller
         return $jsonObj;
     }
 
-    public function getOneWallpaper(Request $request){
+    public function viewWallpaper(Request $request){
         $model = Wallpapers::find($request['id']);
         $model->view_count = $model->view_count + 1;
         $model->save();
-        return  $this->Wallpaper($model);
+        return  $this->jsonWallpaper($model);
     }
 
-    private function Wallpaper($item){
+    private function jsonWallpaper($item){
         $data_arr = [
             'id' =>$item->id,
             'cid' =>$item->cate_id,
@@ -221,6 +165,38 @@ class ApiV4Controller extends Controller
         ];
         return collect($data_arr);
 
+    }
+
+    public function wallpaper(){
+        $domain = $_SERVER['SERVER_NAME'];
+        if (checkBlockIp()) {
+            $result = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
+                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name', $domain)
+                    ->where('tbl_category_manages.checked_ip', 1)
+                    ->select('tbl_category_manages.*');
+                })
+                ->orderByDesc('id')
+                ->paginate(21);
+        }else{
+            $result = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
+                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name', $domain)
+                    ->where('tbl_category_manages.checked_ip', 0)
+                    ->select('tbl_category_manages.*');
+                })
+                ->orderByDesc('id')
+                ->paginate(21);
+
+        }
+        $jsonObj =[];
+        foreach ($result as $item ){
+            $data_arr = $this->jsonWallpaper($item);
+            array_push($jsonObj,json_decode(json_encode($data_arr), FALSE));
+        }
+        return $jsonObj;
     }
 
 
