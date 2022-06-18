@@ -196,7 +196,13 @@ class ApiV4Controller extends Controller
             $data_arr = $this->jsonWallpaper($item);
             array_push($jsonObj,json_decode(json_encode($data_arr), FALSE));
         }
-        $data['current_page'] = $_GET['page'];
+
+
+
+        $data['current_page'] = $result->currentPage();
+        $data['last_page'] = $result->lastPage();
+        $data['total'] = $result->total();
+
         $data['data'] = $jsonObj;
 
         return $data;
