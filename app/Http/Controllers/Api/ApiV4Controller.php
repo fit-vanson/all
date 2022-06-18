@@ -375,7 +375,7 @@ class ApiV4Controller extends Controller
                 ->where('site_name', $domain)
                 ->where('tbl_category_manages.checked_ip', 1)
                 ->withCount('wallpaper')
-                ->get();
+                ->paginate(10);
         } else{
             $category = CategoryManage
                 ::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
@@ -384,9 +384,14 @@ class ApiV4Controller extends Controller
                 ->where('site_name', $domain)
                 ->where('tbl_category_manages.checked_ip', 0)
                 ->withCount('wallpaper')
-                ->get();
+                ->paginate(10);
         }
-        return CategoryResource::collection($category);
+
+        $result['current_page'] = $category->currentPage();
+        $result['last_page'] = $category->lastPage();
+        $result['total'] = $category->total();
+        $result['data'] = CategoryResource::collection($category);
+        return $result;
     }
 
 }
