@@ -395,4 +395,25 @@ class ApiV4Controller extends Controller
         return $result;
     }
 
+    public function cid(Request $request){
+
+        $wallpapers = CategoryManage::findOrFail($request['id'])
+            ->wallpaper()
+            ->orderBy('like_count', 'desc')
+            ->paginate(21);
+
+        $jsonObj =[];
+        foreach ($wallpapers as $wallpaper){
+            $data_arr = $this->jsonWallpaper($wallpaper);
+            array_push($jsonObj,json_decode(json_encode($data_arr), FALSE));
+        }
+
+        $data['current_page'] = $wallpapers->currentPage();
+        $data['last_page'] = $wallpapers->lastPage();
+        $data['total'] = $wallpapers->total();
+        $data['data'] = $jsonObj;
+        return $data;
+
+    }
+
 }
