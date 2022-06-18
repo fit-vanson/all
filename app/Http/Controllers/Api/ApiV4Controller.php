@@ -177,6 +177,7 @@ class ApiV4Controller extends Controller
                     ->where('tbl_category_manages.checked_ip', 1)
                     ->select('tbl_category_manages.*');
                 })
+                ->where('image_extension', '<>', 'image/gif')
                 ->orderByDesc('id')
                 ->paginate(21);
         }else{
@@ -187,6 +188,7 @@ class ApiV4Controller extends Controller
                     ->where('tbl_category_manages.checked_ip', 0)
                     ->select('tbl_category_manages.*');
                 })
+                ->where('image_extension', '<>', 'image/gif')
                 ->orderByDesc('id')
                 ->paginate(21);
 
@@ -197,18 +199,128 @@ class ApiV4Controller extends Controller
             array_push($jsonObj,json_decode(json_encode($data_arr), FALSE));
         }
 
+        $data['current_page'] = $result->currentPage();
+        $data['last_page'] = $result->lastPage();
+        $data['total'] = $result->total();
+        $data['data'] = $jsonObj;
+        return $data;
+    }
 
+    public function popular(){
+        $domain = $_SERVER['SERVER_NAME'];
+        if (checkBlockIp()) {
+            $result = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
+                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name', $domain)
+                    ->where('tbl_category_manages.checked_ip', 1)
+                    ->select('tbl_category_manages.*');
+            })
+                ->where('image_extension', '<>', 'image/gif')
+                ->orderByDesc('view_count')
+                ->paginate(21);
+        }else{
+            $result = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
+                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name', $domain)
+                    ->where('tbl_category_manages.checked_ip', 0)
+                    ->select('tbl_category_manages.*');
+            })
+                ->where('image_extension', '<>', 'image/gif')
+                ->orderByDesc('view_count')
+                ->paginate(21);
+
+        }
+        $jsonObj =[];
+        foreach ($result as $item ){
+            $data_arr = $this->jsonWallpaper($item);
+            array_push($jsonObj,json_decode(json_encode($data_arr), FALSE));
+        }
 
         $data['current_page'] = $result->currentPage();
         $data['last_page'] = $result->lastPage();
         $data['total'] = $result->total();
-
         $data['data'] = $jsonObj;
-
         return $data;
     }
 
+    public function download(){
+        $domain = $_SERVER['SERVER_NAME'];
+        if (checkBlockIp()) {
+            $result = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
+                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name', $domain)
+                    ->where('tbl_category_manages.checked_ip', 1)
+                    ->select('tbl_category_manages.*');
+            })
+                ->where('image_extension', '<>', 'image/gif')
+                ->orderByDesc('like_count')
+                ->paginate(21);
+        }else{
+            $result = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
+                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name', $domain)
+                    ->where('tbl_category_manages.checked_ip', 0)
+                    ->select('tbl_category_manages.*');
+            })
+                ->where('image_extension', '<>', 'image/gif')
+                ->orderByDesc('like_count')
+                ->paginate(21);
 
+        }
+        $jsonObj =[];
+        foreach ($result as $item ){
+            $data_arr = $this->jsonWallpaper($item);
+            array_push($jsonObj,json_decode(json_encode($data_arr), FALSE));
+        }
 
+        $data['current_page'] = $result->currentPage();
+        $data['last_page'] = $result->lastPage();
+        $data['total'] = $result->total();
+        $data['data'] = $jsonObj;
+        return $data;
+    }
+
+    public function live(){
+        $domain = $_SERVER['SERVER_NAME'];
+        if (checkBlockIp()) {
+            $result = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
+                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name', $domain)
+                    ->where('tbl_category_manages.checked_ip', 1)
+                    ->select('tbl_category_manages.*');
+            })
+                ->where('image_extension', 'image/gif')
+                ->orderByDesc('id')
+                ->paginate(21);
+        }else{
+            $result = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
+                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
+                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
+                    ->where('site_name', $domain)
+                    ->where('tbl_category_manages.checked_ip', 0)
+                    ->select('tbl_category_manages.*');
+            })
+                ->where('image_extension', 'image/gif')
+                ->orderByDesc('id')
+                ->paginate(21);
+
+        }
+        $jsonObj =[];
+        foreach ($result as $item ){
+            $data_arr = $this->jsonWallpaper($item);
+            array_push($jsonObj,json_decode(json_encode($data_arr), FALSE));
+        }
+
+        $data['current_page'] = $result->currentPage();
+        $data['last_page'] = $result->lastPage();
+        $data['total'] = $result->total();
+        $data['data'] = $jsonObj;
+        return $data;
+    }
 
 }
