@@ -118,6 +118,7 @@ Route::group([
     Route::get('wallpaper',[ApiV4Controller::class, 'wallpaper']);
     Route::get('wallpaper/popular',[ApiV4Controller::class, 'popular']);
     Route::get('wallpaper/download',[ApiV4Controller::class, 'download']);
+    Route::get('wallpaper/random',[ApiV4Controller::class, 'random']);
     Route::get('wallpaper/cid',[ApiV4Controller::class, 'cid']);
     Route::get('wallpaper/live',[ApiV4Controller::class, 'live']);
 
