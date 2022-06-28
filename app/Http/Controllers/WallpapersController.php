@@ -185,6 +185,9 @@ class WallpapersController extends Controller
             $wallpaper->feature = 0;
             $wallpaper->image_extension = $_FILES['file']['type'];
 //            $wallpaper->cate_id = $request->select_category;
+
+            dd($request->select_category);
+
             $wallpaper->save();
             $wallpaper->category()->attach($request->select_category);
             return response()->json(['success'=>'Thành công']);
