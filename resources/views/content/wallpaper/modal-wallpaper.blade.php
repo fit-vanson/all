@@ -14,7 +14,8 @@
               @csrf
               <div class="col-md-12">
                   <label class="form-label">Category</label>
-                  <select class="form-select" id="select_category" name="select_category[]" required multiple >
+                  <select class="form-select" id="select_category" name="select_category" required  >
+{{--                  <select class="form-select" id="select_category" name="select_category[]" required multiple >--}}
                       @foreach($categories as $category)
                           <option value="{{$category->id}}">{{$category->category_name}}</option>
                       @endforeach

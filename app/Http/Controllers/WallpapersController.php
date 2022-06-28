@@ -184,10 +184,10 @@ class WallpapersController extends Controller
             $wallpaper->like_count = rand(500,1000);
             $wallpaper->feature = 0;
             $wallpaper->image_extension = $_FILES['file']['type'];
-//            $wallpaper->cate_id = $request->select_category;
+            $wallpaper->cate_id = $request->select_category;
 
             $wallpaper->save();
-            $wallpaper->category()->attach($request->select_category);
+//            $wallpaper->category()->attach($request->select_category);
             return response()->json(['success'=>'Thành công']);
 
         }
