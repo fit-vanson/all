@@ -21,7 +21,7 @@ class ApiV3Controller extends Controller
         dd(1);
     }
     public function checkCode($id){
-        dd(1);
+
         if (isset($_SERVER['HTTP_CLIENT_IP']))
             $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
         else if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
