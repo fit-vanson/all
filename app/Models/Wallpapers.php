@@ -12,15 +12,15 @@ class Wallpapers extends Model
         'cate_id','name','origin_image','image','thumbnail_image','view_count','feature','like_count','hash_file','image_extension'
     ];
 
-//    public function category()
-//    {
-//        return $this->belongsToMany('App\Models\CategoryManage', 'tbl_category_has_wallpaper', 'wallpaper_id', 'category_id');
-//    }
-
     public function category()
     {
-        return $this->belongsTo('App\Models\CategoryManage','cate_id');
+        return $this->belongsToMany('App\Models\CategoryManage', 'tbl_category_has_wallpaper', 'wallpaper_id', 'category_id');
     }
+
+//    public function category()
+//    {
+//        return $this->belongsTo('App\Models\CategoryManage','cate_id');
+//    }
 
     public function visitors(){
         return $this->belongsToMany(Visitor::class,'visitor_favorites');
