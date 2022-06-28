@@ -60,10 +60,10 @@ class ApiV3Controller extends Controller
         $ads = json_decode($site->ads, true);
 
         $response_publisher_id["name"] = "ADMIN_PUBLISHER_ID";
-        $response_publisher_id["value"] = $ads ? $ads['AdMob_Publisher_ID'] : '';
+        $response_publisher_id["value"] = $site->ad_switch == 1 ? ($ads ? $ads['AdMob_Publisher_ID'] : '') : '';
 
         $response_app_id["name"] = "ADMIN_APP_ID";
-        $response_app_id["value"] =$ads ?  $ads['AdMob_App_ID'] : '';
+        $response_app_id["value"] = $site->ad_switch == 1 ? ($ads ?  $ads['AdMob_App_ID'] : '') : '';
 
         $response_ads_rewarded["name"] = "ADMIN_REWARDED_ADMOB_ID";
         $response_ads_rewarded["value"] = '';
@@ -71,7 +71,7 @@ class ApiV3Controller extends Controller
 
 
         $response_ads_interstitial_admob_id["name"] = "ADMIN_INTERSTITIAL_ADMOB_ID";
-        $response_ads_interstitial_admob_id["value"] = $ads ?  $ads['AdMob_Interstitial_Ad_Unit_ID']: '';
+        $response_ads_interstitial_admob_id["value"] = $site->ad_switch == 1 ? ($ads ?  $ads['AdMob_Interstitial_Ad_Unit_ID']: '') : '';
 
         $response_ads_interstitial_facebook_id["name"] = "ADMIN_INTERSTITIAL_FACEBOOK_ID";
         $response_ads_interstitial_facebook_id["value"] = '';
@@ -84,7 +84,7 @@ class ApiV3Controller extends Controller
         $response_ads_interstitial_click["value"] = 3;
 
         $response_ads_banner_admob_id["name"] = "ADMIN_BANNER_ADMOB_ID";
-        $response_ads_banner_admob_id["value"] =$ads ?  $ads['AdMob_Banner_Ad_Unit_ID']: '';
+        $response_ads_banner_admob_id["value"] = $site->ad_switch == 1 ? ($ads ?  $ads['AdMob_Banner_Ad_Unit_ID']: '') : '';
 
 
         $response_ads_banner_facebook_id["name"] = "ADMIN_BANNER_FACEBOOK_ID";
@@ -97,7 +97,7 @@ class ApiV3Controller extends Controller
         $response_ads_native_facebook_id["value"] = "";
 
         $response_ads_native_admob_id["name"] = "ADMIN_NATIVE_ADMOB_ID";
-        $response_ads_native_admob_id["value"] = $ads ? $ads['AdMob_Native_Ad_Unit_ID']: '';
+        $response_ads_native_admob_id["value"] = $site->ad_switch == 1 ? ( $ads ? $ads['AdMob_Native_Ad_Unit_ID']: '') : '';
 
         $response_ads_native_item["name"] = "ADMIN_NATIVE_LINES";
         $response_ads_native_item["value"] = 6;
