@@ -20,9 +20,7 @@ class ApiV3Controller extends Controller
     public function index(){
         dd(1);
     }
-    public function checkCode(Request $request,$version, $token, $item_code){
-
-
+    public function checkCode(){
         if (isset($_SERVER['HTTP_CLIENT_IP']))
             $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
         else if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
