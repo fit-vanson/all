@@ -206,13 +206,14 @@
                         render: function (data, type, full, meta) {
                             var categories = data,
                                 $output = '';
-                            // $.each(categories, function(i, item) {
+                            $.each(categories, function(i, item) {
                             var stateNum = Math.floor(Math.random() * 6) + 1;
                             var states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
                             var $state = states[stateNum];
-                            $output += '<span style="margin-top: 5px;" class="badge rounded-pill badge-light-' + $state + '">' + categories + '</span></br>';
-                            // return i<2;
-                            // });
+                            // $output += '<span style="margin-top: 5px;" class="badge rounded-pill badge-light-' + $state + '">' + categories + '</span></br>';
+                            $output += '<span style="margin-top: 5px;" class="badge rounded-pill badge-light-' + $state + '">' + item + '</span></br>';
+                            return i<2;
+                            });
                             return $output
                         }
                     },
@@ -338,11 +339,12 @@
                         $('#avatar_thumbnail').attr('src', '{{asset('storage/wallpapers/thumbnail')}}/' + data.thumbnail_image);
                         $('#avatar_detail').attr('src', '{{asset('storage/wallpapers/detail')}}/' + data.image);
                         $('#avatar_download').attr('src', '{{asset('storage/wallpapers/download')}}/' + data.origin_image);
-                        // var id_cate = [];
-                        // $.each(data.category, function (i, item) {
-                        //     id_cate.push(item.id)
-                        // });
-                        $('#select_category_edit').val(data.cate_id);
+
+                        var id_cate = [];
+                        $.each(data.category, function (i, item) {
+                            id_cate.push(item.id)
+                        });
+                        $('#select_category_edit').val(id_cate);
                         $('#select_category_edit').select2({
                             dropdownParent: "#EditWallpaperModal"
                         });
