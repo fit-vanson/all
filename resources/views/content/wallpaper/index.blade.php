@@ -204,16 +204,17 @@
                         targets: 6,
                         // orderable: false,
                         render: function (data, type, full, meta) {
+                            console.log(data)
                             var categories = data,
                                 $output = '';
-                            $.each(categories, function(i, item) {
-                            var stateNum = Math.floor(Math.random() * 6) + 1;
-                            var states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
-                            var $state = states[stateNum];
-                            // $output += '<span style="margin-top: 5px;" class="badge rounded-pill badge-light-' + $state + '">' + categories + '</span></br>';
-                            $output += '<span style="margin-top: 5px;" class="badge rounded-pill badge-light-' + $state + '">' + item + '</span></br>';
-                            return i<2;
-                            });
+                            // $.each(categories, function(i, item) {
+                                var stateNum = Math.floor(Math.random() * 6) + 1;
+                                var states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
+                                var $state = states[stateNum];
+                                $output += '<span style="margin-top: 5px;" class="badge rounded-pill badge-light-' + $state + '">' + categories + '</span></br>';
+                                // $output += '<span style="margin-top: 5px;" class="badge rounded-pill badge-light-' + $state + '">' + item + '</span></br>';
+                                // return i<2;
+                            // });
                             return $output
                         }
                     },
