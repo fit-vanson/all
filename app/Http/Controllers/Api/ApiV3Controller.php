@@ -66,7 +66,7 @@ class ApiV3Controller extends Controller
         $response_app_id["value"] = $site->ad_switch == 1 ? ($ads ?  $ads['AdMob_App_ID'] : '') : '';
 
         $response_ads_rewarded["name"] = "ADMIN_REWARDED_ADMOB_ID";
-        $response_ads_rewarded["value"] = '';
+        $response_ads_rewarded["value"] = $site->ad_switch == 1 ? ($ads ?  $ads['AdMob_App_Reward_Ad_Unit_ID'] : '') : '';
 
 
 
