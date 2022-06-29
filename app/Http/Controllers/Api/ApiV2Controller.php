@@ -231,6 +231,7 @@ class ApiV2Controller extends Controller
         $data_arr = json_decode(urldecode(base64_decode($data_json)), true);
 
 
+
         if (isset($data_arr['sign']) == '' && isset($data_arr['salt']) == '') {
             return $data_arr;
 
