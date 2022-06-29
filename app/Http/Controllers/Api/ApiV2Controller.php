@@ -232,7 +232,7 @@ class ApiV2Controller extends Controller
 
 
 
-        if ($data_arr['sign'] == '' && $data_arr['salt'] == '') {
+        if (isset($data_arr['sign']) == '' && isset($data_arr['salt']) == '') {
 
 
             $set['HD_WALLPAPER'][] = array("success" => -1, "MSG" => "Invalid sign salt.");
