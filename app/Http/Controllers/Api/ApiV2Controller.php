@@ -302,8 +302,6 @@ class ApiV2Controller extends Controller
     private function get_home($get_method){
         $domain = $_SERVER['SERVER_NAME'];
 
-        dd($get_method);
-
         if ($get_method['type'] != '') {
             $type = trim($get_method['type']);
             if (checkBlockIp()) {
