@@ -1052,7 +1052,7 @@ class ApiV2Controller extends Controller
             $data_arr['total_rate'] = $item['like_count'];
             $data_arr['rate_avg'] = $item['like_count'];
 
-            $data_arr['pay'] = "free";
+//            $data_arr['pay'] = "free";
 
 
             $data_arr['is_favorite']= $this->is_favorite($item['id'], 'wallpaper', $android_id);
