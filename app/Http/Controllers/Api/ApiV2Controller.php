@@ -229,71 +229,69 @@ class ApiV2Controller extends Controller
         $data_json = $data_info;
         $data_arr = json_decode(urldecode(base64_decode($data_json)), true);
 
+        if ($data_arr['sign'] == '' && $data_arr['salt'] == '') {
 
+            $set['HD_WALLPAPER'][] = array("success" => -1, "MSG" => "Invalid sign salt.");
+            header('Content-Type: application/json; charset=utf-8');
+            echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+            exit();
+    } else {
 
-            if ($data_arr['sign'] == '' && $data_arr['salt'] == '') {
+            $data_arr['salt'];
+
+            $md5_salt = md5($key . $data_arr['salt']);
+
+            if ($data_arr['sign'] != $md5_salt) {
 
                 $set['HD_WALLPAPER'][] = array("success" => -1, "MSG" => "Invalid sign salt.");
                 header('Content-Type: application/json; charset=utf-8');
                 echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
                 exit();
+            }
+            if (isset($_SERVER['HTTP_CLIENT_IP']))
+                $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+            else if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+                $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            else if (isset($_SERVER['HTTP_X_FORWARDED']))
+                $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+            else if (isset($_SERVER['HTTP_FORWARDED_FOR']))
+                $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+            else if (isset($_SERVER['HTTP_FORWARDED']))
+                $ipaddress = $_SERVER['HTTP_FORWARDED'];
+            else if (isset($_SERVER['REMOTE_ADDR']))
+                $ipaddress = $_SERVER['REMOTE_ADDR'];
+            else if (isset($_SERVER["HTTP_CF_CONNECTING_IP"]))
+                $ipaddress = $_SERVER["HTTP_CF_CONNECTING_IP"];
+            else
+                $ipaddress = 'UNKNOWN';
+
+            $domain = $_SERVER['SERVER_NAME'];
+
+            $site = SiteManage::where('site_name', $domain)->first();
+            $listIp = ListIp::where('ip_address', $ipaddress)->where('id_site', $site->id)->whereDate('created_at', Carbon::today())->first();
+            if (!$listIp) {
+                ListIp::create([
+                    'ip_address' => $ipaddress,
+                    'id_site' => $site->id
+                ]);
             } else {
-
-                $data_arr['salt'];
-
-                $md5_salt = md5($key . $data_arr['salt']);
-
-                if ($data_arr['sign'] != $md5_salt) {
-
-                    $set['HD_WALLPAPER'][] = array("success" => -1, "MSG" => "Invalid sign salt.");
-                    header('Content-Type: application/json; charset=utf-8');
-                    echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
-                    exit();
-                }
-                if (isset($_SERVER['HTTP_CLIENT_IP']))
-                    $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
-                else if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
-                    $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-                else if (isset($_SERVER['HTTP_X_FORWARDED']))
-                    $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
-                else if (isset($_SERVER['HTTP_FORWARDED_FOR']))
-                    $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
-                else if (isset($_SERVER['HTTP_FORWARDED']))
-                    $ipaddress = $_SERVER['HTTP_FORWARDED'];
-                else if (isset($_SERVER['REMOTE_ADDR']))
-                    $ipaddress = $_SERVER['REMOTE_ADDR'];
-                else if (isset($_SERVER["HTTP_CF_CONNECTING_IP"]))
-                    $ipaddress = $_SERVER["HTTP_CF_CONNECTING_IP"];
-                else
-                    $ipaddress = 'UNKNOWN';
-
-                $domain = $_SERVER['SERVER_NAME'];
-
-                $site = SiteManage::where('site_name', $domain)->first();
-                $listIp = ListIp::where('ip_address', $ipaddress)->where('id_site', $site->id)->whereDate('created_at', Carbon::today())->first();
+                $listIp = ListIp::where('ip_address', get_ip())->where('id_site', $site->id)->whereDate('created_at', Carbon::today())->first();
                 if (!$listIp) {
                     ListIp::create([
-                        'ip_address' => $ipaddress,
+                        'ip_address' => get_ip(),
                         'id_site' => $site->id
                     ]);
-                } else {
-                    $listIp = ListIp::where('ip_address', get_ip())->where('id_site', $site->id)->whereDate('created_at', Carbon::today())->first();
-                    if (!$listIp) {
-                        ListIp::create([
-                            'ip_address' => get_ip(),
-                            'id_site' => $site->id
-                        ]);
-                    }
                 }
-
-                if(isset($data_arr['android_id'])){
-                    $visitor =$data_arr['android_id'];
-                    Visitor::updateOrCreate([
-                        'device_id' => $visitor
-                    ]);
-                }
-
             }
+
+            if(isset($data_arr['android_id'])){
+                $visitor =$data_arr['android_id'];
+                Visitor::updateOrCreate([
+                    'device_id' => $visitor
+                ]);
+            }
+
+        }
         return $data_arr;
     }
 
