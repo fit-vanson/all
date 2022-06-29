@@ -27,7 +27,8 @@ class ApiV2Controller extends Controller
 
         $get_method = $this->checkSignSalt($_POST['data']);
 
-        if(isset($get_method['method_name']) && $get_method['method_name']=="get_home")
+
+        if(isset($get_method['method_name']) && $get_method['method_name']=="get_home" || isset($get_method['helper_name']) && $get_method['helper_name']=="get_home")
         {
             $this->get_home($get_method);
         }
@@ -233,6 +234,7 @@ class ApiV2Controller extends Controller
 
 
         if (isset($data_arr['sign']) == '' && isset($data_arr['salt']) == '') {
+            return $data_arr;
 
 
             $set['HD_WALLPAPER'][] = array("success" => -1, "MSG" => "Invalid sign salt.");
@@ -302,7 +304,7 @@ class ApiV2Controller extends Controller
     private function get_home($get_method){
         $domain = $_SERVER['SERVER_NAME'];
 //        if ($get_method['type'] != '') {
-            $type = ($get_method['type'] != '' ) ? trim($get_method['type']) : 'Square' ;
+            $type = (isset($get_method['type']) && $get_method['type'] != '' ) ? trim($get_method['type']) : 'Square' ;
             if (checkBlockIp()) {
                 $wallpaper = Wallpapers::where('image_extension', '<>', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
                     $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
