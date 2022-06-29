@@ -262,8 +262,8 @@ class ApiV3Controller extends Controller
     }
 
     public function wallpapersAll($order,$page){
-        $page_limit = 12;
-        $limit= $page * $page_limit;
+        $page_limit = 10;
+        $limit= 0 * $page_limit;
 
         $domain=$_SERVER['SERVER_NAME'];
         if (checkBlockIp()) {
@@ -275,9 +275,8 @@ class ApiV3Controller extends Controller
                     ->select('tbl_category_manages.*');
             })
                 ->orderBy($order, 'desc')
-                ->limit($page_limit)
-                ->offset($limit)
-                ->get()->toArray();
+                ->paginate($page_limit)
+                ->toArray();
 
         } else {
             $wallpaper = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
@@ -288,9 +287,8 @@ class ApiV3Controller extends Controller
                     ->select('tbl_category_manages.*');
             })
                 ->orderBy($order, 'desc')
-                ->limit($page_limit)
-                ->offset($limit)
-                ->get()->toArray();
+                ->paginate($page_limit)
+                ->toArray();
         }
 
         $data_arr = $this->getWallpaper($wallpaper);
