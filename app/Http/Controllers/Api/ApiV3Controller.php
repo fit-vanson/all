@@ -12,6 +12,7 @@ use App\Models\Wallpapers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use League\ColorExtractor\Palette;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -207,18 +208,6 @@ class ApiV3Controller extends Controller
 
         $domain=$_SERVER['SERVER_NAME'];
         if (checkBlockIp()) {
-//            $wallpaper = Wallpapers::where('image_extension', '<>', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
-//                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
-//                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
-//                    ->where('site_name', $domain)
-//                    ->where('tbl_category_manages.checked_ip', 1)
-//                    ->select('tbl_category_manages.*');
-//            })
-//                ->limit($page_limit)
-//                ->offset($limit)
-//                ->get()
-//                ->toArray();
-
             $category = CategoryManage
                 ::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                 ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
@@ -228,17 +217,7 @@ class ApiV3Controller extends Controller
                 ->withCount('wallpaper')
                 ->get()->toArray();
         } else {
-//            $wallpaper = Wallpapers::where('image_extension', '<>', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
-//                $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
-//                    ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
-//                    ->where('site_name', $domain)
-//                    ->where('tbl_category_manages.checked_ip', 0)
-//                    ->select('tbl_category_manages.*');
-//            })
-//                ->limit($page_limit)
-//                ->offset($limit)
-//                ->get()
-//                ->toArray();
+
             $category = CategoryManage
                 ::leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                 ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
@@ -248,14 +227,6 @@ class ApiV3Controller extends Controller
                 ->withCount('wallpaper')
                 ->get()->toArray();
         }
-
-//        dd($category);
-
-//        $endpoint = " https://wallpapers.virmana.com/api/category/all/4F5A9C3D9A86FA54EACEDDD635185/16edd7cf-2525-485e-b11a-3dd35f382457/";
-//        $endpoint = "https://wallpapers.virmana.com/api/wallpaper/all/views/0/4F5A9C3D9A86FA54EACEDDD635185/16edd7cf-2525-485e-b11a-3dd35f382457/";
-//        $response = Http::get( $endpoint);
-//        dd($response->json());
-
 
 
         $data_arr = $this->getCategories($category);
@@ -466,13 +437,17 @@ class ApiV3Controller extends Controller
         $jsonObj = [];
         foreach ($data as $item){
 
+            $palette = Palette::fromFilename(asset('storage/wallpapers/thumbnail/'.$item['thumbnail_image']));
+            $topEightColors = $palette->getMostUsedColors(6);
+
             $data_arr['id'] = $item['id'];
             $data_arr['kind'] = $item['image_extension'] != 'image/gif' ? 'image' : 'gif';
             $data_arr['title'] = $item['name'];
             $data_arr['description'] = $item['name'];
             $data_arr['category'] = $item['category']['category_name'];
 //            $data_arr['color'] =  '000000';
-            $data_arr['color'] =  substr(md5(rand()), 0, 6);
+//            $data_arr['color'] =  substr(md5(rand()), 0, 6);
+            $data_arr['color'] =  $topEightColors;
 
             $data_arr['downloads'] = rand(500,1000);
 
