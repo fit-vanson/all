@@ -28,7 +28,7 @@ class ApiV2Controller extends Controller
         $get_method = $this->checkSignSalt($_POST['data']);
 
 
-        if(isset($get_method['method_name']) && $get_method['method_name']=="get_home" || isset($get_method['helper_name']) && $get_method['helper_name']=="get_home")
+        if( $get_method['method_name']=="get_home")
         {
             $this->get_home($get_method);
         }
@@ -229,8 +229,6 @@ class ApiV2Controller extends Controller
         $key = "zxcv@vietmmo";
         $data_json = $data_info;
         $data_arr = json_decode(urldecode(base64_decode($data_json)), true);
-
-
 
 
         if (isset($data_arr['sign']) == '' && isset($data_arr['salt']) == '') {
