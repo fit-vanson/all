@@ -453,10 +453,8 @@ class ApiV3Controller extends Controller
     }
 
     private  function getWallpaper($data){
-
-        dd($data);
         $jsonObj = [];
-        foreach ($data['data'] as $item){
+        foreach ($data as $item){
 
             $data_arr['id'] = $item['id'];
             $data_arr['kind'] = $item['image_extension'] != 'image/gif' ? 'image' : 'gif';
