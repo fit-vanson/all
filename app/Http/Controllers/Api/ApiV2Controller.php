@@ -27,7 +27,7 @@ class ApiV2Controller extends Controller
 
         $get_method = $this->checkSignSalt($_POST['data']);
 
-        if($get_method['method_name']=="get_home")
+        if(isset($get_method['method_name'])=="get_home")
         {
             $this->get_home($get_method);
         }
