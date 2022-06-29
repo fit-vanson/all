@@ -150,8 +150,9 @@ class ApiV3Controller extends Controller
                     ->where('tbl_category_manages.checked_ip', 1)
                     ->select('tbl_category_manages.*');
             })
-                ->paginate($page_limit)
-                ->toArray();
+                ->limit($page_limit)
+                ->offset($limit)
+                ->get()->toArray();;
 
             $category = CategoryManage::with('wallpaper')
                 ->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
@@ -169,12 +170,15 @@ class ApiV3Controller extends Controller
                     ->where('tbl_category_manages.checked_ip', 0)
                     ->select('tbl_category_manages.*');
             })
+                ->limit($page_limit)
+                ->offset($limit)
+                ->get()->toArray();
 //                ->setFirstResult($page_limit * $limit)
 //                ->setMaxResults($page_limit)
 
 //                ->offset($limit)
 //                ->get()
-                ->paginate($page_limit)->toArray();
+//                ->paginate($page_limit)->toArray();
             $category = CategoryManage::with('wallpaper')
                 ->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
                 ->leftJoin('tbl_site_manages', 'tbl_site_manages.id', '=', 'tbl_category_has_site.site_id')
@@ -315,8 +319,9 @@ class ApiV3Controller extends Controller
                     ->select('tbl_category_manages.*');
             })
                 ->inRandomOrder()
-                ->paginate($page_limit)
-                ->toArray();
+                ->limit($page_limit)
+                ->offset($limit)
+                ->get()->toArray();;
 
         } else {
             $wallpaper = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
@@ -327,8 +332,9 @@ class ApiV3Controller extends Controller
                     ->select('tbl_category_manages.*');
             })
                 ->inRandomOrder()
-                ->paginate($page_limit)
-                ->toArray();
+                ->limit($page_limit)
+                ->offset($limit)
+                ->get()->toArray();;
 
         }
 
@@ -339,7 +345,7 @@ class ApiV3Controller extends Controller
 
     public function wallpapersByCategory($page,$category){
         $page_limit = 10;
-        $limit= 0 * $page_limit;
+        $limit= $page * $page_limit;
 
         $domain=$_SERVER['SERVER_NAME'];
         if (checkBlockIp()) {
@@ -356,8 +362,9 @@ class ApiV3Controller extends Controller
             })
                 ->where('cate_id', $category)
                 ->inRandomOrder()
-                ->paginate($page_limit)
-                ->toArray();
+                ->limit($page_limit)
+                ->offset($limit)
+                ->get()->toArray();;
 
         } else {
             $wallpaper = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
@@ -369,8 +376,9 @@ class ApiV3Controller extends Controller
             })
                 ->where('cate_id', $category)
                 ->inRandomOrder()
-                ->paginate($page_limit)
-                ->toArray();
+                ->limit($page_limit)
+                ->offset($limit)
+                ->get()->toArray();;
 
         }
         $data_arr = $this->getWallpaper($wallpaper);
@@ -380,7 +388,7 @@ class ApiV3Controller extends Controller
 
     public function wallpapersBysearch($page,$query){
         $page_limit = 10;
-        $limit= 0 * $page_limit;
+        $limit= $page * $page_limit;
 
         $domain=$_SERVER['SERVER_NAME'];
         if (checkBlockIp()) {
@@ -395,8 +403,9 @@ class ApiV3Controller extends Controller
             })
                 ->where('name', 'like', '%' . $query . '%')
                 ->inRandomOrder()
-                ->paginate($page_limit)
-                ->toArray();
+                ->limit($page_limit)
+                ->offset($limit)
+                ->get()->toArray();;
 
         } else {
             $wallpaper = Wallpapers::with('category')->whereHas('category', function ($q) use ($domain) {
@@ -408,8 +417,9 @@ class ApiV3Controller extends Controller
             })
                 ->where('name', 'like', '%' . $query . '%')
                 ->inRandomOrder()
-                ->paginate($page_limit)
-                ->toArray();
+                ->limit($page_limit)
+                ->offset($limit)
+                ->get()->toArray();;
 
         }
         $data_arr = $this->getWallpaper($wallpaper);
