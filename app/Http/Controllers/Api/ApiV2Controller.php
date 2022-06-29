@@ -27,7 +27,9 @@ class ApiV2Controller extends Controller
 
         $get_method = $this->checkSignSalt($_POST['data']);
 
-        if($get_method['method_name']=="get_home")
+
+
+        if(isset($get_method['method_name'])=="get_home" || isset($get_method['helper_name'])=="get_home"  )
         {
             $this->get_home($get_method);
         }
@@ -228,14 +230,9 @@ class ApiV2Controller extends Controller
         $key = "zxcv@vietmmo";
         $data_json = $data_info;
         $data_arr = json_decode(urldecode(base64_decode($data_json)), true);
-
-
-//        dd($data_arr);
-
-
-
         if (isset($data_arr['sign']) == '' && isset($data_arr['salt']) == '') {
 
+            return $data_arr;
             $set['HD_WALLPAPER'][] = array("success" => -1, "MSG" => "Invalid sign salt.");
             header('Content-Type: application/json; charset=utf-8');
             echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
@@ -302,8 +299,10 @@ class ApiV2Controller extends Controller
 
     private function get_home($get_method){
         $domain = $_SERVER['SERVER_NAME'];
-        if ($get_method['type'] != '') {
-            $type = trim($get_method['type']);
+
+
+//        if (isset($get_method['type']) != '') {
+            $type = isset($get_method['type']) ? trim($get_method['type']) : "";
             if (checkBlockIp()) {
                 $wallpaper = Wallpapers::where('image_extension', '<>', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
                     $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
@@ -352,7 +351,7 @@ class ApiV2Controller extends Controller
             header('Content-Type: application/json; charset=utf-8');
             echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
             die();
-        }
+//        }
     }
 
     private function get_latest($get_method)
@@ -1050,6 +1049,8 @@ class ApiV2Controller extends Controller
             $data_arr['total_views'] = $item['view_count'];
             $data_arr['total_rate'] = $item['like_count'];
             $data_arr['rate_avg'] = $item['like_count'];
+
+            $data_arr['pay'] = "free";
 
 
             $data_arr['is_favorite']= $this->is_favorite($item['id'], 'wallpaper', $android_id);
