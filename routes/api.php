@@ -65,17 +65,6 @@ Route::group([
     Route::post('/update_download',[ApiController::class, 'update_download']);
 
     Route::get('/',[ApiController::class, 'index']);
-//    Route::get('/categories', [CategoryController::class, 'index']);
-//    Route::get('/categories/{category_id}/wallpapers', [CategoryController::class, 'getWallpapers']);
-//
-//    Route::get('/wallpaper-detail/{id}/{device_id}', [WallpaperController::class, 'show']);
-//    Route::get('/wallpapers/featured', [WallpaperController::class, 'getFeatured']);
-//    Route::get('/wallpapers/popular', [WallpaperController::class, 'getPopulared']);
-//    Route::get('/wallpapers/newest', [WallpaperController::class, 'getNewest']);
-//
-//    Route::post('/wallpaper-favorite', [FavoriteController::class, 'likeWallpaper']);
-//    Route::post('/wallpaper-favorite-unsaved', [FavoriteController::class, 'disLikeWallpaper']);
-//    Route::get('/favorite/{device_id}', [FavoriteController::class, 'getSaved']);
 });
 
 
