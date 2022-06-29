@@ -27,7 +27,7 @@ class ApiV2Controller extends Controller
 
         $get_method = $this->checkSignSalt($_POST['data']);
 
-        if(isset($get_method['method_name'])=="get_home")
+        if($get_method['method_name']=="get_home")
         {
             $this->get_home($get_method);
         }
@@ -301,7 +301,6 @@ class ApiV2Controller extends Controller
 
     private function get_home($get_method){
         $domain = $_SERVER['SERVER_NAME'];
-
         if ($get_method['type'] != '') {
             $type = trim($get_method['type']);
             if (checkBlockIp()) {
