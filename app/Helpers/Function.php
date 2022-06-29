@@ -36,7 +36,7 @@ function checkBlockIp(){
     else
         $ipaddress = 'UNKNOWN';
 //    $site = SiteManage::with('blockIps')->where('site_name',$domain)->first();
-    $blockIps = BlockIp::where('status',1)->get();
+    $blockIps = BlockIP::where('status',1)->get();
 
     $block=false;
 //    foreach ($site->blockIps as $blockIp){
