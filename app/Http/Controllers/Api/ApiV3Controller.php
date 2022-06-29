@@ -263,7 +263,7 @@ class ApiV3Controller extends Controller
 
     public function wallpapersAll($order,$page){
         $page_limit = 10;
-        $limit= 0 * $page_limit;
+        $limit= $page * $page_limit;
 
         $domain=$_SERVER['SERVER_NAME'];
         if (checkBlockIp()) {
@@ -298,7 +298,7 @@ class ApiV3Controller extends Controller
 
     public function wallpapersRandom($page){
         $page_limit = 10;
-        $limit= 0 * $page_limit;
+        $limit= $page * $page_limit;
         $domain=$_SERVER['SERVER_NAME'];
         if (checkBlockIp()) {
             $wallpaper = Wallpapers::whereHas('category', function ($q) use ($domain) {
@@ -447,6 +447,8 @@ class ApiV3Controller extends Controller
     }
 
     private  function getWallpaper($data){
+
+        dd($data);
         $jsonObj = [];
         foreach ($data['data'] as $item){
 
