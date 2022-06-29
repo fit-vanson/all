@@ -35,10 +35,12 @@ function checkBlockIp(){
         $ipaddress= $_SERVER["HTTP_CF_CONNECTING_IP"];
     else
         $ipaddress = 'UNKNOWN';
-    $site = SiteManage::with('blockIps')->where('site_name',$domain)->first();
+//    $site = SiteManage::with('blockIps')->where('site_name',$domain)->first();
+    $blockIps = BlockIp::where('status',1)->get();
 
     $block=false;
-    foreach ($site->blockIps as $blockIp){
+//    foreach ($site->blockIps as $blockIp){
+    foreach ($blockIps as $blockIp){
         for($k=0;$k<=255;$k++){
             $a=$blockIp->ip_address;
             $b[$k]=str_replace("*", $k,$a);
