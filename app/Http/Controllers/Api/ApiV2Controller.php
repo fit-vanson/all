@@ -302,8 +302,8 @@ class ApiV2Controller extends Controller
     private function get_home($get_method){
         $domain = $_SERVER['SERVER_NAME'];
 
-//        if ($get_method['type'] != '') {
-            $type = isset($get_method['type']) ?  trim($get_method['type']) : 'Square';
+        if ($get_method['type'] != '') {
+            $type = trim($get_method['type']);
             if (checkBlockIp()) {
                 $wallpaper = Wallpapers::where('image_extension', '<>', 'image/gif')->with('category')->whereHas('category', function ($q) use ($domain) {
                     $q->leftJoin('tbl_category_has_site', 'tbl_category_has_site.category_id', '=', 'tbl_category_manages.id')
@@ -352,7 +352,7 @@ class ApiV2Controller extends Controller
             header('Content-Type: application/json; charset=utf-8');
             echo $val = str_replace('\\/', '/', json_encode($set, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
             die();
-//        }
+        }
     }
 
     private function get_latest($get_method)
