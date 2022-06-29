@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\BlockIp;
+use App\Models\BlockIP;
 use App\Models\SiteManage;
 
 function get_ip(){
