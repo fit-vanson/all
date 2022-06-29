@@ -437,14 +437,17 @@ class ApiV3Controller extends Controller
         $jsonObj = [];
         foreach ($data as $item){
 
+
 //
 //            $image=imagecreatefromjpeg(asset('storage/wallpapers/thumbnail/'.$item['thumbnail_image']));
 //            $thumb=imagecreatetruecolor(1,1);
 //            imagecopyresampled($thumb,$image,0,0,0,0,1,1,imagesx($image),imagesy($image));
 //            $mainColor=strtoupper(dechex(imagecolorat($thumb,0,0)));
 
-//            $palette = Palette::fromFilename(asset('storage/wallpapers/thumbnail/'.$item['thumbnail_image']));
-//            $topEightColors = $palette->getMostUsedColors(6);
+            $palette = Palette::fromFilename(asset('storage/wallpapers/thumbnail/'.$item['thumbnail_image']));
+            $topEightColors = $palette->getMostUsedColors(6);
+
+            dd($topEightColors);
 
             $data_arr['id'] = $item['id'];
             $data_arr['kind'] = $item['image_extension'] != 'image/gif' ? 'image' : 'gif';
