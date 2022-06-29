@@ -437,8 +437,14 @@ class ApiV3Controller extends Controller
         $jsonObj = [];
         foreach ($data as $item){
 
-            $palette = Palette::fromFilename(asset('storage/wallpapers/thumbnail/'.$item['thumbnail_image']));
-            $topEightColors = $palette->getMostUsedColors(6);
+
+            $image=imagecreatefromjpeg(asset('storage/wallpapers/thumbnail/'.$item['thumbnail_image']));
+            $thumb=imagecreatetruecolor(1,1);
+            imagecopyresampled($thumb,$image,0,0,0,0,1,1,imagesx($image),imagesy($image));
+            $mainColor=strtoupper(dechex(imagecolorat($thumb,0,0)));
+
+//            $palette = Palette::fromFilename(asset('storage/wallpapers/thumbnail/'.$item['thumbnail_image']));
+//            $topEightColors = $palette->getMostUsedColors(6);
 
             $data_arr['id'] = $item['id'];
             $data_arr['kind'] = $item['image_extension'] != 'image/gif' ? 'image' : 'gif';
@@ -447,7 +453,7 @@ class ApiV3Controller extends Controller
             $data_arr['category'] = $item['category']['category_name'];
 //            $data_arr['color'] =  '000000';
 //            $data_arr['color'] =  substr(md5(rand()), 0, 6);
-            $data_arr['color'] =  $topEightColors;
+            $data_arr['color'] =  $mainColor;
 
             $data_arr['downloads'] = rand(500,1000);
 
